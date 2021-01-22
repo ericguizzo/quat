@@ -78,7 +78,7 @@ def get_label_IEMOCAP(wavname):
     str_label = eval(str_label)
     str_label = np.subtract(str_label, 1)
     str_label = np.divide(str_label, 4)
-    print (str_label)
+    #print (str_label)
 
 
     return str_label
