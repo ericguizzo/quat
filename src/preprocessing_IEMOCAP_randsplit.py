@@ -74,7 +74,7 @@ def get_label_IEMOCAP(wavname):
     #trans_path = '/home/eric/Desktop/Ses01F_impro01.txt'
     with open(trans_path) as f:
         contents = f.readlines()
-    print (contents)
+    print (list(filter(lambda x: ID in x, contents)))
     sys.exit(0)
     str_label = list(filter(lambda x: ID in x, contents))[0].split('\t')[2]
 
