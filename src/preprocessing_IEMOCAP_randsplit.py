@@ -75,21 +75,12 @@ def get_label_IEMOCAP(wavname):
     with open(trans_path) as f:
         contents = f.readlines()
     str_label = list(filter(lambda x: ID in x, contents))[0].split('\t')[-1]
+    str_label = eval(str_label)
     print (str_label)
-    print (eval(str_label)[0])
-    sys.exit(0)
-    #change this to have only 4 labels!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    #int_label = label_to_int[str_label]
-    int_label = label_to_int[str_label]
-
-    if int_label != None:
-        output = uf.onehot(int_label, num_classes_IEMOCAP)
-    else:
-        output = None
 
 
-    return output
+
+    return str_label
 
 def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
     '''
