@@ -74,7 +74,8 @@ def get_label_IEMOCAP(wavname):
     #trans_path = '/home/eric/Desktop/Ses01F_impro01.txt'
     with open(trans_path) as f:
         contents = f.readlines()
-
+    print (contents)
+    sys.exit(0)
     str_label = list(filter(lambda x: ID in x, contents))[0].split('\t')[2]
 
     #change this to have only 4 labels!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -161,7 +162,7 @@ def main():
     num_foldables = 5
 
     if SEGMENTATION:
-        max_file_length = 1 
+        max_file_length = 1
     else:
         max_file_length=get_max_length_IEMOCAP(filtered_list)  #get longest file in samples
     num_files = len(filtered_list)
