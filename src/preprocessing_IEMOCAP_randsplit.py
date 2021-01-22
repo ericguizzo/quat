@@ -72,6 +72,7 @@ def get_label_IEMOCAP(wavname):
     trans_path = os.path.join(INPUT_IEMOCAP_FOLDER, 'Session' + str(session),
                             'dialog/EmoEvaluation', trans_file)
     #trans_path = '/home/eric/Desktop/Ses01F_impro01.txt'
+    print ('path', trans_path)
     with open(trans_path) as f:
         contents = f.readlines()
     print (list(filter(lambda x: ID in x, contents)))
