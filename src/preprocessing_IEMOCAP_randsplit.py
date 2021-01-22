@@ -76,8 +76,9 @@ def get_label_IEMOCAP(wavname):
         contents = f.readlines()
     str_label = list(filter(lambda x: ID in x, contents))[0].split('\t')[-1]
     str_label = eval(str_label)
+    str_label = np.subtract(str_label, 1)
+    str_label = np.divide(str_label, 4)
     print (str_label)
-
 
 
     return str_label
