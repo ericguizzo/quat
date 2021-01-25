@@ -625,7 +625,6 @@ def main():
     temp_results['val_loss'] = np.mean(val_batch_losses)
     temp_results['test_loss'] = np.mean(test_batch_losses)
 
-
     #if classification compute also f1, precision, recall
     if task_type == 'classification':
         temp_results['train_acc'] = np.mean(train_batch_accs)
