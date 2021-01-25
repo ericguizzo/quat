@@ -80,7 +80,7 @@ import numpy as np
 from multiscale_convlayer2 import MultiscaleConv2d
 import utility_functions as uf
 import define_models_torch as choose_model
-import feature_loss
+#import feature_loss
 
 
 #import preprocessing_DAIC as pre
@@ -118,33 +118,6 @@ choose_optimizer = cfg.get('training_defaults', 'choose_optimizer')
 recompute_matrices = eval(cfg.get('training_defaults', 'recompute_matrices'))
 regularization_lambda = cfg.getfloat('training_defaults', 'regularization_lambda')
 
-#feature loss params
-anti_transfer = eval(cfg.get('training_defaults', 'anti_transfer'))
-at_pretraining = eval(cfg.get('training_defaults', 'at_pretraining'))
-at_beta = cfg.getfloat('training_defaults', 'at_beta')
-at_layer = cfg.getint('training_defaults', 'at_layer')
-at_aggregation = cfg.get('training_defaults', 'at_aggregation')
-at_distance = cfg.get('training_defaults', 'at_distance')
-
-at_librispeech_model_path = cfg.get('training_defaults', 'at_librispeech_model_path')
-at_iemocap_model_path = cfg.get('training_defaults', 'at_iemocap_model_path')
-at_nsynth_model_path = cfg.get('training_defaults', 'at_nsynth_model_path')
-at_goodsounds_model_path = cfg.get('training_defaults', 'at_goodsounds_model_path')
-at_noisyspeech_model_path = cfg.get('training_defaults', 'at_noisyspeech_model_path')
-at_iemocap_1sec_model_path = cfg.get('training_defaults', 'at_iemocap_1sec_model_path')
-at_gsc_preiemo_model_path = cfg.get('training_defaults', 'at_gsc_preiemo_model_path')
-at_gsc_prenoisy_model_path = cfg.get('training_defaults', 'at_gsc_prenoisy_model_path')
-at_morphomnist_morpholabel_path = cfg.get('training_defaults', 'at_morphomnist_morpholabel_path')
-
-pretraining_classes_librispeech = cfg.get('training_defaults', 'pretraining_classes_librispeech')
-pretraining_classes_iemocap = cfg.get('training_defaults', 'pretraining_classes_iemocap')
-pretraining_classes_nsynth = cfg.get('training_defaults', 'pretraining_classes_nsynth')
-pretraining_classes_goodsounds = cfg.get('training_defaults', 'pretraining_classes_goodsounds')
-pretraining_classes_noisyspeech = cfg.get('training_defaults', 'pretraining_classes_noisyspeech')
-pretraining_classes_iemocap_1sec = cfg.get('training_defaults', 'pretraining_classes_iemocap_1sec')
-pretraining_classes_gsc_prenoisy = cfg.get('training_defaults', 'pretraining_classes_gsc_prenoisy')
-pretraining_classes_morphomnist_morpholabel = cfg.get('training_defaults', 'pretraining_classes_morphomnist_morpholabel')
-
 percs = [train_split, validation_split, test_split]
 
 device = torch.device('cuda:' + str(gpu_ID))
@@ -154,6 +127,7 @@ if task_type == 'classification':
     metrics_list = ['accuracy']
 elif task_type == 'regression':
     loss_function = nn.MSELoss()
+
 else:
     raise ValueError('task_type can be only: multilabel_classification, binary_classification or regression')
 
@@ -172,43 +146,6 @@ try:
 except IndexError:
     pass
 
-#load pretrained_vgg for anti transfer learning
-at_model_url = 'n'
-at_model_classes = 0
-if anti_transfer:
-    print ('AT DATASET!!!!!!!!!!!!!!!!!', at_dataset)
-    if at_dataset == 'librispeech':
-        at_model_url = at_librispeech_model_path
-        at_model_classes = pretraining_classes_librispeech
-    if at_dataset == 'iemocap':
-        at_model_url = at_iemocap_model_path
-        at_model_classes = pretraining_classes_iemocap
-    if at_dataset == 'nsynth':
-        at_model_url = at_nsynth_model_path
-        at_model_classes = pretraining_classes_nsynth
-    if at_dataset == 'goodsounds':
-        at_model_url = at_goodsounds_model_path
-        at_model_classes = pretraining_classes_goodsounds
-    if at_dataset == 'noisyspeech':
-        at_model_url = at_noisyspeech_model_path
-        at_model_classes = pretraining_classes_noisyspeech
-    if at_dataset == 'iemocap_1sec':
-        at_model_url = at_iemocap_1sec_model_path
-        at_model_classes = pretraining_classes_iemocap_1sec
-    if at_dataset == 'gsc_preiemo':
-        at_model_url = at_gsc_preiemo_model_path
-        at_model_classes = pretraining_classes_gsc_preiemo
-    if at_dataset == 'gsc_prenoisy':
-        at_model_url = at_gsc_prenoisy_model_path
-        at_model_classes = pretraining_classes_gsc_prenoisy
-    if at_dataset == 'morphomnist_morpholabel':
-        at_model_url = at_morphomnist_morpholabel_path
-        at_model_classes = pretraining_classes_morphomnist_morpholabel
-
-    pretrained_vgg = feature_loss.load_feature_extractor(gpu_ID, at_model_url, at_model_classes)
-else:
-    pretrained_vgg = 'nothing'
-
 
 
 #build dict with all UPDATED training parameters
@@ -225,15 +162,7 @@ training_parameters = {'train_split': train_split,
     'learning_rate': learning_rate,
     'optimizer': choose_optimizer,
     'regularization_lambda': regularization_lambda,
-    'anti_transfer': anti_transfer,
-    'at_beta': at_beta,
-    'at_aggregation': at_aggregation,
-    'at_distance': at_distance
     }
-
-if anti_transfer:
-    if not isinstance(at_layer, list):
-        at_layer = [at_layer]
 
 def main():
     #CREATE DATASET
@@ -397,31 +326,7 @@ def main():
     model_string = 'model_class, model_parameters = choose_model.' + architecture + '(time_dim, features_dim, parameters)'
     exec(model_string)
     model = locals()['model_class']
-    #load pretrained weights if desired
-    if at_pretraining:
-        if at_pretraining == 'librispeech':
-            pretrained_path = '../pretraining_vgg/librispeech/4secs_inv/model'
-        elif at_pretraining == 'iemocap':
-            pretrained_path = '../pretraining_vgg/iemocap/first/model'
-        elif at_pretraining == 'nsynth':
-            pretrained_path = '../pretraining_vgg/nsynth/6secs/model'
-        elif at_pretraining == 'goodsounds':
-            pretrained_path = '../pretraining_vgg/goodsounds/first/model'
-        elif at_pretraining == 'noisyspeech':
-            pretrained_path = '../pretraining_vgg/noisyspeech/first/model'
-        elif at_pretraining == 'iemocap_1sec':
-            pretrained_path = '../pretraining_vgg/iemocap_1sec/first/model'
-        elif at_pretraining == 'gsc_preiemo':
-            pretrained_path = '../pretraining_vgg/gsc_preiemo/model'
-        elif at_pretraining == 'gsc_prenoisy':
-            pretrained_path = '../pretraining_vgg/gsc_prenoisy/model'
-        elif at_pretraining == 'morphomnist_morpholabel':
-            pretrained_path = '../pretraining_vgg/morphomnist_morpholabel/first/model'
-        print ('PRETRAINING!±!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-        print ('pretraining on: ', pretrained_path)
-        model.features.load_state_dict(torch.load(pretrained_path,
-                                    map_location=lambda storage, location: storage),
-                                    strict=False)
+
 
     model = model.to(device)
     #print summary
@@ -436,12 +341,6 @@ def main():
                                weight_decay=regularization_lambda)
 
 
-
-
-
-
-
-
     #run training
     if not os.path.exists(results_path):
         os.makedirs(results_path)
@@ -454,9 +353,6 @@ def main():
     if task_type == 'classification':
         train_acc_hist = []
         val_acc_hist = []
-    if anti_transfer:
-        train_feature_loss_hist = []
-        val_feature_loss_hist = []
 
 
     #finally, TRAINING LOOP
@@ -473,13 +369,7 @@ def main():
             optimizer.zero_grad()
             outputs = model(sounds)
             loss = loss_function(outputs, truth)
-            #add anti-transfer component of loss
-            if anti_transfer:
-                for curr_layer in at_layer:
-                    anti_transfer_loss = feature_loss.feature_loss(sounds, model,
-                                         pretrained_vgg, at_beta, curr_layer,
-                                         at_aggregation, at_distance)
-                    loss = loss + anti_transfer_loss
+
             loss.backward()
             #print
             #print progress and update history, optimizer step
@@ -487,11 +377,8 @@ def main():
             inv_perc = int(20 - perc - 1)
 
             loss_print_t = str(np.round(loss.item(), decimals=5))
-            if anti_transfer:
-                antiloss_print_t = str(anti_transfer_loss.item())
-                string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t + '| antiloss: ' + antiloss_print_t
-            else:
-                string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
+
+            string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
             print ('\r', string_progress, end='')
             optimizer.step()
 
@@ -499,9 +386,6 @@ def main():
         #after current epoch training
         train_batch_losses = []
         val_batch_losses = []
-        if anti_transfer:
-            train_batch_feature_losses = []
-            val_batch_feature_losses = []
 
         if task_type == 'classification':
             train_batch_accs = []
@@ -518,13 +402,6 @@ def main():
                 outputs = model(sounds)
                 temp_loss = loss_function(outputs, truth)
 
-                if anti_transfer:
-                    for curr_layer in at_layer:
-                        anti_transfer_loss = feature_loss.feature_loss(sounds, model,
-                                             pretrained_vgg, at_beta, curr_layer,
-                                             at_aggregation, at_distance)
-                        temp_loss = temp_loss + anti_transfer_loss
-                    train_batch_feature_losses.append(anti_transfer_loss.item())
                 train_batch_losses.append(temp_loss.item())
 
                 if task_type == 'classification':
@@ -540,13 +417,6 @@ def main():
                 outputs = model(sounds)
                 temp_loss = loss_function(outputs, truth)
 
-                if anti_transfer:
-                    for curr_layer in at_layer:
-                        anti_transfer_loss = feature_loss.feature_loss(sounds, model,
-                                             pretrained_vgg, at_beta, curr_layer,
-                                             at_aggregation, at_distance)
-                        temp_loss = temp_loss + anti_transfer_loss
-                    val_batch_feature_losses.append(anti_transfer_loss.item())
                 val_batch_losses.append(temp_loss.item())
 
                 if task_type == 'classification':
@@ -559,11 +429,7 @@ def main():
         train_loss_hist.append(train_epoch_loss)
         val_epoch_loss = np.mean(val_batch_losses)
         val_loss_hist.append(val_epoch_loss)
-        if anti_transfer:
-            train_epoch_feature_loss = np.mean(train_batch_feature_losses)
-            val_epoch_feature_loss = np.mean(val_batch_feature_losses)
-            train_feature_loss_hist.append(train_epoch_feature_loss)
-            val_feature_loss_hist.append(val_epoch_feature_loss)
+
         if task_type == 'classification':
             train_epoch_acc = np.mean(train_batch_accs)
             train_acc_hist.append(train_epoch_acc)
@@ -599,8 +465,6 @@ def main():
             else:
                 raise ValueError('Wrong metric selected')
 
-        if anti_transfer:
-            print ('\n  FEATURE LOSS: TRAIN: ' + str(np.round(train_epoch_feature_loss.item(), decimals=5)) + ' | VAL: ' + str(np.round(val_epoch_feature_loss.item(), decimals=5)))
 
         print ('\n  Train loss: ' + str(np.round(train_epoch_loss.item(), decimals=5)) + ' | Val loss: ' + str(np.round(val_epoch_loss.item(), decimals=5)))
         if task_type == 'classification':
@@ -612,9 +476,6 @@ def main():
         print (utilstring)
         #AS LAST THING, AFTER OPTIMIZER.STEP AND EVENTUAL MODEL SAVING
         #AVERAGE MULTISCALE CONV KERNELS!!!!!!!!!!!!!!!!!!!!!!!!!
-        for layer in model.modules():
-            if isinstance(layer, MultiscaleConv2d):
-                layer.update_kernels()
 
         if early_stopping and epoch >= patience+1:
             patience_vec = val_loss_hist[-patience+1:]
@@ -638,16 +499,7 @@ def main():
     val_batch_lesses = []
     test_batch_losses = []
 
-    #if there is any multiscale layer
-    there_is_multiconv = False
-    for layer in model.modules():
-        if isinstance(layer, MultiscaleConv2d):
-            there_is_multiconv = True
 
-    if there_is_multiconv:
-        train_batch_stretch_percs = []
-        val_batch_stretch_percs= []
-        test_batch_stretch_percs = []
 
 
     if task_type == 'classification':
@@ -687,12 +539,7 @@ def main():
             outputs = model(sounds)
 
             temp_loss = loss_function(outputs, truth)
-            if anti_transfer:
-                for curr_layer in at_layer:
-                    anti_transfer_loss = feature_loss.feature_loss(sounds, model,
-                                         pretrained_vgg, at_beta, curr_layer,
-                                         at_aggregation, at_distance)
-                    temp_loss = temp_loss + anti_transfer_loss
+
             train_batch_losses.append(temp_loss.item())
 
             if task_type == 'classification':
@@ -711,10 +558,6 @@ def main():
                 temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                 train_batch_mae.append(temp_mae)
 
-            for layer in model.modules():
-                if isinstance(layer, MultiscaleConv2d):
-                    temp_stretch_percs = layer.get_stretch_percs()
-                    train_batch_stretch_percs.append(temp_stretch_percs)
 
 
         #VALIDATION DATA
@@ -725,12 +568,7 @@ def main():
             outputs = model(sounds)
 
             temp_loss = loss_function(outputs, truth)
-            if anti_transfer:
-                for curr_layer in at_layer:
-                    anti_transfer_loss = feature_loss.feature_loss(sounds, model,
-                                         pretrained_vgg, at_beta, curr_layer,
-                                         at_aggregation, at_distance)
-                    temp_loss = temp_loss + anti_transfer_loss
+
             val_batch_losses.append(temp_loss.item())
 
             if task_type == 'classification':
@@ -749,10 +587,6 @@ def main():
                 temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                 val_batch_mae.append(temp_mae)
 
-            for layer in model.modules():
-                if isinstance(layer, MultiscaleConv2d):
-                    temp_stretch_percs = layer.get_stretch_percs()
-                    val_batch_stretch_percs.append(temp_stretch_percs)
 
         #TEST DATA
         for i, (sounds, truth) in enumerate(test_data):
@@ -762,12 +596,7 @@ def main():
             outputs = model(sounds)
 
             temp_loss = loss_function(outputs, truth)
-            if anti_transfer:
-                for curr_layer in at_layer:
-                    anti_transfer_loss = feature_loss.feature_loss(sounds, model,
-                                         pretrained_vgg, at_beta, curr_layer,
-                                         at_aggregation, at_distance)
-                    temp_loss = temp_loss + anti_transfer_loss
+
             test_batch_losses.append(temp_loss.item())
 
             if task_type == 'classification':
@@ -786,11 +615,6 @@ def main():
                 temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                 test_batch_mae.append(temp_mae)
 
-            for layer in model.modules():
-                if isinstance(layer, MultiscaleConv2d):
-                    temp_stretch_percs = layer.get_stretch_percs()
-                    test_batch_stretch_percs.append(temp_stretch_percs)
-                    print (temp_stretch_percs)
 
 
     #save results in temp dict file
@@ -801,11 +625,6 @@ def main():
     temp_results['val_loss'] = np.mean(val_batch_losses)
     temp_results['test_loss'] = np.mean(test_batch_losses)
 
-    #save stretch percs if multiconv
-    if there_is_multiconv:
-        temp_results['train_stretch_percs'] = np.mean(train_batch_stretch_percs, axis=0)
-        temp_results['val_stretch_percs'] = np.mean(val_batch_stretch_percs, axis=0)
-        temp_results['test_stretch_percs'] = np.mean(test_batch_stretch_percs, axis=0)
 
     #if classification compute also f1, precision, recall
     if task_type == 'classification':
