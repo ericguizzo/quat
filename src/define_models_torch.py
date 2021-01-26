@@ -9,7 +9,7 @@ from torch import optim
 import torch.nn.functional as F
 import torch.utils.data as utils
 from torch.autograd import Variable
-from multiscale_convlayer2 import MultiscaleConv2d
+#from multiscale_convlayer2 import MultiscaleConv2d
 import sys, os
 import configparser
 import loadconfig
