@@ -42,8 +42,8 @@ except IndexError:
     generator = True
     dataset = 'iemocap_randsplit_spectrum_fast'
     architecture = 'vgg16'
-    parameters = ['niente = 0', "output_classes=4"]
-    task_type = 'classification'
+    parameters = ['niente = 0', "output_classes=3"]
+    task_type = 'regression'
     SAVE_MODEL = '../models/prova'
     results_path = '../results/provisional'
     parameters_path = results_path + '/parameters'
