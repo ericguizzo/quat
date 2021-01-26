@@ -303,6 +303,9 @@ def main():
     training_predictors = training_predictors[:60]
     validation_predictors = validation_predictors[:60]
     test_predictors = test_predictors[:60]
+    training_target = training_target[:60]
+    validation_target = validation_target[:60]
+    test_target = test_target[:60]
 
     #convert to tensor
     train_predictors = torch.tensor(training_predictors).float()
