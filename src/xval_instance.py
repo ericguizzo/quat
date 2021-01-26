@@ -164,7 +164,7 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         tr_loss_arousal.append(folds[i]['tr_loss_arousal'])
         val_loss_arousal.append(folds[i]['val_loss_arousal'])
         test_loss_arousal.append(folds[i]['test_loss_arousal'])
-        
+
         tr_loss_dominance.append(folds[i]['tr_loss_dominance'])
         val_loss_dominance.append(folds[i]['val_loss_dominance'])
         test_loss_dominance.append(folds[i]['test_loss_dominance'])
@@ -198,14 +198,33 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     test_std_dominance = np.std(test_loss_dominance)
 
 
-
-
     folds['summary'] = {'training':{'mean_loss': tr_mean,
                                     'loss_std': tr_std},
                         'validation':{'mean_loss': val_mean,
                                     'loss_std': val_std},
                         'test':{'mean_loss': test_mean,
                                     'loss_std': test_std}}
+
+    folds['summary'] = {'training':{'mean_loss_valence': tr_mean_valence,
+                                    'loss_std_valence': tr_std_valence},
+                        'validation':{'mean_loss_valence': val_mean_valence,
+                                    'loss_std_valence': val_std_valence},
+                        'test':{'mean_loss_valence': test_mean_valence,
+                                    'loss_std_valence': test_std_valence}}
+
+    folds['summary'] = {'training':{'mean_loss_arousal': tr_mean_arousal,
+                                    'loss_std_arousal': tr_std_arousal},
+                        'validation':{'mean_loss_arousal': val_mean_arousal,
+                                    'loss_std_arousal': val_std_arousal},
+                        'test':{'mean_loss_arousal': test_mean_arousal,
+                                    'loss_std_arousal': test_std_arousal}}
+
+    folds['summary'] = {'training':{'mean_loss_dominance': tr_mean_dominance,
+                                    'loss_std_dominance': tr_std_dominance},
+                        'validation':{'mean_loss_dominance': val_mean_dominance,
+                                    'loss_std_dominance': val_std_dominance},
+                        'test':{'mean_loss_dominance': test_mean_dominance,
+                                    'loss_std_dominance': test_std_dominance}}
 
     #compute mean acc and acc std if task_type is classification
     if locals()['task_type'] == 'regression':
@@ -215,6 +234,29 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         tr_MAE = []
         val_MAE = []
         test_MAE = []
+
+        tr_RMSE_valence = []
+        val_RMSE_valence = []
+        test_RMSE_valence = []
+        tr_MAE_valence = []
+        val_MAE_valence = []
+        test_MAE_valence = []
+
+        tr_RMSE_arousal = []
+        val_RMSE_arousal = []
+        test_RMSE_arousal = []
+        tr_MAE_arousal = []
+        val_MAE_arousal = []
+        test_MAE_arousal = []
+
+        tr_RMSE_dominance = []
+        val_RMSE_dominance = []
+        test_RMSE_dominance = []
+        tr_MAE_dominance = []
+        val_MAE_dominance = []
+        test_MAE_dominance = []
+
+
         for i in range(num_folds):
             tr_RMSE.append(folds[i]['train_RMSE'])
             val_RMSE.append(folds[i]['val_RMSE'])
@@ -222,6 +264,29 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
             tr_MAE.append(folds[i]['train_MAE'])
             val_MAE.append(folds[i]['val_MAE'])
             test_MAE.append(folds[i]['test_MAE'])
+
+            tr_RMSE_valence.append(folds[i]['train_RMSE_valence'])
+            val_RMSE_valence.append(folds[i]['val_RMSE_valence'])
+            test_RMSE_valence.append(folds[i]['test_RMSE_valence'])
+            tr_MAE_valence.append(folds[i]['train_MAE_valence'])
+            val_MAE_valence.append(folds[i]['val_MAE_valence'])
+            test_MAE_valence.append(folds[i]['test_MAE_valence'])
+
+            tr_RMSE_arousal.append(folds[i]['train_RMSE_arousal'])
+            val_RMSE_arousal.append(folds[i]['val_RMSE_arousal'])
+            test_RMSE_arousal.append(folds[i]['test_RMSE_arousal'])
+            tr_MAE_arousal.append(folds[i]['train_MAE_arousal'])
+            val_MAE_arousal.append(folds[i]['val_MAE_arousal'])
+            test_MAE_arousal.append(folds[i]['test_MAE_arousal'])
+
+            tr_RMSE_dominance.append(folds[i]['train_RMSE_dominance'])
+            val_RMSE_dominance.append(folds[i]['val_RMSE_dominance'])
+            test_RMSE_dominance.append(folds[i]['test_RMSE_dominance'])
+            tr_MAE_dominance.append(folds[i]['train_MAE_dominance'])
+            val_MAE_dominance.append(folds[i]['val_MAE_dominance'])
+            test_MAE_dominance.append(folds[i]['test_MAE_dominance'])
+
+
         tr_mean_RMSE = np.mean(tr_RMSE)
         val_mean_RMSE = np.mean(val_RMSE)
         test_mean_RMSE = np.mean(test_RMSE)
@@ -234,6 +299,47 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         tr_std_MAE = np.std(tr_MAE)
         val_std_MAE = np.std(val_MAE)
         test_std_MAE = np.std(test_MAE)
+
+        tr_mean_RMSE_valence = np.mean(tr_RMSE_valence)
+        val_mean_RMSE_valence = np.mean(val_RMSE_valence)
+        test_mean_RMSE_valence = np.mean(test_RMSE_valence)
+        tr_std_RMSE_valence = np.std(tr_RMSE_valence)
+        val_std_RMSE_valence = np.std(val_RMSE_valence)
+        test_std_RMSE_valence = np.std(test_RMSE_valence)
+        tr_mean_MAE_valence = np.mean(tr_MAE_valence)
+        val_mean_MAE_valence = np.mean(val_MAE_valence)
+        test_mean_MAE_valence = np.mean(test_MAE_valence)
+        tr_std_MAE_valence = np.std(tr_MAE_valence)
+        val_std_MAE_valence = np.std(val_MAE_valence)
+        test_std_MAE_valence = np.std(test_MAE_valence)
+
+        tr_mean_RMSE_arousal = np.mean(tr_RMSE_arousal)
+        val_mean_RMSE_arousal = np.mean(val_RMSE_arousal)
+        test_mean_RMSE_arousal = np.mean(test_RMSE_arousal)
+        tr_std_RMSE_arousal = np.std(tr_RMSE_arousal)
+        val_std_RMSE_arousal = np.std(val_RMSE_arousal)
+        test_std_RMSE_arousal = np.std(test_RMSE_arousal)
+        tr_mean_MAE_arousal = np.mean(tr_MAE_arousal)
+        val_mean_MAE_arousal = np.mean(val_MAE_arousal)
+        test_mean_MAE_arousal = np.mean(test_MAE_arousal)
+        tr_std_MAE_arousal = np.std(tr_MAE_arousal)
+        val_std_MAE_arousal = np.std(val_MAE_arousal)
+        test_std_MAE_arousal = np.std(test_MAE_arousal)
+
+        tr_mean_RMSE_dominance = np.mean(tr_RMSE_dominance)
+        val_mean_RMSE_dominance = np.mean(val_RMSE_dominance)
+        test_mean_RMSE_dominance = np.mean(test_RMSE_dominance)
+        tr_std_RMSE_dominance = np.std(tr_RMSE_dominance)
+        val_std_RMSE_dominance = np.std(val_RMSE_dominance)
+        test_std_RMSE_dominance = np.std(test_RMSE_dominance)
+        tr_mean_MAE_dominance = np.mean(tr_MAE_dominance)
+        val_mean_MAE_dominance = np.mean(val_MAE_dominance)
+        test_mean_MAE_dominance = np.mean(test_MAE_dominance)
+        tr_std_MAE_dominance = np.std(tr_MAE_dominance)
+        val_std_MAE_dominance = np.std(val_MAE_dominance)
+        test_std_MAE_dominance = np.std(test_MAE_dominance)
+
+
         folds['summary']['training']['mean_RMSE'] =  tr_mean_RMSE
         folds['summary']['training']['RMSE_std'] = tr_std_RMSE
         folds['summary']['validation']['mean_RMSE'] =  val_mean_RMSE
@@ -246,6 +352,45 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         folds['summary']['validation']['MAE_std'] = val_std_MAE
         folds['summary']['test']['mean_MAE'] =  test_mean_MAE
         folds['summary']['test']['MAE_std'] = test_std_MAE
+
+        folds['summary']['training']['mean_RMSE_valence'] =  tr_mean_RMSE_valence
+        folds['summary']['training']['RMSE_std_valence'] = tr_std_RMSE_valence
+        folds['summary']['validation']['mean_RMSE_valence'] =  val_mean_RMSE_valence
+        folds['summary']['validation']['RMSE_std_valence'] = val_std_RMSE_valence
+        folds['summary']['test']['mean_RMSE_valence'] =  test_mean_RMSE_valence
+        folds['summary']['test']['RMSE_std_valence'] = test_std_RMSE_valence
+        folds['summary']['training']['mean_MAE_valence'] =  tr_mean_MAE_valence
+        folds['summary']['training']['MAE_std_valence'] = tr_std_MAE_valence
+        folds['summary']['validation']['mean_MAE_valence'] =  val_mean_MAE_valence
+        folds['summary']['validation']['MAE_std_valence'] = val_std_MAE_valence
+        folds['summary']['test']['mean_MAE_valence'] =  test_mean_MAE_valence
+        folds['summary']['test']['MAE_std_valence'] = test_std_MAE_valence
+
+        folds['summary']['training']['mean_RMSE_arousal'] =  tr_mean_RMSE_arousal
+        folds['summary']['training']['RMSE_std_arousal'] = tr_std_RMSE_arousal
+        folds['summary']['validation']['mean_RMSE_arousal'] =  val_mean_RMSE_arousal
+        folds['summary']['validation']['RMSE_std_arousal'] = val_std_RMSE_arousal
+        folds['summary']['test']['mean_RMSE_arousal'] =  test_mean_RMSE_arousal
+        folds['summary']['test']['RMSE_std_arousal'] = test_std_RMSE_arousal
+        folds['summary']['training']['mean_MAE_arousal'] =  tr_mean_MAE_arousal
+        folds['summary']['training']['MAE_std_arousal'] = tr_std_MAE_arousal
+        folds['summary']['validation']['mean_MAE_arousal'] =  val_mean_MAE_arousal
+        folds['summary']['validation']['MAE_std_arousal'] = val_std_MAE_arousal
+        folds['summary']['test']['mean_MAE_arousal'] =  test_mean_MAE_arousal
+        folds['summary']['test']['MAE_std_arousal'] = test_std_MAE_arousal
+
+        folds['summary']['training']['mean_RMSE_dominance'] =  tr_mean_RMSE_dominance
+        folds['summary']['training']['RMSE_std_dominance'] = tr_std_RMSE_dominance
+        folds['summary']['validation']['mean_RMSE_dominance'] =  val_mean_RMSE_dominance
+        folds['summary']['validation']['RMSE_std_dominance'] = val_std_RMSE_dominance
+        folds['summary']['test']['mean_RMSE_dominance'] =  test_mean_RMSE_dominance
+        folds['summary']['test']['RMSE_std_dominance'] = test_std_RMSE_dominance
+        folds['summary']['training']['mean_MAE_dominance'] =  tr_mean_MAE_dominance
+        folds['summary']['training']['MAE_std_dominance'] = tr_std_MAE_dominance
+        folds['summary']['validation']['mean_MAE_dominance'] =  val_mean_MAE_dominance
+        folds['summary']['validation']['MAE_std_dominance'] = val_std_MAE_dominance
+        folds['summary']['test']['mean_MAE_dominance'] =  test_mean_MAE_dominance
+        folds['summary']['test']['MAE_std_dominance'] = test_std_MAE_dominance
     else:
         tr_acc = []
         val_acc = []
