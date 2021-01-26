@@ -139,46 +139,73 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
     tr_loss = []
     val_loss = []
     test_loss = []
+
+    tr_loss_valence = []
+    val_loss_valence = []
+    test_loss_valence = []
+
+    tr_loss_arousal = []
+    val_loss_arousal = []
+    test_loss_arousal = []
+
+    tr_loss_dominance = []
+    val_loss_dominance = []
+    test_loss_dominance = []
+
     for i in range(num_folds):
         tr_loss.append(folds[i]['train_loss'])
-
         val_loss.append(folds[i]['val_loss'])
         test_loss.append(folds[i]['test_loss'])
+
+        tr_loss_valence.append(folds[i]['tr_loss_valence'])
+        val_loss_valence.append(folds[i]['val_loss_valence'])
+        test_loss_valence.append(folds[i]['test_loss_valence'])
+
+        tr_loss_arousal.append(folds[i]['tr_loss_arousal'])
+        val_loss_arousal.append(folds[i]['val_loss_arousal'])
+        test_loss_arousal.append(folds[i]['test_loss_arousal'])
+        
+        tr_loss_dominance.append(folds[i]['tr_loss_dominance'])
+        val_loss_dominance.append(folds[i]['val_loss_dominance'])
+        test_loss_dominance.append(folds[i]['test_loss_dominance'])
+
     tr_mean = np.mean(tr_loss)
     val_mean = np.mean(val_loss)
     test_mean = np.mean(test_loss)
     tr_std = np.std(tr_loss)
     val_std = np.std(val_loss)
     test_std = np.std(test_loss)
+
+    tr_mean_valence = np.mean(tr_loss_valence)
+    val_mean_valence = np.mean(val_loss_valence)
+    test_mean_valence = np.mean(test_loss_valence)
+    tr_std_valence = np.std(tr_loss_valence)
+    val_std_valence = np.std(val_loss_valence)
+    test_std_valence = np.std(test_loss_valence)
+
+    tr_mean_arousal = np.mean(tr_loss_arousal)
+    val_mean_arousal = np.mean(val_loss_arousal)
+    test_mean_arousal = np.mean(test_loss_arousal)
+    tr_std_arousal = np.std(tr_loss_arousal)
+    val_std_arousal = np.std(val_loss_arousal)
+    test_std_arousal = np.std(test_loss_arousal)
+
+    tr_mean_dominance = np.mean(tr_loss_dominance)
+    val_mean_dominance = np.mean(val_loss_dominance)
+    test_mean_dominance = np.mean(test_loss_dominance)
+    tr_std_dominance = np.std(tr_loss_dominance)
+    val_std_dominance = np.std(val_loss_dominance)
+    test_std_dominance = np.std(test_loss_dominance)
+
+
+
+
     folds['summary'] = {'training':{'mean_loss': tr_mean,
                                     'loss_std': tr_std},
                         'validation':{'mean_loss': val_mean,
                                     'loss_std': val_std},
                         'test':{'mean_loss': test_mean,
                                     'loss_std': test_std}}
-
-    #compute perc stretch factors if multiconv was used
-    if  'train_stretch_percs' in folds[0].keys():
-        dummy = folds[0]['train_stretch_percs']
-        tr_stretches = []
-        val_stretches = []
-        test_stretches = []
-        for i in range(num_folds):
-            tr_stretches.append(folds[i]['train_stretch_percs'])
-            val_stretches.append(folds[i]['val_stretch_percs'])
-            test_stretches.append(folds[i]['test_stretch_percs'])
-        tr_mean_str = np.mean(tr_stretches, axis=0)
-        val_mean_str = np.mean(val_stretches, axis=0)
-        test_mean_str = np.mean(test_stretches, axis=0)
-        tr_std_str = np.std(tr_stretches, axis=0)
-        val_std_str = np.std(val_stretches, axis=0)
-        test_std_str = np.std(test_stretches, axis=0)
-        folds['summary']['training']['mean_stretch_percs'] =  tr_mean_str
-        folds['summary']['training']['stretch_percs_std'] = tr_std_str
-        folds['summary']['validation']['mean_stretch_percs'] =  val_mean_str
-        folds['summary']['validation']['stretch_percs_std'] = val_std_str
-        folds['summary']['test']['mean_stretch_percs'] =  test_mean_str
-        folds['summary']['test']['stretch_percs_std'] = test_std_str
 
     #compute mean acc and acc std if task_type is classification
     if locals()['task_type'] == 'regression':
