@@ -472,9 +472,9 @@ def main():
                 temp_loss_arousal = loss_function(outputs[:,arousal_id], truth[:,arousal_id])
                 temp_loss_dominance = loss_function(outputs[:,dominance_id], truth[:,dominance_id])
 
-                train_batch_losses_valence.append(temp_loss_valence)
-                train_batch_losses_arousal.append(temp_loss_arousal)
-                train_batch_losses_dominance.append(temp_loss_dominance)
+                train_batch_losses_valence.append(temp_loss_valence.item())
+                train_batch_losses_arousal.append(temp_loss_arousal.item())
+                train_batch_losses_dominance.append(temp_loss_dominance.item())
 
                 if task_type == 'classification':
                     temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
@@ -496,9 +496,9 @@ def main():
                 temp_loss_arousal = loss_function(outputs[:,arousal_id], truth[:,arousal_id])
                 temp_loss_dominance = loss_function(outputs[:,dominance_id], truth[:,dominance_id])
 
-                val_batch_losses_valence.append(temp_loss_valence)
-                val_batch_losses_arousal.append(temp_loss_arousal)
-                val_batch_losses_dominance.append(temp_loss_dominance)
+                val_batch_losses_valence.append(temp_loss_valence.item())
+                val_batch_losses_arousal.append(temp_loss_arousal.item())
+                val_batch_losses_dominance.append(temp_loss_dominance.item())
 
                 if task_type == 'classification':
                     temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
