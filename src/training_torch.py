@@ -682,9 +682,6 @@ def main():
     if task_type == 'classification':
         temp_results['train_acc_hist'] = train_acc_hist
         temp_results['val_acc_hist'] = val_acc_hist
-    if anti_transfer:
-        temp_results['train_feature_loss_hist'] = train_feature_loss_hist
-        temp_results['val_feature_loss_hist'] = val_feature_loss_hist
 
     #save actors present in current fold
     temp_results['training_actors'] = train_list
