@@ -707,6 +707,21 @@ def main():
                 temp_mae = mean_absolute_error(outputs.cpu().float(), truth.cpu().float())
                 train_batch_mae.append(temp_mae)
 
+                temp_rmse_valence = np.sqrt(mean_squared_error(outputs[:,valence_id].cpu().float(), truth[:,valence_id].cpu().float()))
+                train_batch_rmse_valence.append(temp_rmse_valence)
+                temp_mae_valence = mean_absolute_error(outputs[:,valence_id].cpu().float(), truth[:,valence_id].cpu().float())
+                train_batch_mae_valence.append(temp_mae_valence)
+
+                temp_rmse_arousal = np.sqrt(mean_squared_error(outputs[:,arousal_id].cpu().float(), truth[:,arousal_id].cpu().float()))
+                train_batch_rmse_arousal.append(temp_rmse_arousal)
+                temp_mae_arousal = mean_absolute_error(outputs[:,arousal_id].cpu().float(), truth[:,arousal_id].cpu().float())
+                train_batch_mae_arousal.append(temp_mae_arousal)
+
+                temp_rmse_dominance = np.sqrt(mean_squared_error(outputs[:,dominance_id].cpu().float(), truth[:,dominance_id].cpu().float()))
+                train_batch_rmse_dominance.append(temp_rmse_dominance)
+                temp_mae_dominance = mean_absolute_error(outputs[:,dominance_id].cpu().float(), truth[:,dominance_id].cpu().float())
+                train_batch_mae_dominance.append(temp_mae_dominance)
+
 
 
         #VALIDATION DATA
@@ -736,6 +751,21 @@ def main():
                 temp_mae = mean_absolute_error(outputs.cpu().float(), truth.cpu().float())
                 val_batch_mae.append(temp_mae)
 
+                temp_rmse_valence = np.sqrt(mean_squared_error(outputs[:,valence_id].cpu().float(), truth[:,valence_id].cpu().float()))
+                val_batch_rmse_valence.append(temp_rmse_valence)
+                temp_mae_valence = mean_absolute_error(outputs[:,valence_id].cpu().float(), truth[:,valence_id].cpu().float())
+                val_batch_mae_valence.append(temp_mae_valence)
+
+                temp_rmse_arousal = np.sqrt(mean_squared_error(outputs[:,arousal_id].cpu().float(), truth[:,arousal_id].cpu().float()))
+                val_batch_rmse_arousal.append(temp_rmse_arousal)
+                temp_mae_arousal = mean_absolute_error(outputs[:,arousal_id].cpu().float(), truth[:,arousal_id].cpu().float())
+                val_batch_mae_arousal.append(temp_mae_arousal)
+
+                temp_rmse_dominance = np.sqrt(mean_squared_error(outputs[:,dominance_id].cpu().float(), truth[:,dominance_id].cpu().float()))
+                val_batch_rmse_dominance.append(temp_rmse_dominance)
+                temp_mae_dominance = mean_absolute_error(outputs[:,dominance_id].cpu().float(), truth[:,dominance_id].cpu().float())
+                val_batch_mae_dominance.append(temp_mae_dominance)
+
 
         #TEST DATA
         for i, (sounds, truth) in enumerate(test_data):
@@ -763,6 +793,21 @@ def main():
                 test_batch_rmse.append(temp_rmse)
                 temp_mae = mean_absolute_error(outputs.cpu().float(), truth.cpu().float())
                 test_batch_mae.append(temp_mae)
+
+                temp_rmse_valence = np.sqrt(mean_squared_error(outputs[:,valence_id].cpu().float(), truth[:,valence_id].cpu().float()))
+                test_batch_rmse_valence.append(temp_rmse_valence)
+                temp_mae_valence = mean_absolute_error(outputs[:,valence_id].cpu().float(), truth[:,valence_id].cpu().float())
+                test_batch_mae_valence.append(temp_mae_valence)
+
+                temp_rmse_arousal = np.sqrt(mean_squared_error(outputs[:,arousal_id].cpu().float(), truth[:,arousal_id].cpu().float()))
+                test_batch_rmse_arousal.append(temp_rmse_arousal)
+                temp_mae_arousal = mean_absolute_error(outputs[:,arousal_id].cpu().float(), truth[:,arousal_id].cpu().float())
+                test_batch_mae_arousal.append(temp_mae_arousal)
+
+                temp_rmse_dominance = np.sqrt(mean_squared_error(outputs[:,dominance_id].cpu().float(), truth[:,dominance_id].cpu().float()))
+                test_batch_rmse_dominance.append(temp_rmse_dominance)
+                temp_mae_dominance = mean_absolute_error(outputs[:,dominance_id].cpu().float(), truth[:,dominance_id].cpu().float())
+                test_batch_mae_dominance.append(temp_mae_dominance)
 
 
 
@@ -796,10 +841,30 @@ def main():
         temp_results['train_MAE'] = np.mean(train_batch_mae)
         temp_results['val_MAE'] = np.mean(val_batch_mae)
         temp_results['test_MAE'] = np.mean(test_batch_mae)
-
         temp_results['train_RMSE'] = np.mean(train_batch_rmse)
         temp_results['val_RMSE'] = np.mean(val_batch_rmse)
         temp_results['test_RMSE'] = np.mean(test_batch_rmse)
+
+        temp_results['train_MAE_valence'] = np.mean(train_batch_mae_valence)
+        temp_results['val_MAE_valence'] = np.mean(val_batch_mae_valence)
+        temp_results['test_MAE_valence'] = np.mean(test_batch_mae_valence)
+        temp_results['train_RMSE_valence'] = np.mean(train_batch_rmse_valence)
+        temp_results['val_RMSE_valence'] = np.mean(val_batch_rmse_valence)
+        temp_results['test_RMSE_valence'] = np.mean(test_batch_rmse_valence)
+
+        temp_results['train_MAE_arousal'] = np.mean(train_batch_mae_arousal)
+        temp_results['val_MAE_arousal'] = np.mean(val_batch_mae_arousal_arousal)
+        temp_results['test_MAE_arousal'] = np.mean(test_batch_mae_arousal)
+        temp_results['train_RMSE_arousal'] = np.mean(train_batch_rmse_arousal)
+        temp_results['val_RMSE_arousal'] = np.mean(val_batch_rmse_arousal)
+        temp_results['test_RMSE_arousal'] = np.mean(test_batch_rmse_arousal)
+
+        temp_results['train_MAE_dominance'] = np.mean(train_batch_mae_dominance)
+        temp_results['val_MAE_dominance'] = np.mean(val_batch_mae_dominance)
+        temp_results['test_MAE_dominance'] = np.mean(test_batch_mae_dominance)
+        temp_results['train_RMSE_dominance'] = np.mean(train_batch_rmse_dominance)
+        temp_results['val_RMSE_dominance'] = np.mean(val_batch_rmse_dominance)
+        temp_results['test_RMSE_dominance'] = np.mean(test_batch_rmse_dominance)
 
     #save history
     temp_results['train_loss_hist'] = train_loss_hist
@@ -807,6 +872,15 @@ def main():
     if task_type == 'classification':
         temp_results['train_acc_hist'] = train_acc_hist
         temp_results['val_acc_hist'] = val_acc_hist
+
+        temp_results['train_acc_hist_valence'] = train_acc_hist_valence
+        temp_results['val_acc_hist_valence'] = val_acc_hist_valence
+
+        temp_results['train_acc_hist_arousal'] = train_acc_hist_arousal
+        temp_results['val_acc_hist_arousal'] = val_acc_hist_arousal
+
+        temp_results['train_acc_hist_dominance'] = train_acc_hist_dominance
+        temp_results['val_acc_hist_dominance'] = val_acc_hist_dominance
 
     #save actors present in current fold
     temp_results['training_actors'] = train_list
