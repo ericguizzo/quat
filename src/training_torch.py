@@ -369,6 +369,18 @@ def main():
 
     train_loss_hist = []
     val_loss_hist = []
+
+    train_loss_hist_valence = []
+    val_loss_hist_valence = []
+
+    train_loss_hist_arousal = []
+    val_loss_hist_arousal = []
+
+    train_loss_hist_dominance = []
+    val_loss_hist_dominance = []
+
+
+
     if task_type == 'classification':
         train_acc_hist = []
         val_acc_hist = []
