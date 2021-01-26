@@ -391,6 +391,15 @@ def main():
             train_batch_accs = []
             val_batch_accs = []
 
+        elif task_type == 'regression':
+            train_batch_rmse = []
+            val_batch_rmse = []
+            test_batch_rmse = []
+
+            train_batch_mae = []
+            val_batch_mae = []
+            test_batch_mae = []
+
         with torch.no_grad():
             model.eval()
             #training data
@@ -408,6 +417,7 @@ def main():
                     temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                     train_batch_accs.append(temp_acc)
 
+
             #validation data
             for i, (sounds, truth) in enumerate(val_data):
                 optimizer.zero_grad()
@@ -422,6 +432,7 @@ def main():
                 if task_type == 'classification':
                     temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                     val_batch_accs.append(temp_acc)
+
 
 
         #append to history and print
