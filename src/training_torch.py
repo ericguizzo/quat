@@ -121,6 +121,12 @@ percs = [train_split, validation_split, test_split]
 
 device = torch.device('cuda:' + str(gpu_ID))
 
+valence_id = 0
+arousal_id = 1
+dominance_id = 2
+
+
+
 if task_type == 'classification':
     loss_function = nn.CrossEntropyLoss()
     metrics_list = ['accuracy']
@@ -460,11 +466,16 @@ def main():
                 temp_loss = loss_function(outputs, truth)
 
                 train_batch_losses.append(temp_loss.item())
-                print ('MERDACCIA', outputs[:,0].shape)
-                '''
-                temp_loss_valence = loss_function(outputs[valence_id], truth[valence_id])
-                temp_loss_arousal = loss_function(outputs[arousal_id], truth[arousal_id])
-                '''
+                #print ('MERDACCIA', outputs[:,0].shape)
+
+                temp_loss_valence = loss_function(outputs[:,valence_id], truth[:,valence_id])
+                temp_loss_arousal = loss_function(outputs[:,arousal_id], truth[:,arousal_id])
+                temp_loss_dominance = loss_function(outputs[:,dominance_id], truth[:,dominance_id])
+
+                train_batch_losses_valence.append(temp_loss_valence)
+                train_batch_losses_arousal.append(temp_loss_arousal)
+                train_batch_losses_dominance.append(temp_loss_dominance)
+
                 if task_type == 'classification':
                     temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                     train_batch_accs.append(temp_acc)
@@ -481,6 +492,14 @@ def main():
 
                 val_batch_losses.append(temp_loss.item())
 
+                temp_loss_valence = loss_function(outputs[:,valence_id], truth[:,valence_id])
+                temp_loss_arousal = loss_function(outputs[:,arousal_id], truth[:,arousal_id])
+                temp_loss_dominance = loss_function(outputs[:,dominance_id], truth[:,dominance_id])
+
+                val_batch_losses_valence.append(temp_loss_valence)
+                val_batch_losses_arousal.append(temp_loss_arousal)
+                val_batch_losses_dominance.append(temp_loss_dominance)
+
                 if task_type == 'classification':
                     temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                     val_batch_accs.append(temp_acc)
@@ -492,6 +511,23 @@ def main():
         train_loss_hist.append(train_epoch_loss)
         val_epoch_loss = np.mean(val_batch_losses)
         val_loss_hist.append(val_epoch_loss)
+
+        train_epoch_loss_valence = np.mean(train_batch_losses_valence)
+        train_loss_hist_valence.append(train_epoch_loss_valence)
+        val_epoch_loss_valence = np.mean(val_batch_losses_valence)
+        val_loss_hist_valence.append(val_epoch_loss_valence)
+
+        train_epoch_loss_arousal = np.mean(train_batch_losses_arousal)
+        train_loss_hist_arousal.append(train_epoch_loss_arousal)
+        val_epoch_loss_arousal = np.mean(val_batch_losses_arousal)
+        val_loss_hist_arousal.append(val_epoch_loss_arousal)
+
+        train_epoch_loss_dominance = np.mean(train_batch_losses_dominance)
+        train_loss_hist_dominance.append(train_epoch_loss_dominance)
+        val_epoch_loss_dominance = np.mean(val_batch_losses_dominance)
+        val_loss_hist_dominance.append(val_epoch_loss_dominance)
+
+
 
         if task_type == 'classification':
             train_epoch_acc = np.mean(train_batch_accs)
