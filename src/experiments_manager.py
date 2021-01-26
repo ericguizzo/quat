@@ -11,7 +11,7 @@ end = 20
 gpu_ID = 0
 
 
-global_parameters = ['num_epochs=50', 'learning_rate=0.00005', 'early_stopping=True',
+global_parameters = ['num_epochs=3', 'learning_rate=0.00005', 'early_stopping=True',
                     'patience=5', 'choose_optimizer="adam"', 'batch_size=8']
 
 experiments_to_run_folder = 'experiments_quat'

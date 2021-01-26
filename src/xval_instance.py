@@ -157,15 +157,15 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
         val_loss.append(folds[i]['val_loss'])
         test_loss.append(folds[i]['test_loss'])
 
-        tr_loss_valence.append(folds[i]['tr_loss_valence'])
+        tr_loss_valence.append(folds[i]['train_loss_valence'])
         val_loss_valence.append(folds[i]['val_loss_valence'])
         test_loss_valence.append(folds[i]['test_loss_valence'])
 
-        tr_loss_arousal.append(folds[i]['tr_loss_arousal'])
+        tr_loss_arousal.append(folds[i]['train_loss_arousal'])
         val_loss_arousal.append(folds[i]['val_loss_arousal'])
         test_loss_arousal.append(folds[i]['test_loss_arousal'])
 
-        tr_loss_dominance.append(folds[i]['tr_loss_dominance'])
+        tr_loss_dominance.append(folds[i]['train_loss_dominance'])
         val_loss_dominance.append(folds[i]['val_loss_dominance'])
         test_loss_dominance.append(folds[i]['test_loss_dominance'])
 
