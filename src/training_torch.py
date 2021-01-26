@@ -577,6 +577,10 @@ def main():
                 train_batch_recall.append(temp_recall)
 
             elif task_type == 'regression':
+                print ('STRACAZZO')
+                print(outputs.cpu().float())
+                print ('//////////')
+                print(truth.cpu().float())
                 temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                 train_batch_rmse.append(temp_rmse)
                 temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
@@ -606,10 +610,6 @@ def main():
                 val_batch_recall.append(temp_recall)
 
             elif task_type == 'regression':
-                print ('STRACAZZO')
-                print(outputs.cpu().float())
-                print ('//////////')
-                print(truth.cpu().float())
                 temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                 val_batch_rmse.append(temp_rmse)
                 temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
