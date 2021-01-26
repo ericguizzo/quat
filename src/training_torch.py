@@ -702,7 +702,7 @@ def main():
                 train_batch_recall.append(temp_recall)
 
             elif task_type == 'regression':
-                temp_rmse = mean_squared_error(outputs.cpu().float(), truth.cpu().float())
+                temp_rmse = np.sqrt(mean_squared_error(outputs.cpu().float(), truth.cpu().float()))
                 train_batch_rmse.append(temp_rmse)
                 temp_mae = mean_absolute_error(outputs.cpu().float(), truth.cpu().float())
                 train_batch_mae.append(temp_mae)
@@ -731,7 +731,7 @@ def main():
                 val_batch_recall.append(temp_recall)
 
             elif task_type == 'regression':
-                temp_rmse = mean_squared_error(outputs.cpu().float(), truth.cpu().float())
+                temp_rmse = np.sqrt(mean_squared_error(outputs.cpu().float(), truth.cpu().float()))
                 val_batch_rmse.append(temp_rmse)
                 temp_mae = mean_absolute_error(outputs.cpu().float(), truth.cpu().float())
                 val_batch_mae.append(temp_mae)
@@ -759,7 +759,7 @@ def main():
                 test_batch_recall.append(temp_recall)
 
             elif task_type == 'regression':
-                temp_rmse = mean_squared_error(outputs.cpu().float(), truth.cpu().float())
+                temp_rmse = np.sqrt(mean_squared_error(outputs.cpu().float(), truth.cpu().float()))
                 test_batch_rmse.append(temp_rmse)
                 temp_mae = mean_absolute_error(outputs.cpu().float(), truth.cpu().float())
                 test_batch_mae.append(temp_mae)
