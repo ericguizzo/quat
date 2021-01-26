@@ -819,6 +819,18 @@ def main():
     temp_results['val_loss'] = np.mean(val_batch_losses)
     temp_results['test_loss'] = np.mean(test_batch_losses)
 
+    temp_results['train_loss_valence'] = np.mean(train_batch_losses_valence)
+    temp_results['val_loss_valence'] = np.mean(val_batch_losses_valence)
+    temp_results['test_loss_valence'] = np.mean(test_batch_losses_valence)
+
+    temp_results['train_loss_arousal'] = np.mean(train_batch_losses_arousal)
+    temp_results['val_loss_arousal'] = np.mean(val_batch_losses_arousal)
+    temp_results['test_loss_arousal'] = np.mean(test_batch_losses_arousal)
+
+    temp_results['train_loss_dominance'] = np.mean(train_batch_losses_dominance)
+    temp_results['val_loss_dominance'] = np.mean(val_batch_losses_dominance)
+    temp_results['test_loss_dominance'] = np.mean(test_batch_losses_dominance)
+
     #if classification compute also f1, precision, recall
     if task_type == 'classification':
         temp_results['train_acc'] = np.mean(train_batch_accs)
