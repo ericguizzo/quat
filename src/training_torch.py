@@ -853,7 +853,7 @@ def main():
         temp_results['test_RMSE_valence'] = np.mean(test_batch_rmse_valence)
 
         temp_results['train_MAE_arousal'] = np.mean(train_batch_mae_arousal)
-        temp_results['val_MAE_arousal'] = np.mean(val_batch_mae_arousal_arousal)
+        temp_results['val_MAE_arousal'] = np.mean(val_batch_mae_arousal)
         temp_results['test_MAE_arousal'] = np.mean(test_batch_mae_arousal)
         temp_results['train_RMSE_arousal'] = np.mean(train_batch_rmse_arousal)
         temp_results['val_RMSE_arousal'] = np.mean(val_batch_rmse_arousal)
