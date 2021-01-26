@@ -400,6 +400,15 @@ def main():
         train_batch_losses = []
         val_batch_losses = []
 
+        train_batch_losses_valence = []
+        val_batch_losses_valence = []
+
+        train_batch_losses_arousal = []
+        val_batch_losses_arousal = []
+
+        train_batch_losses_dominance = []
+        val_batch_losses_dominance = []
+
         if task_type == 'classification':
             train_batch_accs = []
             val_batch_accs = []
@@ -413,6 +422,32 @@ def main():
             val_batch_mae = []
             test_batch_mae = []
 
+            train_batch_rmse_valence = []
+            val_batch_rmse_valence = []
+            test_batch_rmse_valence = []
+
+            train_batch_mae_valence = []
+            val_batch_mae_valence = []
+            test_batch_mae_valence = []
+
+            train_batch_rmse_arousal = []
+            val_batch_rmse_arousal = []
+            test_batch_rmse_arousal = []
+
+            train_batch_mae_arousal = []
+            val_batch_mae_arousal = []
+            test_batch_mae_arousal = []
+
+            train_batch_rmse_dominance = []
+            val_batch_rmse_dominance = []
+            test_batch_rmse_dominance = []
+
+            train_batch_mae_dominance = []
+            val_batch_mae_dominance = []
+            test_batch_mae_dominance = []
+
+
+
         with torch.no_grad():
             model.eval()
             #training data
@@ -425,7 +460,11 @@ def main():
                 temp_loss = loss_function(outputs, truth)
 
                 train_batch_losses.append(temp_loss.item())
-
+                print ('MERDACCIA', outputs.shape)
+                '''
+                temp_loss_valence = loss_function(outputs[valence_id], truth[valence_id])
+                temp_loss_arousal = loss_function(outputs[arousal_id], truth[arousal_id])
+                '''
                 if task_type == 'classification':
                     temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
                     train_batch_accs.append(temp_acc)
@@ -551,6 +590,44 @@ def main():
         train_batch_mae = []
         val_batch_mae = []
         test_batch_mae = []
+
+        train_batch_losses_valence = []
+        train_batch_losses_arousal = []
+        train_batch_losses_dominance = []
+
+        train_batch_rmse_valence = []
+        train_batch_rmse_arousal = []
+        train_batch_rmse_dominance = []
+
+        train_batch_mae_valence = []
+        train_batch_mae_arousal = []
+        train_batch_mae_dominance = []
+
+        val_batch_losses_valence = []
+        val_batch_losses_arousal = []
+        val_batch_losses_dominance = []
+
+        val_batch_rmse_valence = []
+        val_batch_rmse_arousal = []
+        val_batch_rmse_dominance = []
+
+        val_batch_mae_valence = []
+        val_batch_mae_arousal = []
+        val_batch_mae_dominance = []
+
+        test_batch_losses_valence = []
+        test_batch_losses_arousal = []
+        test_batch_losses_dominance = []
+
+        test_batch_rmse_valence = []
+        test_batch_rmse_arousal = []
+        test_batch_rmse_dominance = []
+
+        test_batch_mae_valence = []
+        test_batch_mae_arousal = []
+        test_batch_mae_dominance = []
+
+
 
     model.eval()
     with torch.no_grad():
