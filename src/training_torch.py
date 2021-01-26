@@ -460,7 +460,7 @@ def main():
                 temp_loss = loss_function(outputs, truth)
 
                 train_batch_losses.append(temp_loss.item())
-                print ('MERDACCIA', outputs.shape)
+                print ('MERDACCIA', outputs[:,0].shape)
                 '''
                 temp_loss_valence = loss_function(outputs[valence_id], truth[valence_id])
                 temp_loss_arousal = loss_function(outputs[arousal_id], truth[arousal_id])
