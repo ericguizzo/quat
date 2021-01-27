@@ -40,8 +40,7 @@ experiment = {}
 
 #WRITE HERE EXPERIMENTS
 
-experiment[1] = ['comment_1="prova"', 'comment_2="bla"',
-                 ''
+experiment[1] = ['comment_1="prova"', 'comment_2="bla"'
                  ]
 
 experiment[2] = ['comment_1="prova2"', 'comment_2="blabla"'
