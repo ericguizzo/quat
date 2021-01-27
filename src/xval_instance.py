@@ -205,26 +205,27 @@ def run_experiment(num_experiment, num_run, num_folds, dataset, experiment_folde
                         'test':{'mean_loss': test_mean,
                                     'loss_std': test_std}}
 
-    folds['summary'] = {'training':{'mean_loss_valence': tr_mean_valence,
-                                    'loss_std_valence': tr_std_valence},
-                        'validation':{'mean_loss_valence': val_mean_valence,
-                                    'loss_std_valence': val_std_valence},
-                        'test':{'mean_loss_valence': test_mean_valence,
-                                    'loss_std_valence': test_std_valence}}
+    folds['summary']['training']['mean_loss_valence'] = tr_mean_valence
+    folds['summary']['training']['loss_std_valence'] = tr_std_valence
+    folds['summary']['validation']['mean_loss_valence'] = val_mean_valence
+    folds['summary']['validation']['loss_std_valence'] = val_std_valence
+    folds['summary']['test']['mean_loss_valence'] = test_mean_valence
+    folds['summary']['test']['loss_std_valence'] = test_std_valence
 
-    folds['summary'] = {'training':{'mean_loss_arousal': tr_mean_arousal,
-                                    'loss_std_arousal': tr_std_arousal},
-                        'validation':{'mean_loss_arousal': val_mean_arousal,
-                                    'loss_std_arousal': val_std_arousal},
-                        'test':{'mean_loss_arousal': test_mean_arousal,
-                                    'loss_std_arousal': test_std_arousal}}
+    folds['summary']['training']['mean_loss_arousal'] = tr_mean_arousal
+    folds['summary']['training']['loss_std_arousal'] = tr_std_arousal
+    folds['summary']['validation']['mean_loss_arousal'] = val_mean_arousal
+    folds['summary']['validation']['loss_std_arousal'] = val_std_arousal
+    folds['summary']['test']['mean_loss_arousal'] = test_mean_arousal
+    folds['summary']['test']['loss_std_arousal'] = test_std_arousal
 
-    folds['summary'] = {'training':{'mean_loss_dominance': tr_mean_dominance,
-                                    'loss_std_dominance': tr_std_dominance},
-                        'validation':{'mean_loss_dominance': val_mean_dominance,
-                                    'loss_std_dominance': val_std_dominance},
-                        'test':{'mean_loss_dominance': test_mean_dominance,
-                                    'loss_std_dominance': test_std_dominance}}
+    folds['summary']['training']['mean_loss_dominance'] = tr_mean_dominance
+    folds['summary']['training']['loss_std_dominance'] = tr_std_dominance
+    folds['summary']['validation']['mean_loss_dominance'] = val_mean_dominance
+    folds['summary']['validation']['loss_std_dominance'] = val_std_dominance
+    folds['summary']['test']['mean_loss_dominance'] = test_mean_dominance
+    folds['summary']['test']['loss_std__dominance'] = test_std_dominance
+
 
     #compute mean acc and acc std if task_type is classification
     if locals()['task_type'] == 'regression':
