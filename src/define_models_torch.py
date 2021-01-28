@@ -586,3 +586,13 @@ def vgg16(time_dim, features_dim, user_parameters=['niente = 0']):
     out = model.cpu()
 
     return out, p
+
+
+def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
+    '''
+    quaternion-valued autoencoder
+    '''
+    p = {
+    'output_classes':1000,
+
+    }
