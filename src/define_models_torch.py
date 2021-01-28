@@ -591,58 +591,69 @@ def vgg16(time_dim, features_dim, user_parameters=['niente = 0']):
 
 
 def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
-    '''
-    quaternion-valued autoencoder
-    '''
     p = {
-    'structure': [32, 64, 128, 256, 512],
-    'latent_dim': 20
-    }
-
+        'structure': [32, 64, 128, 256, 512],
+        'latent_dim': 20
+        }
     p = parse_parameters(p, user_parameters)
-    self.latent_dim = latent_dim
-    #build encoder *real-valued
-    conv_layers = []
-    in_chans = 1
-    for curr_chans in structure:
-        conv_layers.append(
-            nn.Sequential(
-                nn.Conv2d(in_chans, out_channels=curr_chans,
-                            kernel_size=3, stride=2, padding=[1, 1], dilatation=[1, 1]),
-                nn.LeakyReLU())
-            )
-        in_chans = curr_chans
 
-    self.encoder = nn.Sequential(*conv_layers)
+    class autoencoder_q_class(nn.Module):
+        '''
+        quaternion-valued autoencoder
+        '''
 
-    #latent dimension layers
-    self.latent_real = nn.Linear(structure[-1]*4, latent_dim)
-    self.latent_q =  QuaternionLinear(structure[-1]*4, latent_dim)
 
-    #decoder input layers
-    self.decoder_input_real = Linear(4*latent_dim, structure[-1] * 4)
-    self.decoder_input_q = QuaternionLinear(4*latent_dim, structure[-1] * 4)
-    structure.reverse()
+        def __init__(self, structure=p['structure'], latent_dim=p['latent_dim']):
+            super(autoencoder_q_class, self).__init__()
 
-    #build decoder *real valued
-    conv_layers = []
-    for i in range(len(structure) - 1):
-        conv_layers.append(
-            nn.Sequential(
-                nn.ConvTranspose2d(structure[i], structure[i + 1],
-                                   kernel_size=3, stride=2, padding=1, output_padding=1),
-                nn.LeakyReLU())
-        )
-    self.decoder_real = nn.Sequential(*conv_layers)
 
-    #build decoder *quaternion-valued
-    conv_layers = []
-    for i in range(len(structure) - 1):
-        conv_layers.append(
-            nn.Sequential(
-                QuaternionTransposeConv(structure[i], structure[i + 1],
-                                   kernel_size=3, stride=2, padding=1, output_padding=1),
-                nn.LeakyReLU())
-        )
+            self.latent_dim =latent_dim
+            #build encoder *real-valued
+            conv_layers = []
+            in_chans = 1
+            for curr_chans in structure:
+                conv_layers.append(
+                    nn.Sequential(
+                        nn.Conv2d(in_chans, out_channels=curr_chans,
+                                    kernel_size=3, stride=2, padding=[1, 1]),
+                        nn.LeakyReLU())
+                    )
+                in_chans = curr_chans
 
-    self.decoder_q = nn.Sequential(*conv_layers)
+            self.encoder = nn.Sequential(*conv_layers)
+
+            #latent dimension layers
+            self.latent_real = nn.Linear(structure[-1]*4, latent_dim)
+            self.latent_q =  QuaternionLinear(structure[-1]*4, latent_dim)
+
+            #decoder input layers
+            self.decoder_input_real = nn.Linear(4*latent_dim, structure[-1] * 4)
+            self.decoder_input_q = QuaternionLinear(4*latent_dim, structure[-1] * 4)
+            structure.reverse()
+
+            #build decoder *real valued
+            conv_layers = []
+            for i in range(len(structure) - 1):
+                conv_layers.append(
+                    nn.Sequential(
+                        nn.ConvTranspose2d(structure[i], structure[i + 1],
+                                           kernel_size=3, stride=2, padding=1, output_padding=1),
+                        nn.LeakyReLU())
+                )
+            self.decoder_real = nn.Sequential(*conv_layers)
+
+            #build decoder *quaternion-valued
+            conv_layers = []
+            for i in range(len(structure) - 1):
+                conv_layers.append(
+                    nn.Sequential(
+                        QuaternionTransposeConv(structure[i], structure[i + 1],
+                                           kernel_size=3, stride=2, padding=1, output_padding=1),
+                        nn.LeakyReLU())
+                )
+
+            self.decoder_q = nn.Sequential(*conv_layers)
+
+    out = autoencoder_q_class()
+
+    return out, p
