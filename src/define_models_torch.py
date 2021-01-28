@@ -593,6 +593,18 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
     quaternion-valued autoencoder
     '''
     p = {
-    'output_classes':1000,
-
+    'structure' = [32, 64, 128, 256, 512]
     }
+
+    p = parse_parameters(p, user_parameters)
+
+    conv_layers = []
+    in_chans = 1
+    for curr_chans in structure:
+        conv_layers.append(
+            nn.Sequential(
+                QuaternionConv(in_chans, out_channels=curr_chans,
+                            kernel_size=3, stride=2, padding=[1, 1], dilatation=[1, 1]),
+                nn.LeakyReLU())
+            )
+        in_chans = curr_chans
