@@ -9,6 +9,8 @@ from torch import optim
 import torch.nn.functional as F
 import torch.utils.data as utils
 from torch.autograd import Variable
+from quaternion_layers import (QuaternionConv, QuaternionLinear,
+                               QuaternionTransposeConv)
 #from multiscale_convlayer2 import MultiscaleConv2d
 import sys, os
 import configparser
