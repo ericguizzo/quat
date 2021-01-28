@@ -19,9 +19,9 @@ y = target[input_id]
 x = torch.tensor(x.reshape(1, 1, x.shape[0], x.shape[1])).float().to(device)
 
 
-print (x.shape)
+print ('input dim', x.shape)
 
 #torch.manual_seed(0)
-model, p = mod.autoencoder_q(0,1,['verbose=True'])
+model, p = mod.autoencoder_q(0,1,['verbose=True', 'latent_dim=20'])
 model = model.to(device)
 model(x)
