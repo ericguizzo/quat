@@ -611,6 +611,7 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
             self.quat = quat
             self.latent_dim =latent_dim
             self.verbose = verbose
+            self.flattened_dim = 32768
             #build encoder *real-valued
             conv_layers = []
             in_chans = 1
@@ -626,12 +627,12 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
             self.encoder = nn.Sequential(*conv_layers)
 
             #latent dimension layers
-            self.latent_real = nn.Linear(40960, latent_dim)
-            self.latent_q =  QuaternionLinear(40960, latent_dim)
+            self.latent_real = nn.Linear(self.flattened_dim, latent_dim)
+            self.latent_q =  QuaternionLinear(self.flattened_dim, latent_dim)
 
             #decoder input layers
-            self.decoder_input_real = nn.Linear(latent_dim, 40960)
-            self.decoder_input_q = QuaternionLinear(4*latent_dim, 40960)
+            self.decoder_input_real = nn.Linear(latent_dim, self.flattened_dim)
+            self.decoder_input_q = QuaternionLinear(4*latent_dim, self.flattened_dim)
             structure.reverse()
 
             #build decoder *real valued
@@ -665,7 +666,7 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
                                                    padding=1,
                                                    output_padding=1),
                                 nn.LeakyReLU(),
-                                nn.Conv2d(structure[-1], out_channels=3,
+                                nn.Conv2d(structure[-1], out_channels=1,
                                           kernel_size=3, padding=1),
                                 nn.Sigmoid())
 
@@ -684,17 +685,17 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
                 if self.verbose:
                     print ('latent', x.shape)
                 x = self.decoder_input_real(x)
-                x = x.view(-1, 512, 16, 5)
+                x = x.view(-1, 512, 16, 4)
                 if self.verbose:
                     print('decoder_input', x.shape)
                 x = self.decoder_real(x)
                 if self.verbose:
                     print('decoder', x.shape)
-                '''
+
                 x = self.final_layer_real(x)
                 if self.verbose:
                     print('final', x.shape)
-                '''
+
 
 
             return x
