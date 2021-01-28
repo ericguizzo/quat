@@ -598,13 +598,32 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
 
     p = parse_parameters(p, user_parameters)
 
+    #build encoder
     conv_layers = []
     in_chans = 1
     for curr_chans in structure:
         conv_layers.append(
             nn.Sequential(
-                QuaternionConv(in_chans, out_channels=curr_chans,
+                nn.Conv2d(in_chans, out_channels=curr_chans,
                             kernel_size=3, stride=2, padding=[1, 1], dilatation=[1, 1]),
                 nn.LeakyReLU())
             )
         in_chans = curr_chans
+
+    self.encoder = nn.Sequential(*conv_layers)
+
+    #build decoder
+
+    conv_layers = []
+    self.decoder_input = QuaternionLinear(4*latent_dim, hidden_dims[-1] * 4)
+    structure.reverse()
+
+    for i in range(len(hidden_dims) - 1):
+        modules.append(
+            nn.Sequential(
+                nn.ConvTranspose2d(hidden_dims[i], hidden_dims[i + 1],
+                                   kernel_size=3, stride=2, padding=1, output_padding=1),
+                nn.LeakyReLU())
+        )
+
+    self.q_decoder = nn.Sequential(*modules)
