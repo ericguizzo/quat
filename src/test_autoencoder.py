@@ -5,13 +5,14 @@ import numpy as np
 import time
 
 #test if pretrained model and preprocessed iemocap dataset work
-iemocap_path = '../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy'
-model_path = '../pretraining_vgg/4secs_inv/model'
+predictors_path = '/Users/eric/Desktop/sapienza/quat/temp/iemocap_randsplit_spectrum_fast_test_predictors_fold_0.npy'
+target_path = '/Users/eric/Desktop/sapienza/quat/temp/iemocap_randsplit_spectrum_fast_test_target_fold_0.npy'
 #gpu_ID = 1
 #device = 'cuda:' + str(gpu_ID)
 device = 'cpu'
 
-
+predictors = np.load(predictors_path)
+target = np.load(target_path)
 
 print ('loading data')
 #load input sound from iemicap

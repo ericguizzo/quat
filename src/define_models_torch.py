@@ -595,8 +595,8 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
     quaternion-valued autoencoder
     '''
     p = {
-    'structure' = [32, 64, 128, 256, 512]
-    'latent_dim' = 20
+    'structure': [32, 64, 128, 256, 512],
+    'latent_dim': 20
     }
 
     p = parse_parameters(p, user_parameters)
