@@ -603,11 +603,13 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
         '''
 
 
-        def __init__(self, structure=p['structure'], latent_dim=p['latent_dim']):
+        def __init__(self, structure=p['structure'], latent_dim=p['latent_dim'],
+                    verbose=p['verbose']):
             super(autoencoder_q_class, self).__init__()
 
 
             self.latent_dim =latent_dim
+            self.verbose = verbose
             #build encoder *real-valued
             conv_layers = []
             in_chans = 1
@@ -651,8 +653,14 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
                                            kernel_size=3, stride=2, padding=1, output_padding=1),
                         nn.LeakyReLU())
                 )
-
             self.decoder_q = nn.Sequential(*conv_layers)
+
+
+        def forward(self, x):
+            x = self.encoder(x)
+            if self.verbose:
+                print(x.shape)
+            return x
 
     out = autoencoder_q_class()
 
