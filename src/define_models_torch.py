@@ -613,43 +613,34 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
 
     self.encoder = nn.Sequential(*conv_layers)
 
-    #latent dimension layesr
+    #latent dimension layers
     self.latent_real = nn.Linear(structure[-1]*4, latent_dim)
     self.latent_q =  QuaternionLinear(structure[-1]*4, latent_dim)
 
-
-    conv_layers = []
+    #decoder input layers
     self.decoder_input_real = Linear(4*latent_dim, structure[-1] * 4)
     self.decoder_input_q = QuaternionLinear(4*latent_dim, structure[-1] * 4)
-
-
-    structure.reverse()
-    #build decoder *real valued
-    for i in range(len(hidden_dims) - 1):
-        modules.append(
-            nn.Sequential(
-                nn.ConvTranspose2d(hidden_dims[i], hidden_dims[i + 1],
-                                   kernel_size=3, stride=2, padding=1, output_padding=1),
-                nn.LeakyReLU())
-        )
-
-
-    #build decoder *real valued
     structure.reverse()
 
+    #build decoder *real valued
     conv_layers = []
-    self.decoder_input = QuaternionLinear(4*latent_dim, structure[-1] * 4)
-    structure.reverse()
-
-    for i in range(len(hidden_dims) - 1):
-        modules.append(
+    for i in range(len(structure) - 1):
+        conv_layers.append(
             nn.Sequential(
-                nn.ConvTranspose2d(hidden_dims[i], hidden_dims[i + 1],
+                nn.ConvTranspose2d(structure[i], structure[i + 1],
+                                   kernel_size=3, stride=2, padding=1, output_padding=1),
+                nn.LeakyReLU())
+        )
+    self.decoder_real = nn.Sequential(*conv_layers)
+
+    #build decoder *quaternion-valued
+    conv_layers = []
+    for i in range(len(structure) - 1):
+        conv_layers.append(
+            nn.Sequential(
+                QuaternionTransposeConv(structure[i], structure[i + 1],
                                    kernel_size=3, stride=2, padding=1, output_padding=1),
                 nn.LeakyReLU())
         )
 
-
-
-
-    self.q_decoder = nn.Sequential(*modules)
+    self.decoder_q = nn.Sequential(*conv_layers)
