@@ -628,11 +628,11 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
 
             #latent dimension layers
             self.latent_real = nn.Linear(self.flattened_dim, latent_dim)
-            self.latent_q =  QuaternionLinear(self.flattened_dim, latent_dim)
+            self.latent_q =  QuaternionLinear(self.flattened_dim, latent_dim*4)
 
             #decoder input layers
             self.decoder_input_real = nn.Linear(latent_dim, self.flattened_dim)
-            self.decoder_input_q = QuaternionLinear(latent_dim, self.flattened_dim)
+            self.decoder_input_q = QuaternionLinear(latent_dim*4, self.flattened_dim)
             structure.reverse()
 
             #build decoder *real valued
