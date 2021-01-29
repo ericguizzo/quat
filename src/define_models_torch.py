@@ -594,7 +594,7 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
     p = {
         'structure': [32, 64, 128, 256, 512],
         'latent_dim': 20,
-        'quat': False
+        'quat': True
         }
     p = parse_parameters(p, user_parameters)
 
@@ -632,7 +632,7 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
 
             #decoder input layers
             self.decoder_input_real = nn.Linear(latent_dim, self.flattened_dim)
-            self.decoder_input_q = QuaternionLinear(4*latent_dim, self.flattened_dim)
+            self.decoder_input_q = QuaternionLinear(latent_dim, self.flattened_dim)
             structure.reverse()
 
             #build decoder *real valued
@@ -641,7 +641,8 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
                 conv_layers.append(
                     nn.Sequential(
                         nn.ConvTranspose2d(structure[i], structure[i + 1],
-                                           kernel_size=3, stride=2, padding=1, output_padding=1),
+                                           kernel_size=3, stride=2, padding=1,
+                                           output_padding=1),
                         nn.LeakyReLU())
                 )
             self.decoder_real = nn.Sequential(*conv_layers)
@@ -652,7 +653,8 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
                 conv_layers.append(
                     nn.Sequential(
                         QuaternionTransposeConv(structure[i], structure[i + 1],
-                                           kernel_size=3, stride=2, padding=1, output_padding=1),
+                                           kernel_size=3, stride=2, padding=1,
+                                           output_padding=1),
                         nn.LeakyReLU())
                 )
             self.decoder_q = nn.Sequential(*conv_layers)
@@ -670,6 +672,18 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
                                           kernel_size=3, padding=1),
                                 nn.Sigmoid())
 
+            self.final_layer_q = nn.Sequential(
+                                QuaternionTransposeConv(structure[-1],
+                                                        structure[-1],
+                                                        kernel_size=3,
+                                                        stride=2,
+                                                        padding=1,
+                                                        output_padding=1),
+                                nn.LeakyReLU(),
+                                QuaternionConv(structure[-1], out_channels=4,
+                                          kernel_size=3, stride=1, padding=1),
+                                nn.Sigmoid())
+
 
         def forward(self, x):
             #encode
@@ -679,7 +693,22 @@ def autoencoder_q(time_dim, features_dim, user_parameters=['niente = 0']):
             x = torch.flatten(x, start_dim=1)
             if self.verbose:
                 print('flatten', x.shape)
-            #latent dim
+            if self.quat:
+                x = self.latent_q(x)
+                if self.verbose:
+                    print ('latent', x.shape)
+                x = self.decoder_input_q(x)
+                x = x.view(-1, 512, 16, 4)
+                if self.verbose:
+                    print('decoder_input', x.shape)
+                x = self.decoder_q(x)
+                if self.verbose:
+                    print('decoder', x.shape)
+                x = self.final_layer_q(x)
+                if self.verbose:
+                    print('final', x.shape)
+
+
             if not self.quat:
                 x = self.latent_real(x)
                 if self.verbose:
