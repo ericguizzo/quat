@@ -26,7 +26,8 @@ y = target[input_id]
 x = torch.tensor(x.reshape(1, 1, x.shape[0], x.shape[1])).float().to(device)
 
 x = torch.rand(1,1,512,128)
-print ('input dim', x.shape)
+print ('input_=
+]dim', x.shape)
 
 #torch.manual_seed(0)
 model, p = mod.autoencoder_q(0,1,['verbose=True', 'latent_dim=20'])
