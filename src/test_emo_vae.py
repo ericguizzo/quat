@@ -20,7 +20,7 @@ batch_size = 1
 beta = 0.2
 label = torch.rand(batch_size,3)
 
-x = torch.ones(batch_size,1,512,128)  #dummy batch, same size as spectrograms
+x = torch.rand(batch_size,1,512,128)  #dummy batch, same size as spectrograms
 
 model = emo_vae(verbose=True)
 print ("\nInput dim:", x.shape)
