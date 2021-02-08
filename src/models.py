@@ -92,7 +92,7 @@ class emo_vae(nn.Module):
 
 
         layers = []
-        in_chans = 65536
+        in_chans = self.flattened_dim * 2
         for curr_chans in classifier_structure:
             layers.append(
                 nn.Sequential(
@@ -170,11 +170,10 @@ class emo_vae(nn.Module):
         x_arousal = self.classifier_arousal(x_arousal)
         x_dominance = self.classifier_dominance(x_dominance)
 
-        x_valence = self.final_layer_dominance(x_valence)
-        x_arousal = self.final_layer_dominance(x_arousal)
-        x_dominance = self.final_layer_dominance(x_dominance)
+        x_valence = torch.sigmoid(self.final_layer_dominance(x_valence))
+        x_arousal = torch.sigmoid(self.final_layer_dominance(x_arousal))
+        x_dominance = torch.sigmoid(self.final_layer_dominance(x_dominance))
 
         emo_preds = torch.cat((x_valence,x_arousal,x_dominance),1)
 
-        print (emo_preds)
         return x, emo_preds
