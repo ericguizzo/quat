@@ -10,6 +10,7 @@ from sklearn.metrics import accuracy_score, f1_score,
                             precision_score, recall_score
 
 from models import emo_vae
+from loss_emo import loss_f
 import utility_functions as uf
 
 '''
@@ -35,6 +36,7 @@ parser.add_argument('--results_folder', type=str, default='../results')
 parser.add_argument('--train_perc', type=float, default=0.7)
 parser.add_argument('--val_perc', type=float, default=0.2)
 parser.add_argument('--test_perc', type=float, default=0.1)
+parser.add_argument('--fast_test', type=bool, default=False)
 
 
 args = parser.parse_args()
@@ -88,15 +90,15 @@ test_predictors, test_target = uf.build_matrix_dataset(predictors_merged,
 
 
 
-'''
-bound = 100
-training_predictors = training_predictors[:bound]
-training_target = training_target[:bound]
-validation_predictors = validation_predictors[:bound]
-validation_target = validation_target[:bound]
-test_predictors = test_predictors[:bound]
-test_target = test_target[:bound]
-'''
+if args.fast_test:
+    bound = 100
+    training_predictors = training_predictors[:bound]
+    training_target = training_target[:bound]
+    validation_predictors = validation_predictors[:bound]
+    validation_target = validation_target[:bound]
+    test_predictors = test_predictors[:bound]
+    test_target = test_target[:bound]
+
 
 #normalize datasets
 tr_mean = np.mean(training_predictors)
@@ -133,6 +135,11 @@ test_data = utils.DataLoader(test_dataset, batch_size, shuffle=False, pin_memory
 
 #load model
 
+model = emo_ae(structure=args.model_cnn_structure,
+               classifier_structure=args.model_classifier_structure,
+               latent_dim=args.model_latent_dim,
+               verbose=args.verbose,
+               quat=args.model_quat)
 
 par = ['output_classes=' + str(num_speakers_iemocap)]
 
@@ -141,7 +148,6 @@ model, dummy = define_models_torch.vgg16(0,0, par)
 model = model.to(device)
 
 print (model)
-
 
 #compute number of parameters
 model_params = sum([np.prod(p.size()) for p in model.parameters()])
