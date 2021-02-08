@@ -90,10 +90,9 @@ class emo_vae(nn.Module):
                                       kernel_size=3, stride=1, padding=1),
                             nn.Sigmoid())
 
-        self.classifier_valence = nn.sequential(
-                                nn.Linear()
 
         layers = []
+        in_chans = 65536
         for curr_chans in classifier_structure:
             layers.append(
                 nn.Sequential(
@@ -108,18 +107,18 @@ class emo_vae(nn.Module):
 
         self.final_layer_valence = nn.Sequential(
                 nn.Dropout(),
-                nn.Linear(layers[-1], 1),
-                nn.LeackyReLU()
+                nn.Linear(classifier_structure[-1], 1),
+                nn.LeakyReLU()
             )
         self.final_layer_arousal = nn.Sequential(
                 nn.Dropout(),
-                nn.Linear(layers[-1], 1),
-                nn.LeackyReLU()
+                nn.Linear(classifier_structure[-1], 1),
+                nn.LeakyReLU()
             )
         self.final_layer_dominance = nn.Sequential(
                 nn.Dropout(),
-                nn.Linear(layers[-1], 1),
-                nn.LeackyReLU()
+                nn.Linear(classifier_structure[-1], 1),
+                nn.LeakyReLU()
             )
 
     def forward(self, x):
@@ -164,13 +163,14 @@ class emo_vae(nn.Module):
                 print('final', x.shape)
 
         #classifiers
-        x_valence = x[:,1,:,:]
-        x_arousal = x[:,2,:,:]
-        x_dominance = x[:,3,:,:]
+        x_valence = torch.flatten(x[:,1,:,:], start_dim=1)
+        x_arousal = torch.flatten(x[:,2,:,:], start_dim=1)
+        x_dominance = torch.flatten(x[:,3,:,:], start_dim=1)
+        print ('CULO', x_valence.shape)
 
-        x_valence = self.classifier_valence(x)
-        x_arousal = self.classifier_arousal(x)
-        x_dominance = self.classifier_dominance(x)
+        x_valence = self.classifier_valence(x_valence)
+        x_arousal = self.classifier_arousal(x_arousal)
+        x_dominance = self.classifier_dominance(x_dominance)
 
         x_valence = self.final_layer_dominance(x_valence)
         x_arousal = self.final_layer_dominance(x_arousal)
