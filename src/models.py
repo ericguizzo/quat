@@ -166,8 +166,6 @@ class emo_vae(nn.Module):
         x_valence = torch.flatten(x[:,1,:,:], start_dim=1)
         x_arousal = torch.flatten(x[:,2,:,:], start_dim=1)
         x_dominance = torch.flatten(x[:,3,:,:], start_dim=1)
-        print ('CULO', x_valence.shape)
-
         x_valence = self.classifier_valence(x_valence)
         x_arousal = self.classifier_arousal(x_arousal)
         x_dominance = self.classifier_dominance(x_dominance)
@@ -176,4 +174,7 @@ class emo_vae(nn.Module):
         x_arousal = self.final_layer_dominance(x_arousal)
         x_dominance = self.final_layer_dominance(x_dominance)
 
-        return x, x_valence, x_arousal, x_dominance
+        emo_preds = torch.cat((x_valence,x_arousal,x_dominance),1)
+
+        print (emo_preds)
+        return x, emo_preds
