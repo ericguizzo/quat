@@ -3,16 +3,15 @@ from torch import nn
 from quaternion_layers import (QuaternionConv, QuaternionLinear,
                                QuaternionTransposeConv)
 
-#default args
-verbose = True
-structure =  [32, 64, 128, 256, 512],
-latent_dim= 20,
-quat = True
 
 
 class emo_vae(nn.Module):
-    def __init__(self, structure=structure, latent_dim=latent_dim,
-                verbose=verboose, quat=quat):
+    def __init__(self,
+                structure=[32, 64, 128, 256, 512],
+                classifier_structure=[2000,1000,500,100],
+                latent_dim=20,
+                verbose=True,
+                quat=True):
         super(emo_vae, self).__init__()
 
         self.quat = quat
@@ -67,7 +66,7 @@ class emo_vae(nn.Module):
         self.decoder_q = nn.Sequential(*conv_layers)
 
         #final layers
-        self.final_layer_real = nn.Sequential(
+        self.final_layer_decoder_real = nn.Sequential(
                             nn.ConvTranspose2d(structure[-1],
                                                structure[-1],
                                                kernel_size=3,
@@ -79,7 +78,7 @@ class emo_vae(nn.Module):
                                       kernel_size=3, padding=1),
                             nn.Sigmoid())
 
-        self.final_layer_q = nn.Sequential(
+        self.final_layer_decoder_q = nn.Sequential(
                             QuaternionTransposeConv(structure[-1],
                                                     structure[-1],
                                                     kernel_size=3,
@@ -91,15 +90,48 @@ class emo_vae(nn.Module):
                                       kernel_size=3, stride=1, padding=1),
                             nn.Sigmoid())
 
+        self.classifier_valence = nn.sequential(
+                                nn.Linear()
+
+        layers = []
+        for curr_chans in classifier_structure:
+            layers.append(
+                nn.Sequential(
+                    nn.Linear(in_chans, curr_chans),
+                    nn.LeakyReLU())
+                )
+            in_chans = curr_chans
+
+        self.classifier_valence = nn.Sequential(*layers)
+        self.classifier_arousal = nn.Sequential(*layers)
+        self.classifier_dominance = nn.Sequential(*layers)
+
+        self.final_layer_valence = nn.Sequential(
+                nn.Dropout(),
+                nn.Linear(layers[-1], 1),
+                nn.LeackyReLU()
+            )
+        self.final_layer_arousal = nn.Sequential(
+                nn.Dropout(),
+                nn.Linear(layers[-1], 1),
+                nn.LeackyReLU()
+            )
+        self.final_layer_dominance = nn.Sequential(
+                nn.Dropout(),
+                nn.Linear(layers[-1], 1),
+                nn.LeackyReLU()
+            )
 
     def forward(self, x):
-        #encode
+        #encoder
         x = self.encoder(x)
         if self.verbose:
             print('encoder', x.shape)
         x = torch.flatten(x, start_dim=1)
         if self.verbose:
             print('flatten', x.shape)
+
+        #decoder
         if self.quat:
             x = self.latent_q(x)
             if self.verbose:
@@ -111,7 +143,7 @@ class emo_vae(nn.Module):
             x = self.decoder_q(x)
             if self.verbose:
                 print('decoder', x.shape)
-            x = self.final_layer_q(x)
+            x = self.final_layer_decoder_q(x)
             if self.verbose:
                 print('final', x.shape)
 
@@ -127,8 +159,21 @@ class emo_vae(nn.Module):
             if self.verbose:
                 print('decoder', x.shape)
 
-            x = self.final_layer_real(x)
+            x = self.final_layer_decoder_real(x)
             if self.verbose:
                 print('final', x.shape)
 
-        return x
+        #classifiers
+        x_valence = x[:,1,:,:]
+        x_arousal = x[:,2,:,:]
+        x_dominance = x[:,3,:,:]
+
+        x_valence = self.classifier_valence(x)
+        x_arousal = self.classifier_arousal(x)
+        x_dominance = self.classifier_dominance(x)
+
+        x_valence = self.final_layer_dominance(x_valence)
+        x_arousal = self.final_layer_dominance(x_arousal)
+        x_dominance = self.final_layer_dominance(x_dominance)
+
+        return x, x_valence, x_arousal, x_dominance
