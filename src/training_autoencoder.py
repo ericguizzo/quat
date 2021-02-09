@@ -13,14 +13,20 @@ from models import emo_vae
 from loss_emo import loss_f
 import utility_functions as uf
 
-'''
-Feature extractor pre-training for anti-transfer loss computation
-'''
 
 
 parser = argparse.ArgumentParser()
+#saving parameters
+parser.add_argument('--experiment_name', type=str, default='test')
+parser.add_argument('--results_folder', type=str, default='../results')
+#dataset parameters
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_speaker/iemocap_randsplit_spectrum_fast_predictors.npy')
 parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_speaker/iemocap_randsplit_spectrum_fast_target.npy')
+parser.add_argument('--train_perc', type=float, default=0.7)
+parser.add_argument('--val_perc', type=float, default=0.2)
+parser.add_argument('--test_perc', type=float, default=0.1)
+parser.add_argument('--fast_test', type=bool, default=False)
+#training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
 parser.add_argument('--use_cuda', type=bool, default=True)
 parser.add_argument('--num_epochs', type=int, default=100)
@@ -31,13 +37,15 @@ parser.add_argument('--early_stopping', type=bool, default=True)
 parser.add_argument('--save_model_metric', type=str, default='loss')
 parser.add_argument('--patience', type=int, default=10)
 parser.add_argument('--load_pretrained', type=str, default=None)
-parser.add_argument('--experiment_name', type=str, default='test')
-parser.add_argument('--results_folder', type=str, default='../results')
-parser.add_argument('--train_perc', type=float, default=0.7)
-parser.add_argument('--val_perc', type=float, default=0.2)
-parser.add_argument('--test_perc', type=float, default=0.1)
-parser.add_argument('--fast_test', type=bool, default=False)
+#model parameters
+parser.add_argument('--model_name', type=string, default='emo_vae')
+parser.add_argument('--model_cnn_structure', type=string, default='[32, 64, 128, 256, 512]')
+parser.add_argument('--model_classifier_structure', type=string, default='[2000,1000,500,100]')
+parser.add_argument('--model_latent_dim', type=int, default=20)
+parser.add_argument('--verbose', type=bool, default=False)
+parser.add_argument('--model_quat', type=bool, default=True)
 
+#eval string args
 
 args = parser.parse_args()
 
@@ -135,15 +143,11 @@ test_data = utils.DataLoader(test_dataset, batch_size, shuffle=False, pin_memory
 
 #load model
 
-model = emo_ae(structure=args.model_cnn_structure,
-               classifier_structure=args.model_classifier_structure,
+model = locals()[args.model_name](structure=eval(args.model_cnn_structure),
+               classifier_structure=eval(args.model_classifier_structure),
                latent_dim=args.model_latent_dim,
                verbose=args.verbose,
                quat=args.model_quat)
-
-par = ['output_classes=' + str(num_speakers_iemocap)]
-
-model, dummy = define_models_torch.vgg16(0,0, par)
 
 model = model.to(device)
 
