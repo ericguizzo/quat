@@ -166,6 +166,7 @@ class emo_vae(nn.Module):
         x_valence = torch.flatten(x[:,1,:,:], start_dim=1)
         x_arousal = torch.flatten(x[:,2,:,:], start_dim=1)
         x_dominance = torch.flatten(x[:,3,:,:], start_dim=1)
+        
         x_valence = self.classifier_valence(x_valence)
         x_arousal = self.classifier_arousal(x_arousal)
         x_dominance = self.classifier_dominance(x_dominance)

@@ -9,8 +9,8 @@ import torch.utils.data as utils
 from sklearn.metrics import accuracy_score, f1_score,
                             precision_score, recall_score
 
-from models import emo_vae
-from loss_emo import loss_f
+from models import *
+from loss_emo import *
 import utility_functions as uf
 
 
@@ -25,6 +25,7 @@ parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemo
 parser.add_argument('--train_perc', type=float, default=0.7)
 parser.add_argument('--val_perc', type=float, default=0.2)
 parser.add_argument('--test_perc', type=float, default=0.1)
+parser.add_argument('--normalize_predictors', type=bool, default=True)
 parser.add_argument('--fast_test', type=bool, default=False)
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
@@ -37,6 +38,9 @@ parser.add_argument('--early_stopping', type=bool, default=True)
 parser.add_argument('--save_model_metric', type=str, default='loss')
 parser.add_argument('--patience', type=int, default=10)
 parser.add_argument('--load_pretrained', type=str, default=None)
+#loss parameters
+parser.add_argument('--loss_function', type=str, default='emo_loss')
+parser.add_argument('--loss_beta', type=int, default=1.)
 #model parameters
 parser.add_argument('--model_name', type=string, default='emo_vae')
 parser.add_argument('--model_cnn_structure', type=string, default='[32, 64, 128, 256, 512]')
@@ -97,7 +101,6 @@ test_predictors, test_target = uf.build_matrix_dataset(predictors_merged,
 
 
 
-
 if args.fast_test:
     bound = 100
     training_predictors = training_predictors[:bound]
@@ -108,15 +111,16 @@ if args.fast_test:
     test_target = test_target[:bound]
 
 
-#normalize datasets
-tr_mean = np.mean(training_predictors)
-tr_std = np.std(training_predictors)
-training_predictors = np.subtract(training_predictors, tr_mean)
-training_predictors = np.divide(training_predictors, tr_std)
-validation_predictors = np.subtract(validation_predictors, tr_mean)
-validation_predictors = np.divide(validation_predictors, tr_std)
-test_predictors = np.subtract(test_predictors, tr_mean)
-test_predictors = np.divide(test_predictors, tr_std)
+if args.normalize_predictors:
+    #normalize to 0 mean ans 1 std
+    tr_mean = np.mean(training_predictors)
+    tr_std = np.std(training_predictors)
+    training_predictors = np.subtract(training_predictors, tr_mean)
+    training_predictors = np.divide(training_predictors, tr_std)
+    validation_predictors = np.subtract(validation_predictors, tr_mean)
+    validation_predictors = np.divide(validation_predictors, tr_std)
+    test_predictors = np.subtract(test_predictors, tr_mean)
+    test_predictors = np.divide(test_predictors, tr_std)
 
 #reshaping for cnn
 training_predictors = training_predictors.reshape(training_predictors.shape[0], 1, training_predictors.shape[1],training_predictors.shape[2])
@@ -160,14 +164,11 @@ print ('Total paramters: ' + str(model_params))
 #define optimizer and loss
 optimizer = optim.Adam(model.parameters(), lr=learning_rate,
                               weight_decay=regularization_lambda)
-loss_function = nn.CrossEntropyLoss()
+loss_function = locals()[args.loss_name]
 
 #init history
 train_loss_hist = []
 val_loss_hist = []
-train_acc_hist = []
-val_acc_hist = []
-
 
 loading_time = float(time.perf_counter()) - float(loading_start)
 print ('\nLoading time: ' + str(np.round(float(loading_time), decimals=1)) + ' seconds')
@@ -180,69 +181,54 @@ for epoch in range(num_epochs):
     string = 'Epoch: [' + str(epoch+1) + '/' + str(num_epochs) + '] '
     #iterate batches
     for i, (sounds, truth) in enumerate(tr_data):
-        #sounds = torch.cat((sounds,sounds,sounds), axis=1)  #because vgg wants 3 channels as input
-        sounds = dyn_pad(sounds)
+        optimizer.zero_grad()
         sounds = sounds.to(device)
         truth = truth.to(device)
-        optimizer.zero_grad()
-        outputs = model(sounds)
-        loss = loss_function(outputs, truth)
-        loss.backward()
-        #print
-        #print progress and update history, optimizer step
+
+        recon, emo_preds = model(sounds)
+        loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
+        loss['total'].backward()
+
+        optimizer.step()
+
+        #print progress
         perc = int(i / len(tr_data) * 20)
         inv_perc = int(20 - perc - 1)
         loss_print_t = str(np.round(loss.item(), decimals=5))
         string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
         print ('\r', string_progress, end='')
-        optimizer.step()
 
-        #validation loss, training and val accuracy computation
-        #after current epoch training
-        train_batch_losses = []
-        val_batch_losses = []
-        train_batch_accs = []
-        val_batch_accs = []
-
+    #create history
+    train_batch_losses = []
+    val_batch_losses = []
     with torch.no_grad():
         model.eval()
         #training data
         for i, (sounds, truth) in enumerate(tr_data):
-            optimizer.zero_grad()
-            #sounds = torch.cat((sounds,sounds,sounds), axis=1)  #because vgg wants 3 channels as input
-            sounds = dyn_pad(sounds)
             sounds = sounds.to(device)
             truth = truth.to(device)
-            outputs = model(sounds)
-            temp_loss = loss_function(outputs, truth)
-            train_batch_losses.append(temp_loss.item())
-            temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-            train_batch_accs.append(temp_acc)
 
+            recon, emo_preds = model(sounds)
+            loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
+
+            train_batch_losses.append(loss.item())
         #validation data
         for i, (sounds, truth) in enumerate(val_data):
-            #sounds = torch.cat((sounds,sounds,sounds), axis=1)  #because vgg wants 3 channels as input
-            optimizer.zero_grad()
-            sounds = dyn_pad(sounds)
             sounds = sounds.to(device)
             truth = truth.to(device)
-            outputs = model(sounds)
-            temp_loss = loss_function(outputs, truth)
-            val_batch_losses.append(temp_loss.item())
-            temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-            val_batch_accs.append(temp_acc)
 
+            recon, emo_preds = model(sounds)
+            loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
+
+            val_batch_losses.append(temp_loss.item())
     #append to history and print
     train_epoch_loss = np.mean(train_batch_losses)
     train_loss_hist.append(train_epoch_loss)
     val_epoch_loss = np.mean(val_batch_losses)
     val_loss_hist.append(val_epoch_loss)
-    train_epoch_acc = np.mean(train_batch_accs)
-    train_acc_hist.append(train_epoch_acc)
-    val_epoch_acc = np.mean(val_batch_accs)
-    val_acc_hist.append(val_epoch_acc)
+    
+
     print ('\n  Train loss: ' + str(np.round(train_epoch_loss.item(), decimals=5)) + ' | Val loss: ' + str(np.round(val_epoch_loss.item(), decimals=5)))
-    print ('  Train acc: ' + str(np.round(train_epoch_acc.item(), decimals=5)) + ' | Val acc: ' + str(np.round(val_epoch_acc.item(), decimals=5)))
 
     #compute epoch time
     epoch_time = float(time.perf_counter()) - float(epoch_start)
@@ -285,33 +271,7 @@ for epoch in range(num_epochs):
 train_batch_losses = []
 val_batch_lesses = []
 test_batch_losses = []
-task_type = 'classification'
 
-if task_type == 'classification':
-    train_batch_accs = []
-    val_batch_accs = []
-    test_batch_accs = []
-
-    train_batch_f1 = []
-    val_batch_f1 = []
-    test_batch_f1 = []
-
-    train_batch_precision = []
-    val_batch_precision = []
-    test_batch_precision = []
-
-    train_batch_recall = []
-    val_batch_recall = []
-    test_batch_recall = []
-
-elif task_type == 'regression':
-    train_batch_rmse = []
-    val_batch_rmse = []
-    test_batch_rmse = []
-
-    train_batch_mae = []
-    val_batch_mae = []
-    test_batch_mae = []
 
 model.eval()
 with torch.no_grad():
@@ -385,15 +345,7 @@ with torch.no_grad():
         temp_loss = loss_function(outputs, truth)
         test_batch_losses.append(temp_loss.item())
 
-        if task_type == 'classification':
-            temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-            test_batch_accs.append(temp_acc)
-            temp_f1 = f1_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-            test_batch_f1.append(temp_f1)
-            temp_precision = precision_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-            test_batch_precision.append(temp_precision)
-            temp_recall = recall_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-            test_batch_recall.append(temp_recall)
+
 
         elif task_type == 'regression':
             temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
