@@ -34,7 +34,7 @@ parser.add_argument('--batch_size', type=int, default=40)
 parser.add_argument('--learning_rate', type=float, default=0.00005)
 parser.add_argument('--regularization_lambda', type=float, default=0.)
 parser.add_argument('--early_stopping', type=bool, default=True)
-parser.add_argument('--save_model_metric', type=str, default='loss')
+parser.add_argument('--save_model_metric', type=str, default='total_loss')
 parser.add_argument('--patience', type=int, default=10)
 parser.add_argument('--load_pretrained', type=str, default=None)
 #loss parameters
@@ -335,21 +335,14 @@ for epoch in range(args.num_epochs):
         print ('\nModel saved')
         saved_epoch = epoch + 1
     else:
-        if save_model_metric == 'loss':
-            best_loss = min(val_loss_hist[:-1])  #not looking at curr_loss
-            curr_loss = val_loss_hist[-1]
+        if args.save_model_metric == 'total_loss':
+            best_loss = min(val_loss_hist['total'].item()[:-1])  #not looking at curr_loss
+            curr_loss = val_loss_hist['total'].item()[-1]
             if curr_loss < best_loss:
                 torch.save(model.state_dict(), model_path)
                 print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
                 saved_epoch = epoch + 1
 
-        elif save_model_metric == 'acc':
-            best_acc = max(val_acc_hist[:-1])  #not looking at curr_loss
-            curr_acc = val_acc_hist[-1]
-            if curr_acc > best_acc:
-                torch.save(model.state_dict(), model_path)
-                print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
-                saved_epoch = epoch + 1
 
         else:
             raise ValueError('Wrong metric selected')
