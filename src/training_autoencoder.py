@@ -296,10 +296,10 @@ for epoch in range(args.num_epochs):
 
             val_batch_losses.append(loss)
     #append to history and print
-    train_epoch_loss = {'total':[], 'emo':[], 'valence':[],
-                        'arousal':[], 'dominance':[]}
-    val_epoch_loss = {'total':[], 'emo':[], 'valence':[],
-                        'arousal':[], 'dominance':[]}
+    train_epoch_loss = {'total':[], 'emo':[], 'recon':[],
+                        'valence':[],'arousal':[], 'dominance':[]}
+    val_epoch_loss = {'total':[], 'emo':[], 'recon':[],
+                      'valence':[],'arousal':[], 'dominance':[]}
 
     for i in train_batch_losses:
         for j in i:
@@ -398,12 +398,12 @@ with torch.no_grad():
         test_batch_losses.append(loss)
 
 #compute final mean of batch losses for train, validation and test set
-train_loss = {'total':[], 'emo':[], 'valence':[],
-                    'arousal':[], 'dominance':[]}
-val_loss = {'total':[], 'emo':[], 'valence':[],
-                    'arousal':[], 'dominance':[]}
-test_loss = {'total':[], 'emo':[], 'valence':[],
-                    'arousal':[], 'dominance':[]}
+train_loss = {'total':[], 'emo':[], 'recon':[],
+              'valence':[], 'arousal':[], 'dominance':[]}
+val_loss = {'total':[], 'emo':[], 'recon':[],
+            'valence':[],'arousal':[], 'dominance':[]}
+test_loss = {'total':[], 'emo':[], 'recon':[],
+             'valence':[],'arousal':[], 'dominance':[]}
 for i in train_batch_losses:
     for j in i:
         name = j

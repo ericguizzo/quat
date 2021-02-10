@@ -13,5 +13,5 @@ def emo_loss(input, recon, truth, emo_preds, beta):
     emo_loss = beta * (valence_loss + arousal_loss + dominance_loss)
     total_loss = recon_loss + emo_loss
 
-    return {'total':total_loss, 'emo':emo_loss, 'valence':valence_loss,
-            'arousal':arousal_loss, 'dominance':dominance_loss}
+    return {'total':total_loss, 'recon': recon_loss, 'emo':emo_loss,
+        'valence':valence_loss,'arousal':arousal_loss, 'dominance':dominance_loss}
