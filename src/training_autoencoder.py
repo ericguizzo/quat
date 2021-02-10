@@ -227,7 +227,7 @@ model = locals()[args.model_name](structure=eval(args.model_cnn_structure),
 
 model = model.to(device)
 
-print (model)
+#print (model)
 
 #compute number of parameters
 model_params = sum([np.prod(p.size()) for p in model.parameters()])

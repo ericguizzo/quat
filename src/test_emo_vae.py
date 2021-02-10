@@ -23,6 +23,7 @@ label = torch.rand(batch_size,3)
 x = torch.rand(batch_size,1,512,128)  #dummy batch, same size as spectrograms
 
 model = emo_vae(verbose=True)
+print (model)
 print ("\nInput dim:", x.shape)
 print ('\nAutoencoder dims:')
 outs, preds = model(x)
