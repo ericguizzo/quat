@@ -403,86 +403,63 @@ for i in train_batch_losses:
     val_batch_losses[i] = np.mean(val_batch_losses[i])
     test_batch_losses[i] = np.mean(test_batch_losses[i])
 
-results = {'training': train_batch_losses,
-            'validation': val_batch_losses,
-            'test': test_batch_losses}
 
 print ('\nResults:')
 print (results)
 
-'''
+
 #save results in temp dict file
 temp_results = {}
 
 #save loss
-temp_results['train_loss'] = np.mean(train_batch_losses)
-temp_results['val_loss'] = np.mean(val_batch_losses)
-temp_results['test_loss'] = np.mean(test_batch_losses)
+temp_results['train_loss_total'] = train_batch_losses['total']
+temp_results['val_loss_total'] = val_batch_losses['total']
+temp_results['test_loss_total'] = test_batch_losses['total']
 
-#if classification compute also f1, precision, recall
-if task_type == 'classification':
-    temp_results['train_acc'] = np.mean(train_batch_accs)
-    temp_results['val_acc'] = np.mean(val_batch_accs)
-    temp_results['test_acc'] = np.mean(test_batch_accs)
+temp_results['train_loss_recon'] = train_batch_losses['recon']
+temp_results['val_loss_recon'] = val_batch_losses['recon']
+temp_results['test_loss_recon'] = test_batch_losses['recon']
 
-    temp_results['train_f1'] = np.mean(train_batch_f1)
-    temp_results['val_f1'] = np.mean(val_batch_f1)
-    temp_results['test_f1'] = np.mean(test_batch_f1)
+temp_results['train_loss_emo'] = train_batch_losses['emo']
+temp_results['val_loss_emo'] = val_batch_losses['emo']
+temp_results['test_loss_emo'] = test_batch_losses['emo']
 
-    temp_results['train_precision'] = np.mean(train_batch_precision)
-    temp_results['val_precision'] = np.mean(val_batch_precision)
-    temp_results['test_precision'] = np.mean(test_batch_precision)
+temp_results['train_loss_valence'] = train_batch_losses['valence']
+temp_results['val_loss_valence'] = val_batch_losses['valence']
+temp_results['test_loss_valence'] = test_batch_losses['valence']
 
-    temp_results['train_recall'] = np.mean(train_batch_recall)
-    temp_results['val_recall'] = np.mean(val_batch_recall)
-    temp_results['test_recall'] = np.mean(test_batch_recall)
-#save acc if classification append classification metrics
-elif task_type == 'regression':
-    temp_results['train_MAE'] = np.mean(train_batch_mae)
-    temp_results['val_MAE'] = np.mean(val_batch_mae)
-    temp_results['test_MAE'] = np.mean(test_batch_mae)
+temp_results['train_loss_arousal'] = train_batch_losses['arousal']
+temp_results['val_loss_arousal'] = val_batch_losses['arousal']
+temp_results['test_loss_arousal'] = test_batch_losses['arousal']
 
-    temp_results['train_RMSE'] = np.mean(train_batch_rmse)
-    temp_results['val_RMSE'] = np.mean(val_batch_rmse)
-    temp_results['test_RMSE'] = np.mean(test_batch_rmse)
+temp_results['train_loss_dominance'] = train_batch_losses['dominance']
+temp_results['val_loss_dominance'] = val_batch_losses['dominance']
+temp_results['test_loss_dominance'] = test_batch_losses['dominance']
 
-#save history
 temp_results['train_loss_hist'] = train_loss_hist
-temp_results['val_loss_hist'] = val_loss_hist
-if task_type == 'classification':
-    temp_results['train_acc_hist'] = train_acc_hist
-    temp_results['val_acc_hist'] = val_acc_hist
-
-plt.subplot(211)
-plt.title('Loss History')
-plt.plot(train_loss_hist)
-plt.plot(val_loss_hist)
-plt.legend(['train', 'val'])
-plt.subplot(212)
-plt.title('Acc History')
-plt.plot(train_acc_hist)
-plt.plot(val_acc_hist)
-plt.legend(['train', 'val'])
-plt.savefig(figure_path)
-
+temp_results['val_loss_hist'] = train_loss_hist
+temp_results['parameters'] = vars(args)
 
 np.save(results_path, temp_results)
 
 #print train results
-print ('')
-print ('\n train results:')
-for i in temp_results.keys():
-    if 'hist' not in i and 'actors' not in i:
-        if 'train' in i:
-            print (str(i) + ': ' + str(temp_results[i]))
-print ('\n val results:')
-for i in temp_results.keys():
-    if 'hist' not in i and 'actors' not in i:
-        if 'val' in i:
-            print (str(i) + ': ' + str(temp_results[i]))
-print ('\n test results:')
-for i in temp_results.keys():
-    if 'hist' not in i and 'actors' not in i:
-        if 'test' in i:
-            print (str(i) + ': ' + str(temp_results[i]))
-'''
+print ('\nRESULTS:')
+keys = list(temp_results.keys())
+keys.remove('parameters')
+keys.remove('train_loss_hist')
+keys.remove('val_loss_hist')
+
+train_keys = [i for i in keys if 'train' in i]
+val_keys = [i for i in keys if 'val' in i]
+test_keys = [i for i in keys if 'test' in i]
+
+
+print ('\n train:')
+for i in train_keys:
+    print (i, ': ', temp_results[i])
+print ('\n val:')
+for i in val_keys:
+    print (i, ': ', val_results[i])
+print ('\n test:')
+for i in test_keys:
+    print (i, ': ', temp_results[i])
