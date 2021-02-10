@@ -477,7 +477,7 @@ for i in train_keys:
     print (i, ': ', temp_results[i])
 print ('\n val:')
 for i in val_keys:
-    print (i, ': ', val_results[i])
+    print (i, ': ', temp_results[i])
 print ('\n test:')
 for i in test_keys:
     print (i, ': ', temp_results[i])
