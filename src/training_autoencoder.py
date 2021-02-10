@@ -315,10 +315,10 @@ for epoch in range(args.num_epochs):
     for i in train_epoch_loss:
         train_epoch_loss[i] = np.mean(train_epoch_loss[i])
         val_epoch_loss[i] = np.mean(val_epoch_loss[i])
-    print ('\nEPOCH LOSSES:')
-    print ('\nTraining:')
+    print ('\n EPOCH LOSSES:')
+    print ('\n Training:')
     print (train_epoch_loss)
-    print ('\nValidation:')
+    print ('\n Validation:')
     print (val_epoch_loss)
 
 
@@ -351,99 +351,66 @@ for epoch in range(args.num_epochs):
             raise ValueError('Wrong metric selected')
 
     if args.early_stopping and epoch >= args.patience+1:
-        patience_vec = val_loss_hist[-args.patience+1:]
+        patience_vec = [i['total'] for i in val_loss_hist[-args.patience+1:]]
+        #patience_vec = val_loss_hist[-args.patience+1:]
         best_l = np.argmin(patience_vec)
         if best_l == 0:
             print ('Training early-stopped')
             break
 
 
-
+#COMPUTE
+model.load_state_dict(torch.load(model_path), strict=False)  #load best model
 train_batch_losses = []
 val_batch_lesses = []
 test_batch_losses = []
 
-'''
 model.eval()
 with torch.no_grad():
-
     #TRAINING DATA
     for i, (sounds, truth) in enumerate(tr_data):
-        optimizer.zero_grad()
-        #sounds = torch.cat((sounds,sounds,sounds), axis=1)  #because vgg wants 3 channels as input
-        sounds = dyn_pad(sounds)
         sounds = sounds.to(device)
         truth = truth.to(device)
-        outputs = model(sounds)
 
-        temp_loss = loss_function(outputs, truth)
-        train_batch_losses.append(temp_loss.item())
+        recon, emo_preds = model(sounds)
+        loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
 
-        if task_type == 'classification':
-            temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-            train_batch_accs.append(temp_acc)
-            temp_f1 = f1_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-            train_batch_f1.append(temp_f1)
-            temp_precision = precision_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-            train_batch_precision.append(temp_precision)
-            temp_recall = recall_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-            train_batch_recall.append(temp_recall)
-
-        elif task_type == 'regression':
-            temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-            train_batch_rmse.append(temp_rmse)
-            temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-            train_batch_mae.append(temp_mae)
-
+        train_batch_losses.append(loss)
 
     #VALIDATION DATA
     for i, (sounds, truth) in enumerate(val_data):
-        optimizer.zero_grad()
-        #sounds = torch.cat((sounds,sounds,sounds), axis=1)  #because vgg wants 3 channels as input
-        sounds = dyn_pad(sounds)
         sounds = sounds.to(device)
         truth = truth.to(device)
-        outputs = model(sounds)
 
-        temp_loss = loss_function(outputs, truth)
-        val_batch_losses.append(temp_loss.item())
+        recon, emo_preds = model(sounds)
+        loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
 
-        if task_type == 'classification':
-            temp_acc = accuracy_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-            val_batch_accs.append(temp_acc)
-            temp_f1 = f1_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-            val_batch_f1.append(temp_f1)
-            temp_precision = precision_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-            val_batch_precision.append(temp_precision)
-            temp_recall = recall_score(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float(), average="macro")
-            val_batch_recall.append(temp_recall)
-
-        elif task_type == 'regression':
-            temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-            val_batch_rmse.append(temp_rmse)
-            temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-            val_batch_mae.append(temp_mae)
+        val_batch_losses.append(loss)
 
     #TEST DATA
     for i, (sounds, truth) in enumerate(test_data):
-        optimizer.zero_grad()
-        #sounds = torch.cat((sounds,sounds,sounds), axis=1)  #because vgg wants 3 channels as input
-        sounds = dyn_pad(sounds)
         sounds = sounds.to(device)
         truth = truth.to(device)
-        outputs = model(sounds)
 
-        temp_loss = loss_function(outputs, truth)
-        test_batch_losses.append(temp_loss.item())
+        recon, emo_preds = model(sounds)
+        loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
+
+        test_batch_losses.append(loss)
 
 
+for i in train_batch_losses:
+    train_batch_losses[i] = np.mean(train_batch_losses[i])
+    val_batch_losses[i] = np.mean(val_batch_losses[i])
+    test_batch_losses[i] = np.mean(test_batch_losses[i])
 
-        elif task_type == 'regression':
-            temp_rmse = mean_squared_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-            test_batch_rmse.append(temp_rmse)
-            temp_mae = mean_absolute_error(np.argmax(outputs.cpu().float(), axis=1), truth.cpu().float())
-            test_batch_mae.append(temp_mae)
+results = {'training': train_batch_losses,
+            'validation': val_batch_losses,
+            'test': test_batch_losses}
 
+print ('\nResults:')
+print (results)
+
+'''
 #save results in temp dict file
 temp_results = {}
 
@@ -518,5 +485,4 @@ for i in temp_results.keys():
     if 'hist' not in i and 'actors' not in i:
         if 'test' in i:
             print (str(i) + ': ' + str(temp_results[i]))
-
 '''
