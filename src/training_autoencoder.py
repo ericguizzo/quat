@@ -285,7 +285,7 @@ for epoch in range(args.num_epochs):
             recon, emo_preds = model(sounds)
             loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
 
-            train_batch_losses.append(loss.item())
+            train_batch_losses.append(loss)
         #validation data
         for i, (sounds, truth) in enumerate(val_data):
             sounds = sounds.to(device)
@@ -294,7 +294,7 @@ for epoch in range(args.num_epochs):
             recon, emo_preds = model(sounds)
             loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
 
-            val_batch_losses.append(temp_loss.item())
+            val_batch_losses.append(loss)
     #append to history and print
     train_epoch_loss = {'total':[], 'emo':[], 'valence':[],
                         'arousal':[], 'dominance':[]}
@@ -305,12 +305,12 @@ for epoch in range(args.num_epochs):
         for j in i:
             name = j
             value = i[j]
-            train_epoch_loss[name].append(value)
+            train_epoch_loss[name].append(value.item())
     for i in val_batch_losses:
         for j in i:
             name = j
             value = i[j]
-            val_epoch_loss[name].append(value)
+            val_epoch_loss[name].append(value.item())
 
     for i in train_epoch_loss:
         train_epoch_loss[i] = np.mean(train_epoch_loss[i])
