@@ -222,11 +222,13 @@ for epoch in range(num_epochs):
 
             val_batch_losses.append(temp_loss.item())
     #append to history and print
+    train_epoch_loss = {} 
+    val_epoch_loss = {}
     train_epoch_loss = np.mean(train_batch_losses)
     train_loss_hist.append(train_epoch_loss)
     val_epoch_loss = np.mean(val_batch_losses)
     val_loss_hist.append(val_epoch_loss)
-    
+
 
     print ('\n  Train loss: ' + str(np.round(train_epoch_loss.item(), decimals=5)) + ' | Val loss: ' + str(np.round(val_epoch_loss.item(), decimals=5)))
 
