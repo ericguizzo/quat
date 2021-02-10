@@ -68,6 +68,8 @@ else:
 
 
 print ('Loading dataset')
+loading_start = float(time.perf_counter())
+
 #PREDICTORS_LOAD = os.path.join(args.dataset_path, 'iemocap_randsplit_spectrum_fast_predictors.npy')
 #TARGET_LOAD = os.path.join(args.dataset_path, 'iemocap_randsplit_spectrum_fast_target.npy')
 PREDICTORS_LOAD = args.predictors_path
