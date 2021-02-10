@@ -397,7 +397,8 @@ with torch.no_grad():
 
         test_batch_losses.append(loss)
 
-
+print ('CULO')
+print (train_batch_losses)
 for i in train_batch_losses:
     train_batch_losses[i] = np.mean(train_batch_losses[i])
     val_batch_losses[i] = np.mean(val_batch_losses[i])
@@ -440,9 +441,10 @@ temp_results['train_loss_hist'] = train_loss_hist
 temp_results['val_loss_hist'] = train_loss_hist
 temp_results['parameters'] = vars(args)
 
+
 np.save(results_path, temp_results)
 
-#print train results
+#print  results
 print ('\nRESULTS:')
 keys = list(temp_results.keys())
 keys.remove('parameters')
