@@ -234,8 +234,8 @@ model_params = sum([np.prod(p.size()) for p in model.parameters()])
 print ('Total paramters: ' + str(model_params))
 
 #define optimizer and loss
-optimizer = optim.Adam(model.parameters(), lr=learning_rate,
-                              weight_decay=regularization_lambda)
+optimizer = optim.Adam(model.parameters(), lr=args.learning_rate,
+                              weight_decay=args.regularization_lambda)
 loss_function = locals()[args.loss_name]
 
 #init history
