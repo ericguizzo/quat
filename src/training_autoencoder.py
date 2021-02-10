@@ -6,9 +6,7 @@ import torch.nn as nn
 from torch import optim
 from torchvision import models
 import torch.utils.data as utils
-from sklearn.metrics import accuracy_score, f1_score,
-                            precision_score, recall_score
-
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from models import *
 from loss_emo import *
 import utility_functions as uf
