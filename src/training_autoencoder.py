@@ -192,6 +192,11 @@ elif freq_dim < curr_freq_dim:
 else:
     pass
 
+print ('\nPadded dims:')
+print ('Training predictors: ', training_predictors.shape)
+print ('Validation predictors: ', validation_predictors.shape)
+print ('Test predictors: ', test_predictors.shape)
+
 
 
 #convert to tensor
