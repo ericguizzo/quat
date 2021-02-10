@@ -73,7 +73,6 @@ dummy = np.load(TARGET_LOAD,allow_pickle=True)
 dummy = dummy.item()
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #JUST WRITE A FUNCTION TO RE-ORDER foldable_list TO SPLIT
-#TRAIN/VAL/TEST IN A BALANCED WAY
 foldable_list = list(dummy.keys())
 fold_actors_list = uf.folds_generator(1, foldable_list, [args.train_perc, args.val_perc, args.test_perc])
 train_list = fold_actors_list[int(0)]['train']
