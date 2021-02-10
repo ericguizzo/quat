@@ -315,7 +315,7 @@ for epoch in range(args.num_epochs):
     for i in train_epoch_loss:
         train_epoch_loss[i] = np.mean(train_epoch_loss[i])
         val_epoch_loss[i] = np.mean(val_epoch_loss[i])
-    print ('EPOCH LOSSES:')
+    print ('\nEPOCH LOSSES:')
     print (train_epoch_loss)
     print (val_epoch_loss)
 
