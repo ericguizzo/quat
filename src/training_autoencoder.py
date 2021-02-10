@@ -397,45 +397,61 @@ with torch.no_grad():
 
         test_batch_losses.append(loss)
 
-print ('CULO')
-print (train_batch_losses)
+#compute final mean of batch losses for train, validation and test set
+train_loss = {'total':[], 'emo':[], 'valence':[],
+                    'arousal':[], 'dominance':[]}
+val_loss = {'total':[], 'emo':[], 'valence':[],
+                    'arousal':[], 'dominance':[]}
+test_loss = {'total':[], 'emo':[], 'valence':[],
+                    'arousal':[], 'dominance':[]}
 for i in train_batch_losses:
-    train_batch_losses[i] = np.mean(train_batch_losses[i])
-    val_batch_losses[i] = np.mean(val_batch_losses[i])
-    test_batch_losses[i] = np.mean(test_batch_losses[i])
-
-
-print ('\nResults:')
-print (results)
+    for j in i:
+        name = j
+        value = i[j]
+        train_loss[name].append(value.item())
+for i in val_batch_losses:
+    for j in i:
+        name = j
+        value = i[j]
+        val_loss[name].append(value.item())
+for i in test_batch_losses:
+    for j in i:
+        name = j
+        value = i[j]
+        test_loss[name].append(value.item())
+for i in train_loss:
+    train_loss[i] = np.mean(train_loss[i])
+    val_loss[i] = np.mean(val_loss[i])
+    test_loss[i] = np.mean(test_loss[i])
 
 
 #save results in temp dict file
 temp_results = {}
 
 #save loss
-temp_results['train_loss_total'] = train_batch_losses['total']
-temp_results['val_loss_total'] = val_batch_losses['total']
-temp_results['test_loss_total'] = test_batch_losses['total']
+temp_results['train_loss_total'] = train_loss['total']
+temp_results['val_loss_total'] = val_loss['total']
+temp_results['test_loss_total'] = test_loss['total']
 
-temp_results['train_loss_recon'] = train_batch_losses['recon']
-temp_results['val_loss_recon'] = val_batch_losses['recon']
-temp_results['test_loss_recon'] = test_batch_losses['recon']
+temp_results['train_loss_recon'] = train_loss['recon']
+temp_results['val_loss_recon'] = val_oss['recon']
+temp_results['test_loss_recon'] = test_loss['recon']
 
-temp_results['train_loss_emo'] = train_batch_losses['emo']
-temp_results['val_loss_emo'] = val_batch_losses['emo']
-temp_results['test_loss_emo'] = test_batch_losses['emo']
+temp_results['train_loss_emo'] = train_loss['emo']
+temp_results['val_loss_emo'] = val_loss['emo']
+temp_results['test_loss_emo'] = test_loss['emo']
 
-temp_results['train_loss_valence'] = train_batch_losses['valence']
-temp_results['val_loss_valence'] = val_batch_losses['valence']
-temp_results['test_loss_valence'] = test_batch_losses['valence']
+temp_results['train_loss_valence'] = train_loss['valence']
+temp_results['val_loss_valence'] = val_loss['valence']
+temp_results['test_loss_valence'] = test_loss['valence']
 
-temp_results['train_loss_arousal'] = train_batch_losses['arousal']
-temp_results['val_loss_arousal'] = val_batch_losses['arousal']
-temp_results['test_loss_arousal'] = test_batch_losses['arousal']
+temp_results['train_loss_arousal'] = train_loss['arousal']
+temp_results['val_loss_arousal'] = val_loss['arousal']
+temp_results['test_loss_arousal'] = test_loss['arousal']
 
-temp_results['train_loss_dominance'] = train_batch_losses['dominance']
-temp_results['val_loss_dominance'] = val_batch_losses['dominance']
-temp_results['test_loss_dominance'] = test_batch_losses['dominance']
+temp_results['train_loss_dominance'] = train_loss['dominance']
+temp_results['val_loss_dominance'] = val_loss['dominance']
+temp_results['test_loss_dominance'] = test_loss['dominance']
 
 temp_results['train_loss_hist'] = train_loss_hist
 temp_results['val_loss_hist'] = train_loss_hist
