@@ -434,7 +434,7 @@ temp_results['val_loss_total'] = val_loss['total']
 temp_results['test_loss_total'] = test_loss['total']
 
 temp_results['train_loss_recon'] = train_loss['recon']
-temp_results['val_loss_recon'] = val_oss['recon']
+temp_results['val_loss_recon'] = val_loss['recon']
 temp_results['test_loss_recon'] = test_loss['recon']
 
 temp_results['train_loss_emo'] = train_loss['emo']
