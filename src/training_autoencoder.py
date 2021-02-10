@@ -22,9 +22,9 @@ parser.add_argument('--train_perc', type=float, default=0.7)
 parser.add_argument('--val_perc', type=float, default=0.2)
 parser.add_argument('--test_perc', type=float, default=0.1)
 parser.add_argument('--normalize_predictors', type=bool, default=True)
-parser.add_argument('--fast_test', type=bool, default=False)
 parser.add_argument('--time_dim', type=int, default=512)
 parser.add_argument('--freq_dim', type=int, default=128)
+parser.add_argument('--fast_test', type=bool, default=True)
 
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
