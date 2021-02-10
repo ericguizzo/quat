@@ -23,6 +23,8 @@ parser.add_argument('--val_perc', type=float, default=0.2)
 parser.add_argument('--test_perc', type=float, default=0.1)
 parser.add_argument('--normalize_predictors', type=bool, default=True)
 parser.add_argument('--fast_test', type=bool, default=False)
+parser.add_argument('--time_dim', type=int, default=512)
+
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
 parser.add_argument('--use_cuda', type=bool, default=True)
@@ -119,10 +121,75 @@ if args.normalize_predictors:
     test_predictors = np.subtract(test_predictors, tr_mean)
     test_predictors = np.divide(test_predictors, tr_std)
 
+
+
 #reshaping for cnn
 training_predictors = training_predictors.reshape(training_predictors.shape[0], 1, training_predictors.shape[1],training_predictors.shape[2])
 validation_predictors = validation_predictors.reshape(validation_predictors.shape[0], 1, validation_predictors.shape[1], validation_predictors.shape[2])
 test_predictors = test_predictors.reshape(test_predictors.shape[0], 1, test_predictors.shape[1], test_predictors.shape[2])
+
+#zero-pad/cut time tim
+if args.time_dim > curr_time_dim:
+    #
+    training_predictors_padded = torch.zeros(training_predictors.shape[0],
+                                             training_predictors.shape[1],
+                                             args.time_dim,
+                                             training_predictors.shape[3])
+    training_predictors_padded[:,:,:curr_time_dim,:] = training_predictors
+    training_predictors = training_predictors_padded
+    #
+    validation_predictors_padded = torch.zeros(validation_predictors.shape[0],
+                                             validation_predictors.shape[1],
+                                             args.time_dim,
+                                             validation_predictors.shape[3])
+    validation_predictors_padded[:,:,:curr_time_dim,:] = validation_predictors
+    validation_predictors = validation_predictors_padded
+    #
+    test_predictors_padded = torch.zeros(test_predictors.shape[0],
+                                             test_predictors.shape[1],
+                                             args.time_dim,
+                                             test_predictors.shape[3])
+    test_predictors_padded[:,:,:curr_time_dim,:] = test_predictors
+    test_predictors = test_predictors_padded
+
+elif args.time_dim < curr_time_dim:
+    training_predictors = training_predictors[:,:,:args.time_dim,:]
+    validation_predictors = validation_predictors[:,:,:args.time_dim,:]
+    test_predictors = test_predictors[:,:,:args.time_dim,:]
+else:
+    pass
+
+#zero-pad/cut freq tim
+if args.freq_dim > curr_freq_dim:
+    #
+    training_predictors_padded = torch.zeros(training_predictors.shape[0],
+                                             training_predictors.shape[1],
+                                             training_predictors.shape[2],
+                                             args.freq_dim)
+    training_predictors_padded[:,:,:,:curr_freq_dim] = training_predictors
+    training_predictors = training_predictors_padded
+    #
+    validation_predictors_padded = torch.zeros(validation_predictors.shape[0],
+                                             validation_predictors.shape[1],
+                                             validation_predictors.shape[2],
+                                             args.freq_dim)
+    validation_predictors_padded[:,:,:,:curr_freq_dim] = validation_predictors
+    validation_predictors = validation_predictors_padded
+    #
+    test_predictors_padded = torch.zeros(test_predictors.shape[0],
+                                             test_predictors.shape[1],
+                                             test_predictors.shape[2],
+                                             args.freq_dim)
+    test_predictors_padded[:,:,:,:curr_freq_dim] = test_predictors
+    test_predictors = test_predictors_padded
+elif freq_dim < curr_freq_dim:
+    training_predictors = training_predictors[:,:,:,:args.freq_dim]
+    validation_predictors = validation_predictors[:,:,:,:args.freq_dim]
+    test_predictors = test_predictors[:,:,:,:args.freq_dim]
+else:
+    pass
+
+
 
 #convert to tensor
 train_predictors = torch.tensor(training_predictors).float()

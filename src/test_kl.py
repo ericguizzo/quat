@@ -2,15 +2,81 @@ import torch
 import torch.nn.functional as F
 import numpy as np
 
-a = torch.rand(1,1,1,128)  #output quaternion spectrogram (dims=[batch,quat,time,freq])
-b = torch.empty(1,1,1,128).normal_(mean=0,std=0.9)  #quaternion-valued label (dims=[batch,emotion:(none,valence arousal,dominance),none,value])
-b1 = torch.ones(1,1,1,1) * 20
 
+training_predictors = torch.rand(1,1,501,129)  #output quaternion spectrogram (dims=[batch,quat,time,freq])
+validation_predictors = torch.rand(1,1,501,129)  #output quaternion spectrogram (dims=[batch,quat,time,freq])
+test_predictors = torch.rand(1,1,501,129)
+print (training_predictors.shape)
+print (validation_predictors.shape)
+print (test_predictors.shape)
+print ('/////////')
+time_dim = 512
+freq_dim = 128
 
-kl = F.kl_div(torch.log(a),b)
-kl1 = F.kl_div(torch.log(a), b1)
+curr_time_dim = training_predictors.shape[2]
+curr_freq_dim = training_predictors.shape[3]
 
-el = torch.mean(-0.5 * torch.sum(1 + a - b ** 2 - a.exp(), dim = 1), dim = 0)
-print('\nEL', torch.mean(el))
-print ('mean', torch.mean(a))
-print ('kl divergence: ', kl, kl1)
+#zero-pad/cut time tim
+if time_dim > curr_time_dim:
+    #
+    training_predictors_padded = torch.zeros(training_predictors.shape[0],
+                                             training_predictors.shape[1],
+                                             time_dim,
+                                             training_predictors.shape[3])
+    training_predictors_padded[:,:,:curr_time_dim,:] = training_predictors
+    training_predictors = training_predictors_padded
+    #
+    validation_predictors_padded = torch.zeros(validation_predictors.shape[0],
+                                             validation_predictors.shape[1],
+                                             time_dim,
+                                             validation_predictors.shape[3])
+    validation_predictors_padded[:,:,:curr_time_dim,:] = validation_predictors
+    validation_predictors = validation_predictors_padded
+    #
+    test_predictors_padded = torch.zeros(test_predictors.shape[0],
+                                             test_predictors.shape[1],
+                                             time_dim,
+                                             test_predictors.shape[3])
+    test_predictors_padded[:,:,:curr_time_dim,:] = test_predictors
+    test_predictors = test_predictors_padded
+
+elif time_dim < curr_time_dim:
+    training_predictors = training_predictors[:,:,:time_dim,:]
+    validation_predictors = validation_predictors[:,:,:time_dim,:]
+    test_predictors = test_predictors[:,:,:time_dim,:]
+else:
+    pass
+
+#zero-pad/cut freq tim
+if freq_dim > curr_freq_dim:
+    #
+    training_predictors_padded = torch.zeros(training_predictors.shape[0],
+                                             training_predictors.shape[1],
+                                             training_predictors.shape[2],
+                                             freq_dim)
+    training_predictors_padded[:,:,:,:curr_freq_dim] = training_predictors
+    training_predictors = training_predictors_padded
+    #
+    validation_predictors_padded = torch.zeros(validation_predictors.shape[0],
+                                             validation_predictors.shape[1],
+                                             validation_predictors.shape[2],
+                                             freq_dim)
+    validation_predictors_padded[:,:,:,:curr_freq_dim] = validation_predictors
+    validation_predictors = validation_predictors_padded
+    #
+    test_predictors_padded = torch.zeros(test_predictors.shape[0],
+                                             test_predictors.shape[1],
+                                             test_predictors.shape[2],
+                                             freq_dim)
+    test_predictors_padded[:,:,:,:curr_freq_dim] = test_predictors
+    test_predictors = test_predictors_padded
+elif freq_dim < curr_freq_dim:
+    training_predictors = training_predictors[:,:,:,:freq_dim]
+    validation_predictors = validation_predictors[:,:,:,:freq_dim]
+    test_predictors = test_predictors[:,:,:,:freq_dim]
+else:
+    pass
+
+print (training_predictors.shape)
+print (validation_predictors.shape)
+print (test_predictors.shape)
