@@ -11,8 +11,6 @@ from models import *
 from loss_emo import *
 import utility_functions as uf
 
-
-
 parser = argparse.ArgumentParser()
 #saving parameters
 parser.add_argument('--experiment_name', type=str, default='test')
@@ -40,9 +38,9 @@ parser.add_argument('--load_pretrained', type=str, default=None)
 parser.add_argument('--loss_function', type=str, default='emo_loss')
 parser.add_argument('--loss_beta', type=int, default=1.)
 #model parameters
-parser.add_argument('--model_name', type=string, default='emo_vae')
-parser.add_argument('--model_cnn_structure', type=string, default='[32, 64, 128, 256, 512]')
-parser.add_argument('--model_classifier_structure', type=string, default='[2000,1000,500,100]')
+parser.add_argument('--model_name', type=str, default='emo_vae')
+parser.add_argument('--model_cnn_structure', type=str, default='[32, 64, 128, 256, 512]')
+parser.add_argument('--model_classifier_structure', type=str, default='[2000,1000,500,100]')
 parser.add_argument('--model_latent_dim', type=int, default=20)
 parser.add_argument('--verbose', type=bool, default=False)
 parser.add_argument('--model_quat', type=bool, default=True)
