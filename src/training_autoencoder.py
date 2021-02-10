@@ -321,7 +321,7 @@ for epoch in range(args.num_epochs):
 
 
 
-    print ('\n  Train loss: ' + str(np.round(train_epoch_loss.item(), decimals=5)) + ' | Val loss: ' + str(np.round(val_epoch_loss.item(), decimals=5)))
+    #print ('\n  Train loss: ' + str(np.round(train_epoch_loss.item(), decimals=5)) + ' | Val loss: ' + str(np.round(val_epoch_loss.item(), decimals=5)))
 
     #compute epoch time
     epoch_time = float(time.perf_counter()) - float(epoch_start)
