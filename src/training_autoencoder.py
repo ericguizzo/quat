@@ -58,14 +58,16 @@ results_path = os.path.join(results_folder, 'results.npy')
 figure_path = os.path.join(results_folder, 'figure.png')
 
 if args.use_cuda:
-    device = 'cuda:' + str(gpu_id)
+    device = 'cuda:' + str(args.gpu_id)
 else:
     device = 'cpu'
 
 
 print ('Loading dataset')
-PREDICTORS_LOAD = os.path.join(dataset_path, 'iemocap_randsplit_spectrum_fast_predictors.npy')
-TARGET_LOAD = os.path.join(dataset_path, 'iemocap_randsplit_spectrum_fast_target.npy')
+#PREDICTORS_LOAD = os.path.join(args.dataset_path, 'iemocap_randsplit_spectrum_fast_predictors.npy')
+#TARGET_LOAD = os.path.join(args.dataset_path, 'iemocap_randsplit_spectrum_fast_target.npy')
+PREDICTORS_LOAD = args.predictors_path
+TARGET_LOAD = args.target_path
 
 dummy = np.load(TARGET_LOAD,allow_pickle=True)
 dummy = dummy.item()
