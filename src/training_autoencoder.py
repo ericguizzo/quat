@@ -248,11 +248,11 @@ loading_time = float(time.perf_counter()) - float(loading_start)
 print ('\nLoading time: ' + str(np.round(float(loading_time), decimals=1)) + ' seconds')
 
 
-for epoch in range(num_epochs):
+for epoch in range(args.num_epochs):
     epoch_start = time.perf_counter()
     model.train()
     print ('\n')
-    string = 'Epoch: [' + str(epoch+1) + '/' + str(num_epochs) + '] '
+    string = 'Epoch: [' + str(epoch+1) + '/' + str(args.num_epochs) + '] '
     #iterate batches
     for i, (sounds, truth) in enumerate(tr_data):
         optimizer.zero_grad()
