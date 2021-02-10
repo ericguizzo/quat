@@ -236,7 +236,7 @@ print ('Total paramters: ' + str(model_params))
 #define optimizer and loss
 optimizer = optim.Adam(model.parameters(), lr=args.learning_rate,
                               weight_decay=args.regularization_lambda)
-loss_function = locals()[args.loss_name]
+loss_function = locals()[args.loss_function]
 
 #init history
 train_loss_hist = []
