@@ -26,11 +26,10 @@ parser.add_argument('--normalize_predictors', type=bool, default=True)
 parser.add_argument('--time_dim', type=int, default=512)
 parser.add_argument('--freq_dim', type=int, default=128)
 parser.add_argument('--fast_test', type=bool, default=True)
-
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
 parser.add_argument('--use_cuda', type=bool, default=True)
-parser.add_argument('--num_epochs', type=int, default=100)
+parser.add_argument('--num_epochs', type=int, default=2)
 parser.add_argument('--batch_size', type=int, default=40)
 parser.add_argument('--learning_rate', type=float, default=0.00005)
 parser.add_argument('--regularization_lambda', type=float, default=0.)
@@ -248,7 +247,7 @@ val_loss_hist = []
 loading_time = float(time.perf_counter()) - float(loading_start)
 print ('\nLoading time: ' + str(np.round(float(loading_time), decimals=1)) + ' seconds')
 
-'''
+
 for epoch in range(num_epochs):
     epoch_start = time.perf_counter()
     model.train()
@@ -297,13 +296,29 @@ for epoch in range(num_epochs):
 
             val_batch_losses.append(temp_loss.item())
     #append to history and print
-    train_epoch_loss = {}
-    val_epoch_loss = {}
+    train_epoch_loss = {'total':[], 'emo':[], 'valence':[],
+                        'arousal':[], 'dominance':[]}
+    val_epoch_loss = {'total':[], 'emo':[], 'valence':[],
+                        'arousal':[], 'dominance':[]}
 
-    train_epoch_loss = np.mean(train_batch_losses)
-    train_loss_hist.append(train_epoch_loss)
-    val_epoch_loss = np.mean(val_batch_losses)
-    val_loss_hist.append(val_epoch_loss)
+    for i in train_batch_losses:
+        for j in i:
+            name = j
+            value = i[j]
+            train_epoch_loss[name].append(value)
+    for i in val_batch_losses:
+        for j in i:
+            name = j
+            value = i[j]
+            val_epoch_loss[name].append(value)
+
+    for i in train_epoch_loss:
+        train_epoch_loss[i] = np.mean(train_epoch_loss[i])
+        val_epoch_loss[i] = np.mean(val_epoch_loss[i])
+    print ('EPOCH LOSSES:')
+    print (train_epoch_loss)
+    print (val_epoch_loss)
+
 
 
     print ('\n  Train loss: ' + str(np.round(train_epoch_loss.item(), decimals=5)) + ' | Val loss: ' + str(np.round(val_epoch_loss.item(), decimals=5)))
@@ -350,7 +365,7 @@ train_batch_losses = []
 val_batch_lesses = []
 test_batch_losses = []
 
-
+'''
 model.eval()
 with torch.no_grad():
 
