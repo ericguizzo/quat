@@ -338,7 +338,7 @@ for epoch in range(args.num_epochs):
         saved_epoch = epoch + 1
     else:
         if args.save_model_metric == 'total_loss':
-            best_loss = min([i['total'] for i in val_loss_hist[:-1]]
+            best_loss = min([i['total'] for i in val_loss_hist[:-1]])
             #best_loss = min(val_loss_hist['total'].item()[:-1])  #not looking at curr_loss
             curr_loss = val_loss_hist[-1]['total']
             if curr_loss < best_loss:
