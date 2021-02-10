@@ -134,21 +134,21 @@ curr_freq_dim = training_predictors.shape[3]
 
 if args.time_dim > curr_time_dim:
     #
-    training_predictors_padded = torch.zeros(training_predictors.shape[0],
+    training_predictors_padded = np.zeros(training_predictors.shape[0],
                                              training_predictors.shape[1],
                                              args.time_dim,
                                              training_predictors.shape[3])
     training_predictors_padded[:,:,:curr_time_dim,:] = training_predictors
     training_predictors = training_predictors_padded
     #
-    validation_predictors_padded = torch.zeros(validation_predictors.shape[0],
+    validation_predictors_padded = np.zeros(validation_predictors.shape[0],
                                              validation_predictors.shape[1],
                                              args.time_dim,
                                              validation_predictors.shape[3])
     validation_predictors_padded[:,:,:curr_time_dim,:] = validation_predictors
     validation_predictors = validation_predictors_padded
     #
-    test_predictors_padded = torch.zeros(test_predictors.shape[0],
+    test_predictors_padded = np.zeros(test_predictors.shape[0],
                                              test_predictors.shape[1],
                                              args.time_dim,
                                              test_predictors.shape[3])
@@ -165,21 +165,21 @@ else:
 #zero-pad/cut freq tim
 if args.freq_dim > curr_freq_dim:
     #
-    training_predictors_padded = torch.zeros(training_predictors.shape[0],
+    training_predictors_padded = np.zeros(training_predictors.shape[0],
                                              training_predictors.shape[1],
                                              training_predictors.shape[2],
                                              args.freq_dim)
     training_predictors_padded[:,:,:,:curr_freq_dim] = training_predictors
     training_predictors = training_predictors_padded
     #
-    validation_predictors_padded = torch.zeros(validation_predictors.shape[0],
+    validation_predictors_padded = np.zeros(validation_predictors.shape[0],
                                              validation_predictors.shape[1],
                                              validation_predictors.shape[2],
                                              args.freq_dim)
     validation_predictors_padded[:,:,:,:curr_freq_dim] = validation_predictors
     validation_predictors = validation_predictors_padded
     #
-    test_predictors_padded = torch.zeros(test_predictors.shape[0],
+    test_predictors_padded = np.zeros(test_predictors.shape[0],
                                              test_predictors.shape[1],
                                              test_predictors.shape[2],
                                              args.freq_dim)
