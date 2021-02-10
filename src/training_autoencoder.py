@@ -322,6 +322,8 @@ for epoch in range(args.num_epochs):
     print (val_epoch_loss)
 
 
+    train_loss_hist.append(train_epoch_loss)
+    val_loss_hist.append(val_epoch_loss)
 
     #print ('\n  Train loss: ' + str(np.round(train_epoch_loss.item(), decimals=5)) + ' | Val loss: ' + str(np.round(val_epoch_loss.item(), decimals=5)))
 
