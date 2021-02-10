@@ -50,7 +50,7 @@ parser.add_argument('--model_quat', type=bool, default=True)
 args = parser.parse_args()
 
 #output filenames
-results_folder = os.path.join(results_folder, experiment_name)
+results_folder = os.path.join(args.results_folder, experiment_name)
 if not os.path.exists(results_folder):
     os.makedirs(results_folder)
 model_path = os.path.join(results_folder, 'model')
