@@ -186,7 +186,7 @@ if args.freq_dim > curr_freq_dim:
                                              args.freq_dim))
     test_predictors_padded[:,:,:,:curr_freq_dim] = test_predictors
     test_predictors = test_predictors_padded
-elif freq_dim < curr_freq_dim:
+elif args.freq_dim < curr_freq_dim:
     training_predictors = training_predictors[:,:,:,:args.freq_dim]
     validation_predictors = validation_predictors[:,:,:,:args.freq_dim]
     test_predictors = test_predictors[:,:,:,:args.freq_dim]
