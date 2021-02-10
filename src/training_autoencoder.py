@@ -173,7 +173,7 @@ val_loss_hist = []
 loading_time = float(time.perf_counter()) - float(loading_start)
 print ('\nLoading time: ' + str(np.round(float(loading_time), decimals=1)) + ' seconds')
 
-
+'''
 for epoch in range(num_epochs):
     epoch_start = time.perf_counter()
     model.train()
@@ -222,8 +222,9 @@ for epoch in range(num_epochs):
 
             val_batch_losses.append(temp_loss.item())
     #append to history and print
-    train_epoch_loss = {} 
+    train_epoch_loss = {}
     val_epoch_loss = {}
+
     train_epoch_loss = np.mean(train_batch_losses)
     train_loss_hist.append(train_epoch_loss)
     val_epoch_loss = np.mean(val_batch_losses)
@@ -429,3 +430,5 @@ for i in temp_results.keys():
     if 'hist' not in i and 'actors' not in i:
         if 'test' in i:
             print (str(i) + ': ' + str(temp_results[i]))
+
+'''
