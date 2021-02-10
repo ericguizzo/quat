@@ -129,6 +129,9 @@ validation_predictors = validation_predictors.reshape(validation_predictors.shap
 test_predictors = test_predictors.reshape(test_predictors.shape[0], 1, test_predictors.shape[1], test_predictors.shape[2])
 
 #zero-pad/cut time tim
+curr_time_dim = training_predictors.shape[2]
+curr_freq_dim = training_predictors.shape[3]
+
 if args.time_dim > curr_time_dim:
     #
     training_predictors_padded = torch.zeros(training_predictors.shape[0],
