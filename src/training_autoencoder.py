@@ -352,8 +352,8 @@ for epoch in range(args.num_epochs):
         else:
             raise ValueError('Wrong metric selected')
 
-    if args.early_stopping and epoch >= patience+1:
-        patience_vec = val_loss_hist[-patience+1:]
+    if args.early_stopping and epoch >= args.patience+1:
+        patience_vec = val_loss_hist[-args.patience+1:]
         best_l = np.argmin(patience_vec)
         if best_l == 0:
             print ('Training early-stopped')
