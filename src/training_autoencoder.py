@@ -24,6 +24,7 @@ parser.add_argument('--test_perc', type=float, default=0.1)
 parser.add_argument('--normalize_predictors', type=bool, default=True)
 parser.add_argument('--fast_test', type=bool, default=False)
 parser.add_argument('--time_dim', type=int, default=512)
+parser.add_argument('--freq_dim', type=int, default=128)
 
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
@@ -196,7 +197,6 @@ print ('\nPadded dims:')
 print ('Training predictors: ', training_predictors.shape)
 print ('Validation predictors: ', validation_predictors.shape)
 print ('Test predictors: ', test_predictors.shape)
-
 
 
 #convert to tensor
