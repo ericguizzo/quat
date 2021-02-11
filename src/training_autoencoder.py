@@ -53,7 +53,6 @@ parser.add_argument('--model_quat', type=bool, default=True)
 parser.add_argument('--num_experiment', type=int, default=0)
 parser.add_argument('--num_run', type=int, default=0)
 parser.add_argument('--num_fold', type=int, default=0)
-parser.add_argument('--num_fold', type=int, default=0)
 
 
 
