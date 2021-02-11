@@ -16,6 +16,8 @@ parser = argparse.ArgumentParser()
 #saving parameters
 parser.add_argument('--experiment_name', type=str, default='test')
 parser.add_argument('--results_folder', type=str, default='../results')
+parser.add_argument('--results_path', type=str, default='../results/results.npy')
+parser.add_argument('--model_path', type=str, default='../results/model')
 #dataset parameters
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
 parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy')
@@ -51,6 +53,7 @@ parser.add_argument('--model_quat', type=bool, default=True)
 parser.add_argument('--num_experiment', type=int, default=0)
 parser.add_argument('--num_run', type=int, default=0)
 parser.add_argument('--num_fold', type=int, default=0)
+parser.add_argument('--num_fold', type=int, default=0)
 
 
 
@@ -60,12 +63,13 @@ parser.add_argument('--num_fold', type=int, default=0)
 args = parser.parse_args()
 
 #output filenames
+'''
 results_folder = os.path.join(args.results_folder, args.experiment_name)
 if not os.path.exists(results_folder):
     os.makedirs(results_folder)
 model_path = os.path.join(results_folder, 'model')
 results_path = os.path.join(results_folder, 'results.npy')
-figure_path = os.path.join(results_folder, 'figure.png')
+'''
 
 if args.use_cuda:
     device = 'cuda:' + str(args.gpu_id)
@@ -73,7 +77,7 @@ else:
     device = 'cpu'
 
 
-print ('Loading dataset')
+print ('\n Loading dataset')
 loading_start = float(time.perf_counter())
 
 #PREDICTORS_LOAD = os.path.join(args.dataset_path, 'iemocap_randsplit_spectrum_fast_predictors.npy')
