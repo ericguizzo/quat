@@ -106,23 +106,16 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=1,
 
         shell_command = gen_command(script, parameters)
 
+        print('\nShell command:\n')
         print (shell_command)
         training = subprocess.Popen(shell_command, shell=True)
 
 
-        '''
-        training = subprocess.Popen(['python3', 'training_torch.py',
-                                     'crossvalidation', str(num_experiment), str(num_run),
-                                      str(num_fold), parameters, model_name, results_name,
-                                      output_temp_data_path, dataset, str(gpu_ID),
-                                      str(num_folds), locals()['task_type'],parameters_name,
-                                      task_type)
         training.communicate()
         training.wait()
-        '''
-        sys.exit(0)
 
-        training_time = (time.clock() - time_start)
+
+        training_time = (time.perf_counter() - time_start)
         print ('training time: ' + str(training_time))
 
         #wait for file to be created
@@ -136,7 +129,9 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=1,
         temp_results = temp_results.item()
         folds[i] = temp_results
         #stop fold iter
-
+    print ('CAZZOOOOOOOOOOOOO')
+    print (temp_results)
+    sys.exot(0)
     #compute summary
     #compute mean loss and loss std
     tr_loss = []
