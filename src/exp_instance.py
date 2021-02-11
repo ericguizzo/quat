@@ -100,12 +100,10 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=1,
         #run training
         time_start = time.perf_counter()
 
-        parameters['num_experiment'] = num_experiment
-        parameters['num_run'] = num_run
         parameters['num_fold'] = num_fold
         parameters['model_path'] = model_name
         parameters['results_path'] = results_name
-        
+
         shell_command = gen_command(script, parameters)
 
         print (shell_command)
