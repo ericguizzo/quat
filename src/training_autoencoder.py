@@ -90,9 +90,9 @@ dummy = dummy.item()
 
 foldable_list = list(dummy.keys())
 fold_actors_list = uf.folds_generator(args.num_folds, foldable_list, [args.train_perc, args.val_perc, args.test_perc])
-train_list = fold_actors_list[num_fold]['train']
-val_list = fold_actors_list[num_fold]['val']
-test_list = fold_actors_list[num_fold]['test']
+train_list = fold_actors_list[args.num_fold]['train']
+val_list = fold_actors_list[args.num_fold]['val']
+test_list = fold_actors_list[args.num_fold]['test']
 del dummy
 
 predictors_merged = np.load(PREDICTORS_LOAD,allow_pickle=True)
