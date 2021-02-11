@@ -342,7 +342,7 @@ for epoch in range(args.num_epochs):
 
     #save best model (metrics = validation loss)
     if epoch == 0:
-        torch.save(model.state_dict(), model_path)
+        torch.save(model.state_dict(), args.model_path)
         print ('\nModel saved')
         saved_epoch = epoch + 1
     else:
@@ -351,7 +351,7 @@ for epoch in range(args.num_epochs):
             #best_loss = min(val_loss_hist['total'].item()[:-1])  #not looking at curr_loss
             curr_loss = val_loss_hist[-1]['total']
             if curr_loss < best_loss:
-                torch.save(model.state_dict(), model_path)
+                torch.save(model.state_dict(), args.model_path)
                 print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
                 saved_epoch = epoch + 1
 
@@ -369,7 +369,7 @@ for epoch in range(args.num_epochs):
 
 
 #COMPUTE
-model.load_state_dict(torch.load(model_path), strict=False)  #load best model
+model.load_state_dict(torch.load(args.model_path), strict=False)  #load best model
 train_batch_losses = []
 val_batch_lesses = []
 test_batch_losses = []
@@ -467,7 +467,7 @@ temp_results['val_loss_hist'] = train_loss_hist
 temp_results['parameters'] = vars(args)
 
 
-np.save(results_path, temp_results)
+np.save(args.results_path, temp_results)
 
 #print  results
 print ('\nRESULTS:')
