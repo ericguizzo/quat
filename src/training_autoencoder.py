@@ -48,6 +48,11 @@ parser.add_argument('--model_latent_dim', type=int, default=20)
 parser.add_argument('--verbose', type=bool, default=False)
 parser.add_argument('--model_quat', type=bool, default=True)
 #grid search parameters
+parser.add_argument('--num_experiment', type=int, default=0)
+parser.add_argument('--num_run', type=int, default=0)
+parser.add_argument('--num_fold', type=int, default=0)
+
+
 
 
 #eval string args
@@ -125,7 +130,6 @@ if args.normalize_predictors:
     validation_predictors = np.divide(validation_predictors, tr_std)
     test_predictors = np.subtract(test_predictors, tr_mean)
     test_predictors = np.divide(test_predictors, tr_std)
-
 
 
 #reshaping for cnn
