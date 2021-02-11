@@ -29,7 +29,7 @@ def save_code(output_code_path):
     copy2.communicate()
 
 
-def run_experiment(num_experiment=0, num_run=0, num_folds=1,
+def run_experiment(num_experiment=0, num_run=0, num_folds=3,
                    dataset='iemocap_randsplit', experiment_folder='../temp/',
                    script='training_autoencoder.py', parameters={}):
     '''
