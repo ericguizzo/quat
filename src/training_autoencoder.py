@@ -39,6 +39,9 @@ parser.add_argument('--early_stopping', type=bool, default=True)
 parser.add_argument('--save_model_metric', type=str, default='total_loss')
 parser.add_argument('--patience', type=int, default=10)
 parser.add_argument('--load_pretrained', type=str, default=None)
+parser.add_argument('--num_folds', type=str, default=1)
+parser.add_argument('--num_fold', type=str, default=1)
+
 #loss parameters
 parser.add_argument('--loss_function', type=str, default='emo_loss')
 parser.add_argument('--loss_beta', type=int, default=1.)
@@ -49,11 +52,6 @@ parser.add_argument('--model_classifier_structure', type=str, default='[2000,100
 parser.add_argument('--model_latent_dim', type=int, default=20)
 parser.add_argument('--verbose', type=bool, default=False)
 parser.add_argument('--model_quat', type=bool, default=True)
-#grid search parameters
-parser.add_argument('--num_experiment', type=int, default=0)
-parser.add_argument('--num_run', type=int, default=0)
-parser.add_argument('--num_fold', type=int, default=0)
-
 
 
 
@@ -88,11 +86,13 @@ dummy = np.load(TARGET_LOAD,allow_pickle=True)
 dummy = dummy.item()
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #JUST WRITE A FUNCTION TO RE-ORDER foldable_list TO SPLIT
+
+
 foldable_list = list(dummy.keys())
-fold_actors_list = uf.folds_generator(1, foldable_list, [args.train_perc, args.val_perc, args.test_perc])
-train_list = fold_actors_list[int(0)]['train']
-val_list = fold_actors_list[int(0)]['val']
-test_list = fold_actors_list[int(0)]['test']
+fold_actors_list = uf.folds_generator(args.num_folds, foldable_list, [args.train_perc, args.val_perc, args.test_perc])
+train_list = fold_actors_list[num_fold]['train']
+val_list = fold_actors_list[num_fold]['val']
+test_list = fold_actors_list[num_fold]['test']
 del dummy
 
 predictors_merged = np.load(PREDICTORS_LOAD,allow_pickle=True)
