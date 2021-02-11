@@ -55,9 +55,6 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=2,
     if not os.path.exists(output_results_path):
         os.makedirs(output_results_path)
 
-    output_parameters_path = output_results_path + '/parameters'
-    if not os.path.exists(output_parameters_path):
-        os.makedirs(output_parameters_path)
 
     output_temp_data_path = output_temp_path + '/temp_data'
     if not os.path.exists(output_temp_data_path):
