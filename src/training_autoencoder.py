@@ -58,15 +58,8 @@ parser.add_argument('--model_quat', type=bool, default=True)
 #eval string args
 
 args = parser.parse_args()
-print ('CULOOOOOOOO', args.model_path)
 #output filenames
-'''
-results_folder = os.path.join(args.results_folder, args.experiment_name)
-if not os.path.exists(results_folder):
-    os.makedirs(results_folder)
-model_path = os.path.join(results_folder, 'model')
-results_path = os.path.join(results_folder, 'results.npy')
-'''
+
 
 if args.use_cuda:
     device = 'cuda:' + str(args.gpu_id)
@@ -84,10 +77,7 @@ TARGET_LOAD = args.target_path
 
 dummy = np.load(TARGET_LOAD,allow_pickle=True)
 dummy = dummy.item()
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#JUST WRITE A FUNCTION TO RE-ORDER foldable_list TO SPLIT
-
-
+#create list of datapoints for current fold
 foldable_list = list(dummy.keys())
 fold_actors_list = uf.folds_generator(args.num_folds, foldable_list, [args.train_perc, args.val_perc, args.test_perc])
 train_list = fold_actors_list[args.num_fold]['train']
