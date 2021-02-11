@@ -130,8 +130,8 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=1,
         folds[i] = temp_results
         #stop fold iter
     print ('CAZZOOOOOOOOOOOOO')
-    print (temp_results)
-    sys.exot(0)
+    print (folds)
+    sys.exit(0)
     #compute summary
     #compute mean loss and loss std
     tr_loss = []
