@@ -60,7 +60,7 @@ parser.add_argument('--num_fold', type=int, default=0)
 #eval string args
 
 args = parser.parse_args()
-
+print ('CULOOOOOOOO', args.model_path)
 #output filenames
 '''
 results_folder = os.path.join(args.results_folder, args.experiment_name)
