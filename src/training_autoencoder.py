@@ -41,7 +41,7 @@ parser.add_argument('--patience', type=int, default=10)
 parser.add_argument('--load_pretrained', type=str, default=None)
 parser.add_argument('--num_folds', type=int, default=1)
 parser.add_argument('--num_fold', type=int, default=1)
-
+parser.add_argument('--fixed_seed', type=bool, default=False)
 #loss parameters
 parser.add_argument('--loss_function', type=str, default='emo_loss')
 parser.add_argument('--loss_beta', type=int, default=1.)
@@ -65,7 +65,6 @@ if args.use_cuda:
     device = 'cuda:' + str(args.gpu_id)
 else:
     device = 'cpu'
-
 
 print ('\n Loading dataset')
 loading_start = float(time.perf_counter())
@@ -100,7 +99,14 @@ validation_predictors, validation_target = uf.build_matrix_dataset(predictors_me
 print ('\n test:')
 test_predictors, test_target = uf.build_matrix_dataset(predictors_merged,
                                                             target_merged, test_list)
-
+if args.fixed_seed:
+    seed = 1
+    np.random.seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
 
 if args.fast_test:
     #take only 100 datapoints, just for quick testing

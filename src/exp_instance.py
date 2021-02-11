@@ -100,6 +100,7 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=3,
         #run training
         time_start = time.perf_counter()
 
+        parameters['num_fols'] = num_folds
         parameters['num_fold'] = num_fold
         parameters['model_path'] = model_name
         parameters['results_path'] = results_name
