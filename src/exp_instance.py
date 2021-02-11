@@ -129,86 +129,43 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=2,
         temp_results = np.load(results_name, allow_pickle=True)
         temp_results = temp_results.item()
         folds[i] = temp_results
-        #stop fold iter
-    print ('CAZZOOOOOOOOOOOOO')
-    print (folds)
-    sys.exit(0)
+        #END OF FOLD ITERATION
+
     #compute summary
-    #compute mean loss and loss std
-    tr_loss = []
-    val_loss = []
-    test_loss = []
+    #compute mean loss and loss std of values across folds
+    keys = list(folds[0].keys())
+    keys = [i for i in keys if 'parameters' not in i and 'hist' not in i]  #remove non-values entries
+    upper_keys = list(folds.keys())
+    folds['summary'] = {}
 
-    tr_loss_valence = []
-    val_loss_valence = []
-    test_loss_valence = []
+    for f in upper_keys:
+        for k in keys:
+            if not k in folds['summary']:
+                folds['summary'][k] = []
+                folds['summary'][k].append(folds[f][k])
+            else:
+                folds['summary'][k].append(folds[f][k])
+    for k in list(folds['summary'].keys()):
+        mean_k = k + '_mean'
+        std_k = k + '_std'
+        folds['summary'][mean_k] = np.mean(folds['summary'][k])
+        folds['summary'][std_k] = np.std(folds['summary'][k])
 
-    tr_loss_arousal = []
-    val_loss_arousal = []
-    test_loss_arousal = []
-
-    tr_loss_dominance = []
-    val_loss_dominance = []
-    test_loss_dominance = []
-
-    for i in range(num_folds):
-        tr_loss.append(folds[i]['train_loss'])
-        val_loss.append(folds[i]['val_loss'])
-        test_loss.append(folds[i]['test_loss'])
-
-        tr_loss_valence.append(folds[i]['train_loss_valence'])
-        val_loss_valence.append(folds[i]['val_loss_valence'])
-        test_loss_valence.append(folds[i]['test_loss_valence'])
-
-        tr_loss_arousal.append(folds[i]['train_loss_arousal'])
-        val_loss_arousal.append(folds[i]['val_loss_arousal'])
-        test_loss_arousal.append(folds[i]['test_loss_arousal'])
-
-        tr_loss_dominance.append(folds[i]['train_loss_dominance'])
-        val_loss_dominance.append(folds[i]['val_loss_dominance'])
-        test_loss_dominance.append(folds[i]['test_loss_dominance'])
-
-    tr_mean = np.mean(tr_loss)
-    val_mean = np.mean(val_loss)
-    test_mean = np.mean(test_loss)
-    tr_std = np.std(tr_loss)
-    val_std = np.std(val_loss)
-    test_std = np.std(test_loss)
-
-    tr_mean_valence = np.mean(tr_loss_valence)
-    val_mean_valence = np.mean(val_loss_valence)
-    test_mean_valence = np.mean(test_loss_valence)
-    tr_std_valence = np.std(tr_loss_valence)
-    val_std_valence = np.std(val_loss_valence)
-    test_std_valence = np.std(test_loss_valence)
-
-    tr_mean_arousal = np.mean(tr_loss_arousal)
-    val_mean_arousal = np.mean(val_loss_arousal)
-    test_mean_arousal = np.mean(test_loss_arousal)
-    tr_std_arousal = np.std(tr_loss_arousal)
-    val_std_arousal = np.std(val_loss_arousal)
-    test_std_arousal = np.std(test_loss_arousal)
-
-    tr_mean_dominance = np.mean(tr_loss_dominance)
-    val_mean_dominance = np.mean(val_loss_dominance)
-    test_mean_dominance = np.mean(test_loss_dominance)
-    tr_std_dominance = np.std(tr_loss_dominance)
-    val_std_dominance = np.std(val_loss_dominance)
-    test_std_dominance = np.std(test_loss_dominance)
+    print (folds['summary'])
 
 
     #save results dict
     dict_name = 'results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
     final_dict_path = output_results_path + '/' + dict_name
     np.save(final_dict_path, folds)
-
-    #run training
+    '''
+    #generate results spreadsheet
     spreadsheet_name = dataset + '_exp' + str(num_experiment) + '_results_spreadsheet.xls'
     gen_spreadsheet = subprocess.Popen(['python3', 'results_to_excel.py',
                                         output_results_path, spreadsheet_name])
     gen_spreadsheet.communicate()
     gen_spreadsheet.wait()
-
+    '''
     #save current code
     save_code(output_code_path)
 
