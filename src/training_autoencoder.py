@@ -47,6 +47,8 @@ parser.add_argument('--model_classifier_structure', type=str, default='[2000,100
 parser.add_argument('--model_latent_dim', type=int, default=20)
 parser.add_argument('--verbose', type=bool, default=False)
 parser.add_argument('--model_quat', type=bool, default=True)
+#grid search parameters
+
 
 #eval string args
 
@@ -102,8 +104,8 @@ test_predictors, test_target = uf.build_matrix_dataset(predictors_merged,
                                                             target_merged, test_list)
 
 
-
 if args.fast_test:
+    #take only 100 datapoints, just for quick testing
     bound = 100
     training_predictors = training_predictors[:bound]
     training_target = training_target[:bound]
@@ -114,7 +116,7 @@ if args.fast_test:
 
 
 if args.normalize_predictors:
-    #normalize to 0 mean ans 1 std
+    #normalize to 0 mean and 1 std
     tr_mean = np.mean(training_predictors)
     tr_std = np.std(training_predictors)
     training_predictors = np.subtract(training_predictors, tr_mean)
