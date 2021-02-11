@@ -31,7 +31,7 @@ def save_code(output_code_path):
 
 def run_experiment(num_experiment=0, num_run=0, num_folds=1,
                    dataset='iemocap_randsplit', experiment_folder='../temp/',
-                   script='training_autoencoder.py', parameters={'nulla':0}):
+                   script='training_autoencoder.py', parameters={}):
     '''
     run the crossvalidation
     '''
