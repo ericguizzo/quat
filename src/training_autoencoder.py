@@ -39,8 +39,8 @@ parser.add_argument('--early_stopping', type=bool, default=True)
 parser.add_argument('--save_model_metric', type=str, default='total_loss')
 parser.add_argument('--patience', type=int, default=10)
 parser.add_argument('--load_pretrained', type=str, default=None)
-parser.add_argument('--num_folds', type=str, default=1)
-parser.add_argument('--num_fold', type=str, default=1)
+parser.add_argument('--num_folds', type=int, default=1)
+parser.add_argument('--num_fold', type=int, default=1)
 
 #loss parameters
 parser.add_argument('--loss_function', type=str, default='emo_loss')
