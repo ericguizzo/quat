@@ -160,7 +160,7 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=2,
 
     #generate results spreadsheet
     spreadsheet_name = dataset + '_exp' + str(num_experiment) + '_results_spreadsheet.xls'
-    output_file = os.path.join(,spreadsheet_name)
+    output_file = os.path.join(output_results_path,spreadsheet_name)
     spreadsheet_parameters = {'input_folder:'output_results_path, 'output_name':output_file}
 
     gen_xls_string = gen_command(script='results_to_excel.py', p=spreadsheet_parameters)
