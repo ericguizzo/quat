@@ -196,11 +196,11 @@ def grid_search(experiments_folder, output_folder, ids, begin, end,  gpu_id):
             #run experiment instance with correct parameters
             run_experiment(num_experiment=exp,
                            num_run=run,
-                           num_folds=parameters['num_folds'],
-                           dataset=parameters['dataset'],
+                           num_folds=parameters[str(run)]['num_folds'],
+                           dataset=parameters[str(run)]['dataset'],
                            experiment_folder=output_folder,
                            script=script,
-                           parameters=parameters
+                           parameters=[str(run)]parameters
                            )
 
 
