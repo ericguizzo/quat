@@ -4,15 +4,13 @@ import random
 import numpy as np
 import os, sys
 import configparser
-import loadconfig
 '''
 Preprocessing script.
 Outputs numpy dicts containing preprocessed predictors and target
 '''
 
-config = loadconfig.load()
 cfg = configparser.ConfigParser()
-cfg.read(config)
+cfg.read('preprocessing_config.ini')
 
 #get values from config file
 FEATURES_TYPE = cfg.get('feature_extraction', 'features_type')

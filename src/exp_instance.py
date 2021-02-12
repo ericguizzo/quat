@@ -128,6 +128,8 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=2,
         temp_results = np.load(results_name, allow_pickle=True)
         temp_results = temp_results.item()
         folds[i] = temp_results
+
+        spreadsheet_parameters = {'input_folder:', 'output_name'}
         #END OF FOLD ITERATION
 
     #compute summary
