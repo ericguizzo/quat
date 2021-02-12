@@ -52,6 +52,9 @@ parser.add_argument('--model_classifier_structure', type=str, default='[2000,100
 parser.add_argument('--model_latent_dim', type=int, default=20)
 parser.add_argument('--verbose', type=bool, default=False)
 parser.add_argument('--model_quat', type=bool, default=True)
+#grid search parameters
+parser.add_argument('--script', type=str, default='training_autoencoder.py')
+
 
 
 
