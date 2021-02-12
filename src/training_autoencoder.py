@@ -55,8 +55,8 @@ parser.add_argument('--model_quat', type=bool, default=True)
 #grid search parameters
 #SPECIFY ONLY IF PERFORMING A GRID SEARCH WITH exp_instance.py SCRIPT
 parser.add_argument('--script', type=str, default='training_autoencoder.py')
-parser.add_argument('--comment1', type=str, default='none')
-parser.add_argument('--comment2', type=str, default='none')
+parser.add_argument('--comment_1', type=str, default='none')
+parser.add_argument('--comment_2', type=str, default='none')
 parser.add_argument('--experiment_description', type=str, default='none')
 parser.add_argument('--dataset', type=str, default='none')
 parser.add_argument('--num_experiment', type=int, default=0)
