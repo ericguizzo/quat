@@ -9,11 +9,9 @@ from scipy.signal import iirfilter, butter, filtfilt, lfilter
 from shutil import copyfile
 import librosa
 import configparser
-import loadconfig
 
-config = loadconfig.load()
 cfg = configparser.ConfigParser()
-cfg.read(config)
+cfg.read('preprocessing_config.ini')
 
 SR = cfg.getint('sampling', 'sr_target')
 
