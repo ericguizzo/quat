@@ -4,6 +4,8 @@ import os, sys
 import subprocess
 import time
 import shutil
+import json
+import argparse
 
 def gen_command(script, d):
     command = ['python3', script]
@@ -166,6 +168,45 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=2,
     #save current code
     save_code(output_code_path)
 
+'''
+def run_experiment(num_experiment=0, num_run=0, num_folds=2,
+                   dataset='iemocap_randsplit', experiment_folder='../temp/',
+                   script='training_autoencoder.py', parameters={}):
+'''
+def grid_search(experiments_folder, output_folder, ids, begin, end,  gpu_id):
+    contents = os.listdir(experiments_folder)
+    selected_experiments = [i for i in contents if int(i.split('_')[0]) in ids]
+
+    #iterate experiments
+    for exp in selected_experiments:
+        #read json
+        file = os.path.join(experiments_folder, exp)
+        with open(file) as json_file:
+            parameters = json.load(json_file)
+
+        exp_keys = [i for i in parameters if 'global_parameters' not in i]
+
+        #append global parameters in every experiment instance
+        for run in exp_keys:
+            for g in parameters['global_parameters']:
+                name = g
+                value = parameters['global_parameters'][g]
+                parameters[run][name] = value
+
+            #run experiment instance with correct parameters
+            run_experiment(num_experiment=exp,
+                           num_run=run,
+                           num_folds=parameters['num_folds'],
+                           dataset=parameters['dataset'],
+                           experiment_folder=output_folder,
+                           script=script,
+                           parameters=parameters
+                           )
+
+
+
+
 
 if __name__ == '__main__':
-    run_experiment()
+
+    grid_search('experiments_quat', '../temp/aaa',[1],1,1, 0)
