@@ -128,8 +128,6 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=2,
         temp_results = np.load(results_name, allow_pickle=True)
         temp_results = temp_results.item()
         folds[i] = temp_results
-
-        spreadsheet_parameters = {'input_folder:', 'output_name'}
         #END OF FOLD ITERATION
 
     #compute summary
@@ -159,14 +157,17 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=2,
     dict_name = 'results_' + dataset + '_exp' + str(num_experiment) + '_run' + str(num_run) + '.npy'
     final_dict_path = output_results_path + '/' + dict_name
     np.save(final_dict_path, folds)
-    '''
+
     #generate results spreadsheet
     spreadsheet_name = dataset + '_exp' + str(num_experiment) + '_results_spreadsheet.xls'
-    gen_spreadsheet = subprocess.Popen(['python3', 'results_to_excel.py',
-                                        output_results_path, spreadsheet_name])
+    output_file = os.path.join(,spreadsheet_name)
+    spreadsheet_parameters = {'input_folder:'output_results_path, 'output_name':output_file}
+
+    gen_xls_string = gen_command(script='results_to_excel.py', p=spreadsheet_parameters)
+    gen_spreadsheet = subprocess.Popen(gen_xls_string, shell=True)
     gen_spreadsheet.communicate()
     gen_spreadsheet.wait()
-    '''
+
     #save current code
     save_code(output_code_path)
 
