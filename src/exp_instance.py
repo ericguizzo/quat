@@ -203,6 +203,7 @@ def grid_search(experiments_folder, output_folder, ids, begin, end,  gpu_id):
                            parameters=parameters[str(run)]
                            )
 
+    print ('ALL EXPERIMENTS REQUESTED TO EXP MANAGER COMPLETED')
 
 
 

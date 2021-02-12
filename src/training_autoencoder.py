@@ -65,7 +65,6 @@ parser.add_argument('--num_experiment', type=int, default=0)
 
 
 
-
 #eval string args
 
 args = parser.parse_args()
@@ -365,6 +364,12 @@ for epoch in range(args.num_epochs):
 
         else:
             raise ValueError('Wrong metric selected')
+
+    if args.num_experiment != 0:
+        #print info on dataset, experiment and instance if performing a grid search
+        utilstring = 'dataset: ' + str(dataset) + ', exp: ' + str(num_experiment) + ', run: ' + str(num_run) + ', fold: ' + str(num_fold)
+        print ('')
+        print (utilstring)
 
     if args.early_stopping and epoch >= args.patience+1:
         patience_vec = [i['total'] for i in val_loss_hist[-args.patience+1:]]
