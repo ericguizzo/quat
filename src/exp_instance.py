@@ -199,7 +199,7 @@ def grid_search(experiments_folder, output_folder, ids, begin, end,  gpu_id):
                            num_folds=parameters[str(run)]['num_folds'],
                            dataset=parameters[str(run)]['dataset'],
                            experiment_folder=output_folder,
-                           script=script,
+                           script=parameters[str(run)]['script'],
                            parameters=parameters[str(run)]['parameters']
                            )
 

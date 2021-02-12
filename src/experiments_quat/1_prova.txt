@@ -1,6 +1,7 @@
 {
   "global_parameters":{
         "experiment_description": "test experiment",
+        "script": "training_autoencoder.py"
         "dataset": "iemocap",
         "num_experiment": 0,
         "num_folds": 1,
