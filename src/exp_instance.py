@@ -175,7 +175,7 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=2,
                    dataset='iemocap_randsplit', experiment_folder='../temp/',
                    script='training_autoencoder.py', parameters={}):
 '''
-def grid_search(experiments_folder, output_folder, ids, begin, end,  gpu_id):
+def grid_search(experiments_folder, output_folder, ids, begin, end, gpu_id):
     contents = os.listdir(experiments_folder)
     selected_experiments = [i for i in contents if int(i.split('_')[0]) in ids]
 
@@ -205,7 +205,7 @@ def grid_search(experiments_folder, output_folder, ids, begin, end,  gpu_id):
                            parameters=parameters[str(run)]
                            )
 
-    print ('ALL EXPERIMENTS REQUESTED TO EXP MANAGER COMPLETED')
+    print ('\nALL EXPERIMENTS REQUESTED COMPLETED')
 
 
 
