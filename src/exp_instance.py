@@ -200,7 +200,7 @@ def grid_search(experiments_folder, output_folder, ids, begin, end,  gpu_id):
                            dataset=parameters[str(run)]['dataset'],
                            experiment_folder=output_folder,
                            script=script,
-                           parameters=[str(run)]parameters
+                           parameters=parameters[str(run)]['parameters']
                            )
 
 
