@@ -209,4 +209,4 @@ def grid_search(experiments_folder, output_folder, ids, begin, end,  gpu_id):
 
 if __name__ == '__main__':
 
-    grid_search('experiments_quat', '../temp/aaa',[1],1,1, 0)
+    grid_search('experiments_quat', '../temp/aaa',[1],1,2,0)
