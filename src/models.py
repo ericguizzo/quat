@@ -194,23 +194,22 @@ class emo_vae_vgg(nn.Module):
                 in_channels=1,
                 verbose=True,
                 batchnorm=True,
-                quat=True):
-        super(emo_vae, self).__init__()
+                architecture='VGG!architecture'
+                ):
+        super(emo_vae_vgg, self).__init__()
 
         self.in_channels = in_channels
-
-
-        self.quat = quat
         self.latent_dim =latent_dim
         self.verbose = verbose
         self.flattened_dim = 32768
 
 
-        self.conv_layers = self.create_conv_layers(VGG_types["VGG16"])
+        self.encoder = self.create_conv_layers_encoder(VGG_types["VGG16"])
 
-        #latent dimension layers
         self.latent =  QuaternionLinear(self.flattened_dim, latent_dim*4)
+        self.decoder_input = QuaternionLinear(latent_dim*4, self.flattened_dim)
 
+        '''
         #decoder input layers
         self.decoder_input = QuaternionLinear(latent_dim*4, self.flattened_dim)
         structure.reverse()
@@ -248,9 +247,34 @@ class emo_vae_vgg(nn.Module):
                 nn.Linear(classifier_structure[-1], 1),
                 nn.LeakyReLU()
             )
-
+    '''
 
     def create_conv_layers_encoder(self, architecture):
+        layers = []
+        in_channels = self.in_channels
+
+        for x in architecture:
+            if type(x) == int:
+                out_channels = x
+
+                layers += [
+                    nn.Conv2d(
+                        in_channels=in_channels,
+                        out_channels=out_channels,
+                        kernel_size=(3, 3),
+                        stride=(1, 1),
+                        padding=(1, 1),
+                    ),
+                    nn.BatchNorm2d(x),
+                    nn.ReLU(),
+                ]
+                in_channels = x
+            elif x == "M":
+                layers += [nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2))]
+
+        return nn.Sequential(*layers)
+
+    def create_conv_layers_decoder(self, architecture):
         layers = []
         in_channels = self.in_channels
 
@@ -280,42 +304,29 @@ class emo_vae_vgg(nn.Module):
         x = self.encoder(x)
         if self.verbose:
             print('encoder', x.shape)
+
         x = torch.flatten(x, start_dim=1)
         if self.verbose:
             print('flatten', x.shape)
 
-        #decoder
-        if self.quat:
-            x = self.latent_q(x)
-            if self.verbose:
-                print ('latent', x.shape)
-            x = self.decoder_input_q(x)
-            x = x.view(-1, 512, 16, 4)
-            if self.verbose:
-                print('decoder_input', x.shape)
-            x = self.decoder_q(x)
-            if self.verbose:
-                print('decoder', x.shape)
-            x = self.final_layer_decoder_q(x)
-            if self.verbose:
-                print('final', x.shape)
+        x = self.latent(x)
+        if self.verbose:
+            print ('latent', x.shape)
 
-        if not self.quat:
-            x = self.latent_real(x)
-            if self.verbose:
-                print ('latent', x.shape)
-            x = self.decoder_input_real(x)
-            x = x.view(-1, 512, 16, 4)
-            if self.verbose:
-                print('decoder_input', x.shape)
-            x = self.decoder_real(x)
-            if self.verbose:
-                print('decoder', x.shape)
+        x = self.decoder_input(x)
+        x = x.view(-1, 512, 16, 4)
 
-            x = self.final_layer_decoder_real(x)
-            if self.verbose:
-                print('final', x.shape)
-
+        if self.verbose:
+            print('decoder_input', x.shape)
+        '''
+        x = self.decoder_q(x)
+        if self.verbose:
+            print('decoder', x.shape)
+        x = self.final_layer_decoder_q(x)
+        if self.verbose:
+            print('final', x.shape)
+        '''
+        '''
         #classifiers
         x_valence = torch.flatten(x[:,1,:,:], start_dim=1)
         x_arousal = torch.flatten(x[:,2,:,:], start_dim=1)
@@ -332,3 +343,6 @@ class emo_vae_vgg(nn.Module):
         emo_preds = torch.cat((x_valence,x_arousal,x_dominance),1)
 
         return x, emo_preds
+
+        '''
+        return x
