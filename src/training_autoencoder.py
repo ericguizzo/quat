@@ -128,7 +128,7 @@ if args.fast_test:
     test_predictors = test_predictors[:bound]
     test_target = test_target[:bound]
 
-
+'''
 if args.normalize_predictors:
     #normalize to 0 mean and 1 std
     tr_mean = np.mean(training_predictors)
@@ -139,6 +139,14 @@ if args.normalize_predictors:
     validation_predictors = np.divide(validation_predictors, tr_std)
     test_predictors = np.subtract(test_predictors, tr_mean)
     test_predictors = np.divide(test_predictors, tr_std)
+'''
+if args.normalize_predictors:
+    #normalize between 0 and 1
+    training_predictors = training_predictors / training_predictors.shape[-1]
+    validation_predictors = validation_predictors / validation_predictors.shape[-1]
+    test_predictors = test_predictors / test_predictors.shape[-1]
+
+
 
 
 #reshaping for cnn
