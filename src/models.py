@@ -194,7 +194,7 @@ class emo_vae_vgg(nn.Module):
                 in_channels=1,
                 verbose=True,
                 batchnorm=True,
-                architecture='VGG!architecture'
+                architecture='VGG16'
                 ):
         super(emo_vae_vgg, self).__init__()
 
@@ -204,11 +204,11 @@ class emo_vae_vgg(nn.Module):
         self.flattened_dim = 32768
 
 
-        self.encoder = self.create_conv_layers_encoder(VGG_types["VGG16"])
+        self.encoder = self.create_conv_layers_encoder(VGG_types[architecture])
 
         self.latent =  QuaternionLinear(self.flattened_dim, latent_dim*4)
         self.decoder_input = QuaternionLinear(latent_dim*4, self.flattened_dim)
-
+        self.decoder = self.create_conv_layers_decoder(VGG_types[architecture])
         '''
         #decoder input layers
         self.decoder_input = QuaternionLinear(latent_dim*4, self.flattened_dim)
@@ -276,14 +276,14 @@ class emo_vae_vgg(nn.Module):
 
     def create_conv_layers_decoder(self, architecture):
         layers = []
-        in_channels = self.in_channels
+        in_channels = 1
 
-        for x in architecture:
+        for x in architecture.reverse():
             if type(x) == int:
                 out_channels = x
 
                 layers += [
-                    nn.Conv2d(
+                    nn.ConvTranspose2d(
                         in_channels=in_channels,
                         out_channels=out_channels,
                         kernel_size=(3, 3),
@@ -295,7 +295,7 @@ class emo_vae_vgg(nn.Module):
                 ]
                 in_channels = x
             elif x == "M":
-                layers += [nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2))]
+                layers += [nn.ConvTranspose2d(kernel_size=(2, 2), stride=(2, 2))]
 
         return nn.Sequential(*layers)
 
@@ -318,10 +318,11 @@ class emo_vae_vgg(nn.Module):
 
         if self.verbose:
             print('decoder_input', x.shape)
-        '''
-        x = self.decoder_q(x)
+
+        x = self.decoder(x)
         if self.verbose:
             print('decoder', x.shape)
+        '''
         x = self.final_layer_decoder_q(x)
         if self.verbose:
             print('final', x.shape)
