@@ -191,21 +191,14 @@ VGG_types = {
 class emo_vae_vgg(nn.Module):
     def __init__(self,
                 latent_dim=20,
+                in_channels=1,
                 verbose=True,
+                batchnorm=True,
                 quat=True):
         super(emo_vae, self).__init__()
 
-        self.conv_layers = self.create_conv_layers(VGG_types["VGG16"])
+        self.in_channels = in_channels
 
-        self.classifier = nn.Sequential(
-            nn.Linear(512 * 7 * 7, 4096),
-            nn.ReLU(),
-            nn.Dropout(p=0.5),
-            nn.Linear(4096, 4096),
-            nn.ReLU(),
-            nn.Dropout(p=0.5),
-            nn.Linear(4096, 100),
-        )
 
         self.quat = quat
         self.latent_dim =latent_dim
@@ -213,16 +206,13 @@ class emo_vae_vgg(nn.Module):
         self.flattened_dim = 32768
 
 
-
-        self.encoder = nn.Sequential()
+        self.conv_layers = self.create_conv_layers(VGG_types["VGG16"])
 
         #latent dimension layers
-        self.latent_real = nn.Linear(self.flattened_dim, latent_dim)
-        self.latent_q =  QuaternionLinear(self.flattened_dim, latent_dim*4)
+        self.latent =  QuaternionLinear(self.flattened_dim, latent_dim*4)
 
         #decoder input layers
-        self.decoder_input_real = nn.Linear(latent_dim, self.flattened_dim)
-        self.decoder_input_q = QuaternionLinear(latent_dim*4, self.flattened_dim)
+        self.decoder_input = QuaternionLinear(latent_dim*4, self.flattened_dim)
         structure.reverse()
 
         #build decoder *real valued
@@ -237,53 +227,7 @@ class emo_vae_vgg(nn.Module):
             )
         self.decoder_real = nn.Sequential(*conv_layers)
 
-        #build decoder *quaternion-valued
-        conv_layers = []
-        for i in range(len(structure) - 1):
-            conv_layers.append(
-                nn.Sequential(
-                    QuaternionTransposeConv(structure[i], structure[i + 1],
-                                       kernel_size=3, stride=2, padding=1,
-                                       output_padding=1),
-                    nn.LeakyReLU())
-            )
-        self.decoder_q = nn.Sequential(*conv_layers)
 
-        #final layers
-        self.final_layer_decoder_real = nn.Sequential(
-                            nn.ConvTranspose2d(structure[-1],
-                                               structure[-1],
-                                               kernel_size=3,
-                                               stride=2,
-                                               padding=1,
-                                               output_padding=1),
-                            nn.LeakyReLU(),
-                            nn.Conv2d(structure[-1], out_channels=1,
-                                      kernel_size=3, padding=1),
-                            nn.Sigmoid())
-
-        self.final_layer_decoder_q = nn.Sequential(
-                            QuaternionTransposeConv(structure[-1],
-                                                    structure[-1],
-                                                    kernel_size=3,
-                                                    stride=2,
-                                                    padding=1,
-                                                    output_padding=1),
-                            nn.LeakyReLU(),
-                            QuaternionConv(structure[-1], out_channels=4,
-                                      kernel_size=3, stride=1, padding=1),
-                            nn.Sigmoid())
-
-
-        layers = []
-        in_chans = self.flattened_dim * 2
-        for curr_chans in classifier_structure:
-            layers.append(
-                nn.Sequential(
-                    nn.Linear(in_chans, curr_chans),
-                    nn.LeakyReLU())
-                )
-            in_chans = curr_chans
 
         self.classifier_valence = nn.Sequential(*layers)
         self.classifier_arousal = nn.Sequential(*layers)
@@ -304,6 +248,32 @@ class emo_vae_vgg(nn.Module):
                 nn.Linear(classifier_structure[-1], 1),
                 nn.LeakyReLU()
             )
+
+
+    def create_conv_layers_encoder(self, architecture):
+        layers = []
+        in_channels = self.in_channels
+
+        for x in architecture:
+            if type(x) == int:
+                out_channels = x
+
+                layers += [
+                    nn.Conv2d(
+                        in_channels=in_channels,
+                        out_channels=out_channels,
+                        kernel_size=(3, 3),
+                        stride=(1, 1),
+                        padding=(1, 1),
+                    ),
+                    nn.BatchNorm2d(x),
+                    nn.ReLU(),
+                ]
+                in_channels = x
+            elif x == "M":
+                layers += [nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2))]
+
+        return nn.Sequential(*layers)
 
     def forward(self, x):
         #encoder
