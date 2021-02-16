@@ -208,22 +208,26 @@ def grid_search(experiments_folder, output_folder, ids, begin, end, gpu_id):
                            script=parameters[str(run)]['script'],
                            parameters=parameters[str(run)]
                            )
-            
+
     print ('\nALL EXPERIMENTS REQUESTED COMPLETED')
 
 
 
 
 if __name__ == '__main__':
-    experiments_folder_default = 'experiments_quat'
-    output_folder = '../beta_exp'
-    experiments_to_run = [2]
-    first_instance = 1
-    last_instance = 6
-    gpu_id = 0
-    grid_search(experiments_folder_default,
-                output_folder,
-                experiments_to_run,
-                first_instance,
-                last_instance,
-                gpu_id)
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--experiments_folder', type=str, default='experiments_quat')
+    parser.add_argument('--output_folder', type=str, default='../beta_exp')
+    parser.add_argument('--ids', type=str, default='[2]')
+    parser.add_argument('--first', type=int, default=1)
+    parser.add_argument('--last', type=int, default=6)
+    parser.add_argument('--gpu_id', type=int, default=0)
+    args = parser.parse_args()
+
+    grid_search(experiments_folder=args.experiments_folder,
+                output_folder=args.output_folder,
+                ids=eval(args.ids),
+                begin=args.first,
+                ens=args.last,
+                gpu_id=args.gpu_id)
