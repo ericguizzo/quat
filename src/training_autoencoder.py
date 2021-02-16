@@ -385,12 +385,13 @@ for epoch in range(args.num_epochs):
 
         else:
             raise ValueError('Wrong metric selected')
-
+    '''
     if args.num_experiment != 0:
         #print info on dataset, experiment and instance if performing a grid search
         utilstring = 'dataset: ' + str(args.dataset) + ', exp: ' + str(args.num_experiment) + ', run: ' + str(args.num_run) + ', fold: ' + str(args.num_fold)
         print ('')
         print (utilstring)
+    '''
 
     if args.early_stopping and epoch >= args.patience+1:
         patience_vec = [i['total'] for i in val_loss_hist[-args.patience+1:]]
