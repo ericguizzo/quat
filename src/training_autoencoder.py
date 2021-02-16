@@ -295,7 +295,7 @@ for epoch in range(args.num_epochs):
         recon, emo_preds = model(sounds)
         loss = F.mse_loss(sounds,recon)
         loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
-        sloss['total'].backward()
+        loss['total'].backward()
         loss.backward()
 
         optimizer.step()
