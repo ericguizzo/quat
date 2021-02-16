@@ -324,15 +324,15 @@ class emo_ae_vgg(nn.Module):
             print('final', x.shape)
 
         #classifiers
-        x_valence = torch.flatten(x[:,1,:,:], start_dim=1)
-        x_arousal = torch.flatten(x[:,2,:,:], start_dim=1)
-        x_dominance = torch.flatten(x[:,3,:,:], start_dim=1)
+        #x_valence = torch.flatten(x[:,1,:,:], start_dim=1)
+        #x_arousal = torch.flatten(x[:,2,:,:], start_dim=1)
+        #x_dominance = torch.flatten(x[:,3,:,:], start_dim=1)
 
-        x_valence = torch.sigmoid(self.classifier_valence(x_valence))
-        x_arousal = torch.sigmoid(self.classifier_arousal(x_arousal))
-        x_dominance = torch.sigmoid(self.classifier_dominance(x_dominance))
+        x_valence = torch.sigmoid(self.classifier_valence(torch.flatten(x[:,1,:,:], start_dim=1)))
+        x_arousal = torch.sigmoid(self.classifier_arousal(torch.flatten(x[:,2,:,:], start_dim=1)))
+        x_dominance = torch.sigmoid(self.classifier_dominance(torch.flatten(x[:,3,:,:], start_dim=1)))
 
 
-        emo_preds = torch.cat((x_valence,x_arousal,x_dominance),1)
+        #emo_preds = torch.cat((x_valence,x_arousal,x_dominance),1)
 
-        return x, emo_preds
+        return x, torch.cat((x_valence,x_arousal,x_dominance),1)
