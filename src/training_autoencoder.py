@@ -293,8 +293,10 @@ for epoch in range(args.num_epochs):
         truth = truth.to(device)
 
         recon, emo_preds = model(sounds)
-        loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
-        loss['total'].backward()
+        loss = F.mse_loss(sounds,recon)
+        #loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
+        #loss['total'].backward()
+        loss.backward()
 
         optimizer.step()
 
@@ -318,7 +320,7 @@ for epoch in range(args.num_epochs):
             recon, emo_preds = model(sounds)
             loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
 
-            train_batch_losses.append(loss)
+            train_batch_losses.append(loss.detach())
         #validation data
         for i, (sounds, truth) in enumerate(val_data):
             sounds = sounds.to(device)
@@ -327,7 +329,7 @@ for epoch in range(args.num_epochs):
             recon, emo_preds = model(sounds)
             loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
 
-            val_batch_losses.append(loss)
+            val_batch_losses.append(loss.detach())
     #append to history and print
     train_epoch_loss = {'total':[], 'emo':[], 'recon':[],
                         'valence':[],'arousal':[], 'dominance':[]}
