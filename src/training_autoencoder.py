@@ -123,6 +123,7 @@ if args.fixed_seed:
         torch.cuda.manual_seed_all(seed)
 
 if args.fast_test:
+    print ('FAST TEST: using unly 100 datapoints ')
     #take only 100 datapoints, just for quick testing
     bound = 100
     training_predictors = training_predictors[:bound]
