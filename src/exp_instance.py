@@ -199,7 +199,7 @@ def grid_search(experiments_folder, output_folder, ids, begin, end, gpu_id):
                 parameters[run][name] = value
             parameters[run]['gpu_id'] = gpu_id
             #run experiment instance with correct parameters
-            '''
+
             run_experiment(num_experiment=exp,
                            num_run=run,
                            num_folds=parameters[str(run)]['num_folds'],
@@ -208,7 +208,7 @@ def grid_search(experiments_folder, output_folder, ids, begin, end, gpu_id):
                            script=parameters[str(run)]['script'],
                            parameters=parameters[str(run)]
                            )
-            '''
+            
     print ('\nALL EXPERIMENTS REQUESTED COMPLETED')
 
 
