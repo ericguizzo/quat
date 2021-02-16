@@ -66,11 +66,7 @@ parser.add_argument('--dataset', type=str, default='none')
 parser.add_argument('--num_experiment', type=int, default=0)
 
 
-
-
-
 #eval string args
-
 args = parser.parse_args()
 #output filenames
 
@@ -122,6 +118,7 @@ if args.fixed_seed:
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
 
+print ('QUIIIIIIIII', args.fast_test)
 if args.fast_test:
     print ('FAST TEST: using unly 100 datapoints ')
     #take only 100 datapoints, just for quick testing
