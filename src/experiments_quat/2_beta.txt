@@ -10,7 +10,7 @@
         "learning_rate": 0.00005,
         "batch_size": 3,
         "model_name":"emo_ae_vgg",
-        "num_epochs": 100,
+        "num_epochs": 100
       },
 
   "1":{"comment_1": "beta_0.05", "comment_2": "/",
