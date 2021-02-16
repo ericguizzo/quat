@@ -9,7 +9,7 @@
         "num_epochs": 1,
         "learning_rate": 0.00005,
         "batch_size": 10,
-        "model_name":"emo_ae_vgg",
+        "model_name":"emo_ae",
         "num_epochs": 100
       },
 
