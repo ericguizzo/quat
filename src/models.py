@@ -5,14 +5,14 @@ from quaternion_layers import (QuaternionConv, QuaternionLinear,
 
 
 
-class emo_vae(nn.Module):
+class emo_ae(nn.Module):
     def __init__(self,
                 structure=[32, 64, 128, 256, 512],
                 classifier_structure=[2000,1000,500,100],
                 latent_dim=20,
                 verbose=True,
                 quat=True):
-        super(emo_vae, self).__init__()
+        super(emo_ae, self).__init__()
 
         self.quat = quat
         self.latent_dim =latent_dim
@@ -188,7 +188,7 @@ VGG_types = {
     }
 
 
-class emo_vae_vgg(nn.Module):
+class emo_ae_vgg(nn.Module):
     def __init__(self,
                 latent_dim=20,
                 in_channels=1,
@@ -197,7 +197,7 @@ class emo_vae_vgg(nn.Module):
                 architecture='VGG16',
                 classifier_dropout=0.5
                 ):
-        super(emo_vae_vgg, self).__init__()
+        super(emo_ae_vgg, self).__init__()
 
         self.in_channels = in_channels
         self.latent_dim =latent_dim
@@ -230,7 +230,7 @@ class emo_vae_vgg(nn.Module):
         self.classifier_valence = nn.Sequential(*classifier_layers)
         self.classifier_arousal = nn.Sequential(*classifier_layers)
         self.classifier_dominance = nn.Sequential(*classifier_layers)
-        
+
 
     def create_conv_layers_encoder(self, architecture):
         layers = []

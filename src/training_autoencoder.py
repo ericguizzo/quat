@@ -31,8 +31,8 @@ parser.add_argument('--fast_test', type=bool, default=True)
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
 parser.add_argument('--use_cuda', type=bool, default=True)
-parser.add_argument('--num_epochs', type=int, default=2)
-parser.add_argument('--batch_size', type=int, default=40)
+parser.add_argument('--num_epochs', type=int, default=200)
+parser.add_argument('--batch_size', type=int, default=100)
 parser.add_argument('--learning_rate', type=float, default=0.00005)
 parser.add_argument('--regularization_lambda', type=float, default=0.)
 parser.add_argument('--early_stopping', type=bool, default=True)
@@ -41,17 +41,21 @@ parser.add_argument('--patience', type=int, default=10)
 parser.add_argument('--load_pretrained', type=str, default=None)
 parser.add_argument('--num_folds', type=int, default=1)
 parser.add_argument('--num_fold', type=int, default=1)
-parser.add_argument('--fixed_seed', type=bool, default=False)
+parser.add_argument('--fixed_seed', type=bool, default=True)
 #loss parameters
 parser.add_argument('--loss_function', type=str, default='emo_loss')
 parser.add_argument('--loss_beta', type=int, default=1.)
 #model parameters
-parser.add_argument('--model_name', type=str, default='emo_vae')
+parser.add_argument('--model_name', type=str, default='emo_ae_vgg')
 parser.add_argument('--model_cnn_structure', type=str, default='[32, 64, 128, 256, 512]')
 parser.add_argument('--model_classifier_structure', type=str, default='[2000,1000,500,100]')
-parser.add_argument('--model_latent_dim', type=int, default=20)
+parser.add_argument('--model_latent_dim', type=int, default=50)
 parser.add_argument('--verbose', type=bool, default=False)
 parser.add_argument('--model_quat', type=bool, default=True)
+parser.add_argument('--model_batchnorm', type=bool, default=True)
+parser.add_argument('--model_architecture', type=str, default='VGG16')
+parser.add_argument('--classifier_dropout', type=bool, default=True)
+
 #grid search parameters
 #SPECIFY ONLY IF PERFORMING A GRID SEARCH WITH exp_instance.py SCRIPT
 parser.add_argument('--script', type=str, default='training_autoencoder.py')
@@ -244,11 +248,18 @@ test_data = utils.DataLoader(test_dataset, args.batch_size, shuffle=False, pin_m
 
 #load model
 
-model = locals()[args.model_name](structure=eval(args.model_cnn_structure),
-               classifier_structure=eval(args.model_classifier_structure),
-               latent_dim=args.model_latent_dim,
-               verbose=args.verbose,
-               quat=args.model_quat)
+if args.model_name == 'emo_ae':
+    model = locals()[args.model_name](structure=eval(args.model_cnn_structure),
+                   classifier_structure=eval(args.model_classifier_structure),
+                   latent_dim=args.model_latent_dim,
+                   verbose=args.verbose,
+                   quat=args.model_quat)
+elif args.model_name == 'emo_ae_vgg'
+    model = locals()[args.model_name](architecture=args.model_architecture,
+                   latent_dim=args.model_latent_dim,
+                   classifier_dropout=args.classifier_dropout,
+                   batchnorm=args.model_batchnorm
+                   )
 
 model = model.to(device)
 

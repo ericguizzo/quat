@@ -1,5 +1,6 @@
 {
   "global_parameters":{
+        "gpu_id":1,
         "experiment_description": "test_experiment",
         "script": "training_autoencoder.py",
         "dataset": "iemocap",
