@@ -257,7 +257,8 @@ elif args.model_name == 'emo_ae_vgg':
     model = locals()[args.model_name](architecture=args.model_architecture,
                    latent_dim=args.model_latent_dim,
                    classifier_dropout=args.classifier_dropout,
-                   batchnorm=args.model_batchnorm
+                   batchnorm=args.model_batchnorm,
+                   verbose=args.verbose
                    )
 
 model = model.to(device)
