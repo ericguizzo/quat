@@ -53,7 +53,7 @@ parser.add_argument('--model_latent_dim', type=int, default=50)
 parser.add_argument('--verbose', type=bool, default=False)
 parser.add_argument('--model_quat', type=bool, default=True)
 parser.add_argument('--model_batchnorm', type=bool, default=True)
-parser.add_argument('--model_architecture', type=str, default='VGG11')
+parser.add_argument('--model_architecture', type=str, default='VGG16')
 parser.add_argument('--classifier_dropout', type=float, default=0.5)
 
 #grid search parameters
@@ -299,11 +299,11 @@ for epoch in range(args.num_epochs):
         #lotal_loss.backward()
 
         optimizer.step()
-
+        loss['total'] = loss['total'].detach()
         #print progress
         perc = int(i / len(tr_data) * 20)
         inv_perc = int(20 - perc - 1)
-        loss_print_t = str(np.round(loss['total'].detach().item(), decimals=5))
+        loss_print_t = str(np.round(loss['total'].item(), decimals=5))
         #loss_print_t = str(np.round(loss.detach().item(), decimals=5))
 
         string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
