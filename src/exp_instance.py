@@ -178,7 +178,7 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=2,
 def grid_search(experiments_folder, output_folder, ids, begin, end, gpu_id):
     contents = os.listdir(experiments_folder)
     selected_experiments = [i for i in contents if int(i.split('_')[0]) in ids]
-
+    print (selected_experiments)
     #iterate experiments
     for exp in selected_experiments:
         #read json
@@ -186,16 +186,20 @@ def grid_search(experiments_folder, output_folder, ids, begin, end, gpu_id):
         with open(file) as json_file:
             parameters = json.load(json_file)
 
-        exp_keys = [i for i in parameters if 'global_parameters' not in i]
-
+        #exp_keys = [i for i in parameters if 'global_parameters' not in i]
         #append global parameters in every experiment instance
+        exp_keys = list(range(begin,end+1))
+        exp_keys = [str(i) for i in exp_keys]
+        print (exp_keys)
+
         for run in exp_keys:
             for g in parameters['global_parameters']:
                 name = g
                 value = parameters['global_parameters'][g]
                 parameters[run][name] = value
-
+            parameters[run]['gpu_id'] = gpu_id
             #run experiment instance with correct parameters
+            '''
             run_experiment(num_experiment=exp,
                            num_run=run,
                            num_folds=parameters[str(run)]['num_folds'],
@@ -204,12 +208,22 @@ def grid_search(experiments_folder, output_folder, ids, begin, end, gpu_id):
                            script=parameters[str(run)]['script'],
                            parameters=parameters[str(run)]
                            )
-
+            '''
     print ('\nALL EXPERIMENTS REQUESTED COMPLETED')
 
 
 
 
 if __name__ == '__main__':
-
-    grid_search('experiments_quat', '../temp/aaa',[1],1,5,0)
+    experiments_folder_default = 'experiments_quat'
+    output_folder = '../beta_exp'
+    experiments_to_run = [2]
+    first_instance = 1
+    last_instance = 6
+    gpu_id = 0
+    grid_search(experiments_folder_default,
+                output_folder,
+                experiments_to_run,
+                first_instance,
+                last_instance,
+                gpu_id)

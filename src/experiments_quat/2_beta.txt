@@ -4,32 +4,31 @@
         "experiment_description": "test_experiment",
         "script": "training_autoencoder.py",
         "dataset": "iemocap",
-        "num_experiment": 0,
+        "num_experiment": 2,
         "num_folds": 1,
         "num_epochs": 1,
         "learning_rate": 0.00005,
         "batch_size": 50,
         "model_name":"emo_vae_vgg",
-        "num_epochs: 200"
+        "num_epochs": 200
       },
 
-  "1":{"comment_1": "beta 0.05", "comment_2": "/",
+  "1":{"comment_1": "beta_0.05", "comment_2": "/",
        "loss_beta":0.05
         },
-  "2":{"comment_1": "beta 0.1", "comment_2": "/",
+  "2":{"comment_1": "beta_0.1", "comment_2": "/",
        "loss_beta":0.1
         },
-  "3":{"comment_1": "beta 0.3", "comment_2": "/",
+  "3":{"comment_1": "beta_0.3", "comment_2": "/",
        "loss_beta":0.3
         },
-  "4":{"comment_1": "beta 0.5", "comment_2": "/",
+  "4":{"comment_1": "beta_0.5", "comment_2": "/",
        "loss_beta":0.5
         },
-  "5":{"comment_1": "beta 0.8", "comment_2": "/",
+  "5":{"comment_1": "beta_0.8", "comment_2": "/",
        "loss_beta":0.8
         },
-  "6":{"comment_1": "beta 1", "comment_2": "/",
-       "loss_beta":1.
-        },
-
+  "6":{"comment_1": "beta_1", "comment_2": "/",
+       "loss_beta":1
+        }
 }
