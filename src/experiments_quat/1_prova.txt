@@ -8,7 +8,9 @@
         "num_folds": 1,
         "num_epochs": 1,
         "learning_rate": 0.00005,
-        "batch_size": 1
+        "batch_size": 1,
+        "model_name": "emo_ae"
+
       },
 
   "1":{"comment_1": "prova1", "comment_2": "bla"
