@@ -388,7 +388,7 @@ for epoch in range(args.num_epochs):
 
     if args.num_experiment != 0:
         #print info on dataset, experiment and instance if performing a grid search
-        utilstring = 'dataset: ' + str(dataset) + ', exp: ' + str(num_experiment) + ', run: ' + str(num_run) + ', fold: ' + str(num_fold)
+        utilstring = 'dataset: ' + str(args.dataset) + ', exp: ' + str(args.num_experiment) + ', run: ' + str(args.num_run) + ', fold: ' + str(args.num_fold)
         print ('')
         print (utilstring)
 
