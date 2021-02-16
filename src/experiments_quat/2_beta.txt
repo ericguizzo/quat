@@ -10,7 +10,7 @@
         "learning_rate": 0.00005,
         "batch_size": 10,
         "model_name":"emo_ae",
-        "num_epochs": 1,
+        "num_epochs": 100,
         "fast_test":"True"
       },
 
