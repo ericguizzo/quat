@@ -44,7 +44,7 @@ parser.add_argument('--num_fold', type=int, default=1)
 parser.add_argument('--fixed_seed', type=bool, default=True)
 #loss parameters
 parser.add_argument('--loss_function', type=str, default='emo_loss')
-parser.add_argument('--loss_beta', type=int, default=1.)
+parser.add_argument('--loss_beta', type=float, default=1.)
 #model parameters
 parser.add_argument('--model_name', type=str, default='emo_ae_vgg')
 parser.add_argument('--model_cnn_structure', type=str, default='[32, 64, 128, 256, 512]')
@@ -54,7 +54,7 @@ parser.add_argument('--verbose', type=bool, default=False)
 parser.add_argument('--model_quat', type=bool, default=True)
 parser.add_argument('--model_batchnorm', type=bool, default=True)
 parser.add_argument('--model_architecture', type=str, default='VGG16')
-parser.add_argument('--classifier_dropout', type=bool, default=True)
+parser.add_argument('--classifier_dropout', type=float, default=0.5)
 
 #grid search parameters
 #SPECIFY ONLY IF PERFORMING A GRID SEARCH WITH exp_instance.py SCRIPT
