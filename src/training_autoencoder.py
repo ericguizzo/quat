@@ -307,6 +307,7 @@ for epoch in range(args.num_epochs):
 
         string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
         print ('\r', string_progress, end='')
+        del loss
 
     #create history
     train_batch_losses = []
