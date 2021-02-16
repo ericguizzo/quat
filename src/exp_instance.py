@@ -229,5 +229,5 @@ if __name__ == '__main__':
                 output_folder=args.output_folder,
                 ids=eval(args.ids),
                 begin=args.first,
-                ens=args.last,
+                end=args.last,
                 gpu_id=args.gpu_id)
