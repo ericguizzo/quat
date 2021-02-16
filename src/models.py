@@ -336,6 +336,3 @@ class emo_ae_vgg(nn.Module):
         emo_preds = torch.cat((x_valence,x_arousal,x_dominance),1)
 
         return x, emo_preds
-
-
-        #return x
