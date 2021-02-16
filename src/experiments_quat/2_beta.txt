@@ -11,7 +11,6 @@
         "batch_size": 3,
         "model_name":"emo_ae_vgg",
         "num_epochs": 100,
-        "fast_test":"False"
       },
 
   "1":{"comment_1": "beta_0.05", "comment_2": "/",
