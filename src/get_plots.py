@@ -99,7 +99,7 @@ if __name__ == '__main__':
     dummy = dummy.item()
     #create list of datapoints for current fold
     foldable_list = list(dummy.keys())
-    fold_actors_list = uf.folds_generator(1, foldable_list, [args.train_perc, args.val_perc, args.test_perc])
+    fold_actors_list = uf.folds_generator(1, foldable_list, [0.7, 0.2, 0.1])
     train_list = fold_actors_list[0]['train']
     val_list = fold_actors_list[0]['val']
     test_list = fold_actors_list[0]['test']
