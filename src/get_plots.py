@@ -29,20 +29,20 @@ def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
     plt.figure(1)
     plt.subplot(231)
     plt.title('Original')
-    plt.pcolormesh(o.T/np.max(o))
+    plt.pcolormesh(o.T/np.max(o)[::,-1])
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
     plt.subplot(232)
     plt.title('Real')
-    plt.pcolormesh(r.T/np.max(r))
+    plt.pcolormesh(r.T/np.max(r)[::,-1])
     plt.subplot(233)
     plt.title('Valence')
-    plt.pcolormesh(v.T/np.max(v))
+    plt.pcolormesh(v.T/np.max(v)[::,-1])
     plt.subplot(234)
     plt.title('Arousal')
-    plt.pcolormesh(a.T/np.max(a))
+    plt.pcolormesh(a.T/np.max(a)[::,-1])
     plt.subplot(235)
     plt.title('Dominance')
-    plt.pcolormesh(d.T/np.max(d))
+    plt.pcolormesh(d.T/np.max(d)[::,-1])
     plt.tight_layout( rect=[0, 0.0, 0.95, 0.95])
 
     name = str(sound_id) + '_plot.' + format
@@ -68,11 +68,11 @@ def gen_sounds(o, r, v, a, d, sound_id,
     pad [:,:128] = d
     d = pad * pad.shape[-1]
 
-    original_wave = librosa.griffinlim(o.T, hop_length=128, n_iter=n_iter)
-    real_wave = librosa.griffinlim(r.T, hop_length=128, n_iter=n_iter)
-    valence_wave = librosa.griffinlim(v.T, hop_length=128, n_iter=n_iter)
-    arousal_wave = librosa.griffinlim(a.T, hop_length=128, n_iter=n_iter)
-    dominance_wave = librosa.griffinlim(d.T, hop_length=128, n_iter=n_iter)
+    original_wave = librosa.griffinlim(o.T[::,-1], hop_length=128, n_iter=n_iter)
+    real_wave = librosa.griffinlim(r.T[::,-1], hop_length=128, n_iter=n_iter)
+    valence_wave = librosa.griffinlim(v.T[::,-1], hop_length=128, n_iter=n_iter)
+    arousal_wave = librosa.griffinlim(a.T[::,-1], hop_length=128, n_iter=n_iter)
+    dominance_wave = librosa.griffinlim(d.T[::,-1], hop_length=128, n_iter=n_iter)
 
     original_wave = (original_wave / np.max(original_wave)) * 0.9
     real_wave = (real_wave / np.max(real_wave)) * 0.9
