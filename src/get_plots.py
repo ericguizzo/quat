@@ -15,7 +15,7 @@ parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/
 parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy')
 parser.add_argument('--datapoints_list', type=str, default='[1,2,3,4,5]')
 parser.add_argument('--output_path', type=str, default='../properties/emo_ae_1')
-parser.add_argument('--use_cuda', type=bool, default=False)
+parser.add_argument('--use_cuda', type=bool, default=True)
 parser.add_argument('--gpu_id', type=int, default=0)
 parser.add_argument('--sample_rate', type=int, default=16000)
 parser.add_argument('--time_dim', type=int, default=512)
