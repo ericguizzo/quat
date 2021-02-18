@@ -11,8 +11,7 @@ import utility_functions as uf
 
 parser = argparse.ArgumentParser()
 #parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_2_beta.txt/models/model_xval_iemocap_exp2_beta.txt_run6_fold0')
-parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_3_beta_vgg.txt/results/results_iemocap_exp3_beta_vgg.txt_run2.npy'
-)
+parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_3_beta_vgg.txt/results/results_iemocap_exp3_beta_vgg.txt_run2.npy')
 
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
 parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy')
