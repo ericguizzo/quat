@@ -130,7 +130,7 @@ class emo_ae(nn.Module):
         x = self.decoder_q(x)
         x = self.final_layer_decoder_q(x)
         return x
-    
+
 
     def forward(self, x):
         #encoder
@@ -201,7 +201,7 @@ VGG_types = {
 
 class emo_ae_vgg(nn.Module):
     def __init__(self,
-                latent_dim=20,
+                latent_dim=50,
                 in_channels=1,
                 verbose=True,
                 batchnorm=True,
