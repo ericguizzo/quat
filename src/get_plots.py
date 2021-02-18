@@ -68,11 +68,11 @@ def gen_sounds(o, r, v, a, d, sound_id,
     pad [:,:128] = d
     d = pad * pad.shape[-1]
 
-    original_wave = librosa.griffinlim(o.T, n_iter=n_iter)
-    real_wave = librosa.griffinlim(r.T, n_iter=n_iter)
-    valence_wave = librosa.griffinlim(v.T, n_iter=n_iter)
-    arousal_wave = librosa.griffinlim(a.T, n_iter=n_iter)
-    dominance_wave = librosa.griffinlim(d.T, n_iter=n_iter)
+    original_wave = librosa.griffinlim(o.T, hop_length=128, n_iter=n_iter)
+    real_wave = librosa.griffinlim(r.T, hop_length=128, n_iter=n_iter)
+    valence_wave = librosa.griffinlim(v.T, hop_length=128, n_iter=n_iter)
+    arousal_wave = librosa.griffinlim(a.T, hop_length=128, n_iter=n_iter)
+    dominance_wave = librosa.griffinlim(d.T, hop_length=128, n_iter=n_iter)
 
     original_wave = (original_wave / np.max(original_wave)) * 0.9
     real_wave = (real_wave / np.max(real_wave)) * 0.9
@@ -232,7 +232,7 @@ if __name__ == '__main__':
 
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
-    
+
     model = emo_ae()
     #model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
     #model = model.to(device)
