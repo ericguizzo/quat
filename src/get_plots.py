@@ -242,7 +242,7 @@ if __name__ == '__main__':
         x = data[i].unsqueeze(0)
         with torch.no_grad():
             y = x.to(device)
-            y = model.autoencode(y).numpy()
+            y = model.autoencode(y).cpu().numpy()
 
         original = x.squeeze().numpy()
         real = y[:,0,:,:].squeeze()
