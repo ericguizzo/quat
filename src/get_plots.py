@@ -27,21 +27,27 @@ args.datapoints_list = eval(args.datapoints_list)
 def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
     print ('max: ', np.max(o), np.max(r),np.max(v),np.max(a),np.max(d))
     print ('mean: ', np.mean(o), np.mean(r),np.mean(v),np.mean(a),np.mean(d))
+    exponent = 0.01/3
+    r = (np.flip(r.T,-1)/np.max(r))**exponent
+    v = (np.flip(v.T,-1)/np.max(v))**exponent
+    a = (np.flip(a.T,-1)/np.max(a))**exponent
+    d = (np.flip(d.T,-1)/np.max(d))**exponent
+
 
     plt.figure(1)
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
     plt.subplot(231)
     plt.title('Real')
-    plt.pcolormesh(np.flip(r.T,-1)/np.max(r))
+    plt.pcolormesh(r)
     plt.subplot(232)
     plt.title('Valence')
-    plt.pcolormesh(np.flip(v.T,-1)/np.max(v))
+    plt.pcolormesh(v)
     plt.subplot(233)
     plt.title('Arousal')
-    plt.pcolormesh(np.flip(a.T,-1)/np.max(a))
+    plt.pcolormesh(a)
     plt.subplot(234)
     plt.title('Dominance')
-    plt.pcolormesh(np.flip(d.T,-1)/np.max(d))
+    plt.pcolormesh(d)
     plt.subplot(235)
     plt.title('Original')
     plt.pcolormesh(np.flip(o.T,-1)/np.max(o))
