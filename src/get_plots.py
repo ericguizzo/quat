@@ -14,13 +14,13 @@ parser.add_argument('--model_path', type=str, default='./beta_exp/experiment_2_b
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
 parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy')
 parser.add_argument('--datapoints_list', type=str, default='[1,2,3,4,5]')
-parser.add_argument('--output_path', type=str, default='../properties')
+parser.add_argument('--output_path', type=str, default='../properties/emo_ae_1')
 parser.add_argument('--use_cuda', type=bool, default=False)
 parser.add_argument('--gpu_id', type=int, default=0)
 parser.add_argument('--sample_rate', type=int, default=16000)
 parser.add_argument('--time_dim', type=int, default=128)
 parser.add_argument('--freq_dim', type=int, default=512)
-parser.add_argument('--use_set', type=int, default='test')
+parser.add_argument('--use_set', type=str, default='test')
 args = parser.parse_args()
 
 args.datapoints_list = eval(args.datapoints_list)
@@ -217,6 +217,7 @@ if __name__ == '__main__':
     model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
 
     for i in args.datapoints_list:
+
         #get autoencoder's outputs
         x = data[i]
         with torch.no_grad():
@@ -230,6 +231,6 @@ if __name__ == '__main__':
         curr_path = os.path.join(args.output_path, str(i))
         if not os.path.exists(curr_path):
             os.makedirs(curr_path)
-        print ('Processing: ', str(i))
+        print ('    Processing: ', str(i))
         gen_plot(real,valence,arousal,dominance,i, curr_path)
         gen_sounds(real,valence,arousal,dominance,i, curr_path)
