@@ -120,7 +120,7 @@ class emo_ae(nn.Module):
                 nn.Linear(classifier_structure[-1], 1),
                 nn.LeakyReLU()
             )
-    '''
+
     def autoencode(self, x):
         x = self.encoder(x)
         x = torch.flatten(x, start_dim=1)
@@ -130,7 +130,7 @@ class emo_ae(nn.Module):
         x = self.decoder_q(x)
         x = self.final_layer_decoder_q(x)
         return x
-    '''
+    
 
     def forward(self, x):
         #encoder
