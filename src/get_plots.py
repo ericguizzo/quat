@@ -226,7 +226,7 @@ if __name__ == '__main__':
     for i in args.datapoints_list:
 
         #get autoencoder's outputs
-        x = data[i]
+        x = data[i].unsqueeze(0)
         with torch.no_grad():
             x = x.to(device)
             x = model.autoencode(x).numpy()
