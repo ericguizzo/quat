@@ -28,22 +28,23 @@ def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
     print ('max: ', np.max(o), np.max(r),np.max(v),np.max(a),np.max(d))
 
     plt.figure(1)
-    plt.subplot(231)
-    plt.title('Original')
-    plt.pcolormesh(np.flip(o.T,-1)/np.max(o))
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
-    plt.subplot(232)
+    plt.subplot(231)
     plt.title('Real')
     plt.pcolormesh(np.flip(r.T,-1)/np.max(r))
-    plt.subplot(233)
+    plt.subplot(232)
     plt.title('Valence')
     plt.pcolormesh(np.flip(v.T,-1)/np.max(v))
-    plt.subplot(234)
+    plt.subplot(233)
     plt.title('Arousal')
     plt.pcolormesh(np.flip(a.T,-1)/np.max(a))
-    plt.subplot(235)
+    plt.subplot(234)
     plt.title('Dominance')
     plt.pcolormesh(np.flip(d.T,-1)/np.max(d))
+    plt.subplot(235)
+    plt.title('Original')
+    plt.pcolormesh(np.flip(o.T,-1)/np.max(o))
+
     plt.tight_layout( rect=[0, 0.0, 0.95, 0.95])
 
     name = str(sound_id) + '_plot.' + format
@@ -266,6 +267,7 @@ if __name__ == '__main__':
         arousal = y[:,2,:,:].squeeze()
         dominance = y[:,3,:,:].squeeze()
 
+        print ('shapes')
         curr_path = os.path.join(args.output_path, str(i))
         if not os.path.exists(curr_path):
             os.makedirs(curr_path)
