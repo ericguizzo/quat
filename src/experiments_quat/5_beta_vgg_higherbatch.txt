@@ -14,7 +14,7 @@
       },
 
   "1":{"comment_1": "beta_0.0", "comment_2": "vgg16",
-       "loss_beta":0.05
+       "loss_beta":0.0
         },
 
 }
