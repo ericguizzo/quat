@@ -242,7 +242,7 @@ if __name__ == '__main__':
         #get autoencoder's outputs
         x = data[i].unsqueeze(0)
         with torch.no_grad():
-            #y = x.to(device)
+            y = x.to(device)
             y = model.autoencode(x).numpy()
 
         original = x.squeeze().numpy()
