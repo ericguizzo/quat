@@ -25,19 +25,22 @@ args = parser.parse_args()
 
 args.datapoints_list = eval(args.datapoints_list)
 
-def gen_plot(r, v, a, d, sound_id, curr_path, format='png'):
+def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
     plt.figure(1)
+    plt.subplot(231)
+    plt.title('Original')
+    plt.pcolormesh(o)
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
-    plt.subplot(221)
+    plt.subplot(232)
     plt.title('Real')
     plt.pcolormesh(r)
-    plt.subplot(222)
+    plt.subplot(233)
     plt.title('Valence')
     plt.pcolormesh(v)
-    plt.subplot(223)
+    plt.subplot(234)
     plt.title('Arousal')
     plt.pcolormesh(a)
-    plt.subplot(224)
+    plt.subplot(235)
     plt.title('Dominance')
     plt.pcolormesh(d)
     plt.tight_layout( rect=[0, 0.0, 0.95, 0.95])
@@ -47,8 +50,11 @@ def gen_plot(r, v, a, d, sound_id, curr_path, format='png'):
     plt.savefig(fig_name, format = format, dpi=300)
     plt.show()
 
-def gen_sounds(r, v, a, d, sound_id,
+def gen_sounds(o, r, v, a, d, sound_id,
                curr_path, sr=args.sample_rate, n_iter=100):
+    pad = np.zeros(shape=[512,128])
+    pad [:,:128] = o
+    o = pad
     pad = np.zeros(shape=[512,128])
     pad [:,:128] = r
     r = pad
@@ -62,26 +68,31 @@ def gen_sounds(r, v, a, d, sound_id,
     pad [:,:128] = d
     d = pad
 
+    original_wave = librosa.griffinlim(o, n_iter=n_iter)
     real_wave = librosa.griffinlim(r, n_iter=n_iter)
     valence_wave = librosa.griffinlim(v, n_iter=n_iter)
     arousal_wave = librosa.griffinlim(a, n_iter=n_iter)
     dominance_wave = librosa.griffinlim(d, n_iter=n_iter)
 
+    original_wave = (original_wave / np.max(original_wave)) * 0.9
     real_wave = (real_wave / np.max(real_wave)) * 0.9
     valence_wave = (valence_wave / np.max(valence_wave)) * 0.9
     arousal_wave = (arousal_wave / np.max(arousal_wave)) * 0.9
     dominance_wave = (dominance_wave / np.max(dominance_wave)) * 0.9
 
+    name_o = name = str(sound_id) + '_original_wave.wav'
     name_r = name = str(sound_id) + '_real_wave.wav'
     name_v = name = str(sound_id) + '_valence_wave.wav'
     name_a = name = str(sound_id) + '_arousal_wave.wav'
     name_d = name = str(sound_id) + '_dominance_wave.wav'
 
+    name_o = os.path.join(curr_path, name_o)
     name_r = os.path.join(curr_path, name_r)
     name_v = os.path.join(curr_path, name_v)
     name_a = os.path.join(curr_path, name_a)
     name_d = os.path.join(curr_path, name_d)
 
+    soundfile.write(name_o, original_wave, sr, 'PCM_16')
     soundfile.write(name_r, real_wave, sr, 'PCM_16')
     soundfile.write(name_v, valence_wave, sr, 'PCM_16')
     soundfile.write(name_a, arousal_wave, sr, 'PCM_16')
@@ -228,17 +239,19 @@ if __name__ == '__main__':
         #get autoencoder's outputs
         x = data[i].unsqueeze(0)
         with torch.no_grad():
-            x = x.to(device)
-            x = model.autoencode(x).numpy()
+            y = x.to(device)
+            y = model.autoencode(x).numpy()
 
-        real = x[:,0,:,:].squeeze()
-        valence = x[:,1,:,:].squeeze()
-        arousal = x[:,2,:,:].squeeze()
-        dominance = x[:,3,:,:].squeeze()
+        original = x.squeeze().numpy()
+        real = y[:,0,:,:].squeeze()
+        valence = y[:,1,:,:].squeeze()
+        arousal = y[:,2,:,:].squeeze()
+        dominance = y[:,3,:,:].squeeze()
 
         curr_path = os.path.join(args.output_path, str(i))
         if not os.path.exists(curr_path):
             os.makedirs(curr_path)
         print ('    Processing: ', str(i))
-        gen_plot(real,valence,arousal,dominance,i, curr_path)
-        gen_sounds(real,valence,arousal,dominance,i, curr_path)
+
+        gen_plot(original,real,valence,arousal,dominance,i, curr_path)
+        gen_sounds(original,real,valence,arousal,dominance,i, curr_path)
