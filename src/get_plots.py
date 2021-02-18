@@ -30,7 +30,7 @@ def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
     plt.figure(1)
     plt.subplot(231)
     plt.title('Original')
-    plt.pcolormesh(np.flip(r.T,-1)/np.max(r))
+    plt.pcolormesh(np.flip(o.T,-1)/np.max(o))
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
     plt.subplot(232)
     plt.title('Real')
@@ -232,10 +232,13 @@ if __name__ == '__main__':
 
     if args.use_set == 'training':
         data = train_predictors
+        target = training_target
     elif args.use_set == 'validation':
         data = val_predictors
+        target = validation_target
     elif args.use_set == 'test':
         data = test_predictors
+        target = test_target
 
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
@@ -249,8 +252,14 @@ if __name__ == '__main__':
         x = data[i].unsqueeze(0)
         with torch.no_grad():
             y = x.to(device)
-            y, preds = model(y).cpu().numpy()
+            y, preds = model(y)
+            y = y.cpu().numpy()
+            preds = preds.cpu().numpy()
 
+        preds = preds.squeeze()
+        p = {'truth': target[i],
+            'prediction': preds}
+        print (p)
         original = x.squeeze().numpy()
         real = y[:,0,:,:].squeeze()
         valence = y[:,1,:,:].squeeze()
