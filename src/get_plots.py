@@ -111,7 +111,13 @@ def gen_sounds(o, r, v, a, d, sound_id,
 
 if __name__ == '__main__':
     print ('Loading dataset')
-
+    seed=1
+    np.random.seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
     if args.use_cuda:
         device = 'cuda:' + str(args.gpu_id)
     else:
