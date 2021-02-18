@@ -18,8 +18,8 @@ parser.add_argument('--output_path', type=str, default='../properties/emo_ae_1')
 parser.add_argument('--use_cuda', type=bool, default=False)
 parser.add_argument('--gpu_id', type=int, default=0)
 parser.add_argument('--sample_rate', type=int, default=16000)
-parser.add_argument('--time_dim', type=int, default=128)
-parser.add_argument('--freq_dim', type=int, default=512)
+parser.add_argument('--time_dim', type=int, default=512)
+parser.add_argument('--freq_dim', type=int, default=128)
 parser.add_argument('--use_set', type=str, default='test')
 args = parser.parse_args()
 
@@ -29,20 +29,20 @@ def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
     plt.figure(1)
     plt.subplot(231)
     plt.title('Original')
-    plt.pcolormesh(o)
+    plt.pcolormesh(o.T/np.max(o))
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
     plt.subplot(232)
     plt.title('Real')
-    plt.pcolormesh(r)
+    plt.pcolormesh(r.T/np.max(r))
     plt.subplot(233)
     plt.title('Valence')
-    plt.pcolormesh(v)
+    plt.pcolormesh(v.T/np.max(v))
     plt.subplot(234)
     plt.title('Arousal')
-    plt.pcolormesh(a)
+    plt.pcolormesh(a.T/np.max(a))
     plt.subplot(235)
     plt.title('Dominance')
-    plt.pcolormesh(d)
+    plt.pcolormesh(d.T/np.max(d))
     plt.tight_layout( rect=[0, 0.0, 0.95, 0.95])
 
     name = str(sound_id) + '_plot.' + format
@@ -68,11 +68,11 @@ def gen_sounds(o, r, v, a, d, sound_id,
     pad [:,:128] = d
     d = pad
 
-    original_wave = librosa.griffinlim(o, n_iter=n_iter)
-    real_wave = librosa.griffinlim(r, n_iter=n_iter)
-    valence_wave = librosa.griffinlim(v, n_iter=n_iter)
-    arousal_wave = librosa.griffinlim(a, n_iter=n_iter)
-    dominance_wave = librosa.griffinlim(d, n_iter=n_iter)
+    original_wave = librosa.griffinlim(o.T, n_iter=n_iter)
+    real_wave = librosa.griffinlim(r.T, n_iter=n_iter)
+    valence_wave = librosa.griffinlim(v.T, n_iter=n_iter)
+    arousal_wave = librosa.griffinlim(a.T, n_iter=n_iter)
+    dominance_wave = librosa.griffinlim(d.T, n_iter=n_iter)
 
     original_wave = (original_wave / np.max(original_wave)) * 0.9
     real_wave = (real_wave / np.max(real_wave)) * 0.9
