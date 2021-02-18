@@ -30,7 +30,7 @@ def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
     plt.figure(1)
     plt.subplot(231)
     plt.title('Original')
-    plt.pcolormesh(np.flipr(r.T,-1)/np.max(r))
+    plt.pcolormesh(np.flip(r.T,-1)/np.max(r))
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
     plt.subplot(232)
     plt.title('Real')
@@ -249,7 +249,7 @@ if __name__ == '__main__':
         x = data[i].unsqueeze(0)
         with torch.no_grad():
             y = x.to(device)
-            y = model.autoencode(y).cpu().numpy()
+            y, preds = model(y).cpu().numpy()
 
         original = x.squeeze().numpy()
         real = y[:,0,:,:].squeeze()
