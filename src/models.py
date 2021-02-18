@@ -9,7 +9,7 @@ class emo_ae(nn.Module):
     def __init__(self,
                 structure=[32, 64, 128, 256, 512],
                 classifier_structure=[2000,1000,500,100],
-                latent_dim=20,
+                latent_dim=50,
                 verbose=True,
                 quat=True):
         super(emo_ae, self).__init__()
