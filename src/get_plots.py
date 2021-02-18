@@ -28,7 +28,7 @@ args.datapoints_list = eval(args.datapoints_list)
 def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
     print ('max: ', np.max(o), np.max(r),np.max(v),np.max(a),np.max(d))
     print ('mean: ', np.mean(o), np.mean(r),np.mean(v),np.mean(a),np.mean(d))
-    exponent = 2/3
+    exponent = 0.5/3
     r = (np.flip(r.T,-1)/np.max(r))**exponent
     v = (np.flip(v.T,-1)/np.max(v))**exponent
     a = (np.flip(a.T,-1)/np.max(a))**exponent
