@@ -7,21 +7,23 @@ import numpy as np
 from models import *
 import argparse
 import os
+import utility_functions as uf
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model_path', type=str, default='experiments_quat')
+parser.add_argument('--model_path', type=str, default='./beta_exp/experiment_2_beta.txt/models/model_xval_iemocap_exp2_beta.txt_run1_fold0')
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
-parser.add_argument('--datapoints_list', type=str, default='[1]')
+parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy')
+parser.add_argument('--datapoints_list', type=str, default='[1,2,3,4,5]')
 parser.add_argument('--output_path', type=str, default='../properties')
 parser.add_argument('--use_cuda', type=bool, default=False)
 parser.add_argument('--gpu_id', type=int, default=0)
 parser.add_argument('--sample_rate', type=int, default=16000)
-parser.add_argument('--n_fft', type=int, default=129)
-
+parser.add_argument('--time_dim', type=int, default=128)
+parser.add_argument('--freq_dim', type=int, default=512)
+parser.add_argument('--use_set', type=int, default='test')
 args = parser.parse_args()
 
 args.datapoints_list = eval(args.datapoints_list)
-
 
 def gen_plot(r, v, a, d, sound_id, curr_path, format='png'):
     plt.figure(1)
@@ -89,21 +91,142 @@ def gen_sounds(r, v, a, d, sound_id,
 
 
 if __name__ == '__main__':
+    print ('Loading dataset')
+    PREDICTORS_LOAD = args.predictors_path
+    TARGET_LOAD = args.target_path
+
+    dummy = np.load(TARGET_LOAD,allow_pickle=True)
+    dummy = dummy.item()
+    #create list of datapoints for current fold
+    foldable_list = list(dummy.keys())
+    fold_actors_list = uf.folds_generator(args.num_folds, foldable_list, [args.train_perc, args.val_perc, args.test_perc])
+    train_list = fold_actors_list[args.num_fold]['train']
+    val_list = fold_actors_list[args.num_fold]['val']
+    test_list = fold_actors_list[args.num_fold]['test']
+    del dummy
+
+    predictors_merged = np.load(PREDICTORS_LOAD,allow_pickle=True)
+    target_merged = np.load(TARGET_LOAD,allow_pickle=True)
+    predictors_merged = predictors_merged.item()
+    target_merged = target_merged.item()
+
+    print ('\n building dataset for current fold')
+    print ('\n training:')
+    training_predictors, training_target = uf.build_matrix_dataset(predictors_merged,
+                                                                target_merged, train_list)
+    print ('\n validation:')
+    validation_predictors, validation_target = uf.build_matrix_dataset(predictors_merged,
+                                                                target_merged, val_list)
+    print ('\n test:')
+    test_predictors, test_target = uf.build_matrix_dataset(predictors_merged,
+                                                                target_merged, test_list)
+
+
+
+    #reshaping for cnn
+    training_predictors = training_predictors.reshape(training_predictors.shape[0], 1, training_predictors.shape[1],training_predictors.shape[2])
+    validation_predictors = validation_predictors.reshape(validation_predictors.shape[0], 1, validation_predictors.shape[1], validation_predictors.shape[2])
+    test_predictors = test_predictors.reshape(test_predictors.shape[0], 1, test_predictors.shape[1], test_predictors.shape[2])
+
+    #zero-pad/cut time tim
+    curr_time_dim = training_predictors.shape[2]
+    curr_freq_dim = training_predictors.shape[3]
+
+    if args.time_dim > curr_time_dim:
+        #
+        training_predictors_padded = np.zeros((training_predictors.shape[0],
+                                                 training_predictors.shape[1],
+                                                 args.time_dim,
+                                                 training_predictors.shape[3]))
+        training_predictors_padded[:,:,:curr_time_dim,:] = training_predictors
+        training_predictors = training_predictors_padded
+        #
+        validation_predictors_padded = np.zeros((validation_predictors.shape[0],
+                                                 validation_predictors.shape[1],
+                                                 args.time_dim,
+                                                 validation_predictors.shape[3]))
+        validation_predictors_padded[:,:,:curr_time_dim,:] = validation_predictors
+        validation_predictors = validation_predictors_padded
+        #
+        test_predictors_padded = np.zeros((test_predictors.shape[0],
+                                                 test_predictors.shape[1],
+                                                 args.time_dim,
+                                                 test_predictors.shape[3]))
+        test_predictors_padded[:,:,:curr_time_dim,:] = test_predictors
+        test_predictors = test_predictors_padded
+
+    elif args.time_dim < curr_time_dim:
+        training_predictors = training_predictors[:,:,:args.time_dim,:]
+        validation_predictors = validation_predictors[:,:,:args.time_dim,:]
+        test_predictors = test_predictors[:,:,:args.time_dim,:]
+    else:
+        pass
+
+    #zero-pad/cut freq tim
+    if args.freq_dim > curr_freq_dim:
+        #
+        training_predictors_padded = np.zeros((training_predictors.shape[0],
+                                                 training_predictors.shape[1],
+                                                 training_predictors.shape[2],
+                                                 args.freq_dim))
+        training_predictors_padded[:,:,:,:curr_freq_dim] = training_predictors
+        training_predictors = training_predictors_padded
+        #
+        validation_predictors_padded = np.zeros((validation_predictors.shape[0],
+                                                 validation_predictors.shape[1],
+                                                 validation_predictors.shape[2],
+                                                 args.freq_dim))
+        validation_predictors_padded[:,:,:,:curr_freq_dim] = validation_predictors
+        validation_predictors = validation_predictors_padded
+        #
+        test_predictors_padded = np.zeros((test_predictors.shape[0],
+                                                 test_predictors.shape[1],
+                                                 test_predictors.shape[2],
+                                                 args.freq_dim))
+        test_predictors_padded[:,:,:,:curr_freq_dim] = test_predictors
+        test_predictors = test_predictors_padded
+    elif args.freq_dim < curr_freq_dim:
+        training_predictors = training_predictors[:,:,:,:args.freq_dim]
+        validation_predictors = validation_predictors[:,:,:,:args.freq_dim]
+        test_predictors = test_predictors[:,:,:,:args.freq_dim]
+    else:
+        pass
+
+    print ('\nPadded dims:')
+    print ('Training predictors: ', training_predictors.shape)
+    print ('Validation predictors: ', validation_predictors.shape)
+    print ('Test predictors: ', test_predictors.shape)
+
+
+    #convert to tensor
+    train_predictors = torch.tensor(training_predictors).float()
+    val_predictors = torch.tensor(validation_predictors).float()
+    test_predictors = torch.tensor(test_predictors).float()
+
+    if args.use_set == 'training':
+        data = train_predictors
+    elif args.use_set == 'validation':
+        data = val_predictors
+    elif args.use_set == 'test':
+        data = test_predictors
+
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
 
-    x = torch.rand(1,1,512,128)
     model = emo_ae()
+    model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
 
-    with torch.no_grad():
-        x = model.autoencode(x).numpy()
+    for i in args.datapoints_list:
+        #get autoencoder's outputs
+        x = data[i]
+        with torch.no_grad():
+            x = model.autoencode(x).numpy()
 
-    real = x[:,0,:,:].squeeze()
-    valence = x[:,1,:,:].squeeze()
-    arousal = x[:,2,:,:].squeeze()
-    dominance = x[:,3,:,:].squeeze()
+        real = x[:,0,:,:].squeeze()
+        valence = x[:,1,:,:].squeeze()
+        arousal = x[:,2,:,:].squeeze()
+        dominance = x[:,3,:,:].squeeze()
 
-    for i in [1]:
         curr_path = os.path.join(args.output_path, str(i))
         if not os.path.exists(curr_path):
             os.makedirs(curr_path)
