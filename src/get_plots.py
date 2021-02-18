@@ -26,6 +26,7 @@ args = parser.parse_args()
 args.datapoints_list = eval(args.datapoints_list)
 def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
     print ('max: ', np.max(o), np.max(r),np.max(v),np.max(a),np.max(d))
+    print ('mean: ', np.mean(o), np.mean(r),np.mean(v),np.mean(a),np.mean(d))
 
     plt.figure(1)
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
