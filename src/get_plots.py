@@ -99,10 +99,10 @@ if __name__ == '__main__':
     dummy = dummy.item()
     #create list of datapoints for current fold
     foldable_list = list(dummy.keys())
-    fold_actors_list = uf.folds_generator(args.num_folds, foldable_list, [args.train_perc, args.val_perc, args.test_perc])
-    train_list = fold_actors_list[args.num_fold]['train']
-    val_list = fold_actors_list[args.num_fold]['val']
-    test_list = fold_actors_list[args.num_fold]['test']
+    fold_actors_list = uf.folds_generator(1, foldable_list, [args.train_perc, args.val_perc, args.test_perc])
+    train_list = fold_actors_list[0]['train']
+    val_list = fold_actors_list[0]['val']
+    test_list = fold_actors_list[0]['test']
     del dummy
 
     predictors_merged = np.load(PREDICTORS_LOAD,allow_pickle=True)
