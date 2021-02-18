@@ -10,7 +10,7 @@ import os
 import utility_functions as uf
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model_path', type=str, default='./beta_exp/experiment_2_beta.txt/models/model_xval_iemocap_exp2_beta.txt_run1_fold0')
+parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_2_beta.txt/models/model_xval_iemocap_exp2_beta.txt_run1_fold0')
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
 parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy')
 parser.add_argument('--datapoints_list', type=str, default='[1,2,3,4,5]')
@@ -92,6 +92,12 @@ def gen_sounds(r, v, a, d, sound_id,
 
 if __name__ == '__main__':
     print ('Loading dataset')
+
+    if args.use_cuda:
+        device = 'cuda:' + str(args.gpu_id)
+    else:
+        device = 'cpu'
+
     PREDICTORS_LOAD = args.predictors_path
     TARGET_LOAD = args.target_path
 
@@ -215,12 +221,14 @@ if __name__ == '__main__':
 
     model = emo_ae()
     model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
+    model = model.to(device)
 
     for i in args.datapoints_list:
 
         #get autoencoder's outputs
         x = data[i]
         with torch.no_grad():
+            x = x.to(device)
             x = model.autoencode(x).numpy()
 
         real = x[:,0,:,:].squeeze()
