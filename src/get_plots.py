@@ -48,25 +48,25 @@ def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
     name = str(sound_id) + '_plot.' + format
     fig_name = os.path.join(curr_path, name)
     plt.savefig(fig_name, format = format, dpi=300)
-    plt.show()
+    #plt.show()
 
 def gen_sounds(o, r, v, a, d, sound_id,
                curr_path, sr=args.sample_rate, n_iter=100):
-    pad = np.zeros(shape=[512,128])
+    pad = np.zeros(shape=[512,129])
     pad [:,:128] = o
-    o = pad
-    pad = np.zeros(shape=[512,128])
+    o = pad * pad.shape[-1]
+    pad = np.zeros(shape=[512,129])
     pad [:,:128] = r
-    r = pad
-    pad = np.zeros(shape=[512,128])
+    r = pad * pad.shape[-1]
+    pad = np.zeros(shape=[512,129])
     pad [:,:128] = v
-    v = pad
-    pad = np.zeros(shape=[512,128])
+    v = pad * pad.shape[-1]
+    pad = np.zeros(shape=[512,129])
     pad [:,:128] = a
-    a = pad
-    pad = np.zeros(shape=[512,128])
+    a = pad * pad.shape[-1]
+    pad = np.zeros(shape=[512,129])
     pad [:,:128] = d
-    d = pad
+    d = pad * pad.shape[-1]
 
     original_wave = librosa.griffinlim(o.T, n_iter=n_iter)
     real_wave = librosa.griffinlim(r.T, n_iter=n_iter)
@@ -138,7 +138,10 @@ if __name__ == '__main__':
     test_predictors, test_target = uf.build_matrix_dataset(predictors_merged,
                                                                 target_merged, test_list)
 
-
+    #normalize
+    training_predictors = training_predictors / training_predictors.shape[-1]
+    validation_predictors = validation_predictors / validation_predictors.shape[-1]
+    test_predictors = test_predictors / test_predictors.shape[-1]
 
     #reshaping for cnn
     training_predictors = training_predictors.reshape(training_predictors.shape[0], 1, training_predictors.shape[1],training_predictors.shape[2])
@@ -229,17 +232,17 @@ if __name__ == '__main__':
 
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
-
+    '''
     model = emo_ae()
-    model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
-    model = model.to(device)
-
+    #model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
+    #model = model.to(device)
+    data = torch.rand(5,1,512,128).float()
     for i in args.datapoints_list:
 
         #get autoencoder's outputs
         x = data[i].unsqueeze(0)
         with torch.no_grad():
-            y = x.to(device)
+            #y = x.to(device)
             y = model.autoencode(x).numpy()
 
         original = x.squeeze().numpy()
