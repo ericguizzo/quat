@@ -234,16 +234,15 @@ if __name__ == '__main__':
         os.makedirs(args.output_path)
 
     model = emo_ae()
-    #model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
+    model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
     model = model.to(device)
-    #data = torch.rand(5,1,512,128).float()
     for i in args.datapoints_list:
 
         #get autoencoder's outputs
         x = data[i].unsqueeze(0)
         with torch.no_grad():
             y = x.to(device)
-            y = model.autoencode(x).numpy()
+            y = model.autoencode(y).numpy()
 
         original = x.squeeze().numpy()
         real = y[:,0,:,:].squeeze()
