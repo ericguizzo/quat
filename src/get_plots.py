@@ -24,12 +24,12 @@ parser.add_argument('--use_set', type=str, default='test')
 args = parser.parse_args()
 
 args.datapoints_list = eval(args.datapoints_list)
-
+print ('max: ', np.max(o), np.max(r),np.max(v),np.max(a),np.max(d))
 def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
     plt.figure(1)
     plt.subplot(231)
     plt.title('Original')
-    plt.pcolormesh(np.flip(o.T,-1)/np.max(o))
+    plt.pcolormesh(np.flipr(r.T,-1)/np.max(r))
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
     plt.subplot(232)
     plt.title('Real')
@@ -69,7 +69,7 @@ def gen_sounds(o, r, v, a, d, sound_id,
     d = pad * pad.shape[-1]
 
     o = np.flip(o.T,-1)
-    r = np.flip(r.T,-1)
+    r = (np.flip(r.T,-1) - np.mean(r)) / np.std(r)
     v = np.flip(v.T,-1)
     a = np.flip(a.T,-1)
     d = np.flip(d.T,-1)
@@ -240,7 +240,7 @@ if __name__ == '__main__':
         os.makedirs(args.output_path)
 
     model = emo_ae()
-    #model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
+    model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
     model = model.to(device)
     for i in args.datapoints_list:
 
