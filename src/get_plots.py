@@ -240,7 +240,7 @@ if __name__ == '__main__':
         os.makedirs(args.output_path)
 
     model = emo_ae()
-    model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
+    #model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
     model = model.to(device)
     for i in args.datapoints_list:
 
