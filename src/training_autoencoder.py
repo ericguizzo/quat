@@ -131,7 +131,6 @@ if args.fixed_seed:
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
 
-print ('QUIIIIIIIII', args.fast_test)
 if args.fast_test:
     print ('FAST TEST: using unly 100 datapoints ')
     #take only 100 datapoints, just for quick testing
@@ -258,10 +257,10 @@ val_data = utils.DataLoader(val_dataset, args.batch_size, shuffle=False, pin_mem
 test_data = utils.DataLoader(test_dataset, args.batch_size, shuffle=False, pin_memory=True)  #no batch here!!
 
 #load model
-if args.model_name == 'emo_ae':
+if args.model_name == 'simple_autoencoder':
     model = locals()[args.model_name](latent_dim=args.model_latent_dim)
 
-if args.model_name == 'simple_autoencoder':
+if args.model_name == 'emo_ae':
     model = locals()[args.model_name](structure=eval(args.model_cnn_structure),
                    classifier_structure=eval(args.model_classifier_structure),
                    latent_dim=args.model_latent_dim,
