@@ -74,7 +74,7 @@ class emo_ae(nn.Module):
                                                padding=1,
                                                output_padding=1),
                             nn.LeakyReLU(),
-                            nn.Conv2d(structure[-1], out_channels=1,
+                            nn.Conv2d(structure[-1], out_channels=4,
                                       kernel_size=3, padding=1),
                             nn.Sigmoid())
 
