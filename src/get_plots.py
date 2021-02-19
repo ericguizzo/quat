@@ -10,8 +10,8 @@ import os
 import utility_functions as uf
 
 parser = argparse.ArgumentParser()
-#parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_2_beta.txt/models/model_xval_iemocap_exp2_beta.txt_run6_fold0')
-parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_5_beta_vgg_higherbatch.txt/models/model_xval_iemocap_exp5_beta_vgg_higherbatch.txt_run1_fold0')
+parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_2_beta.txt/models/model_xval_iemocap_exp2_beta.txt_run6_fold0')
+#parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_5_beta_vgg_higherbatch.txt/models/model_xval_iemocap_exp5_beta_vgg_higherbatch.txt_run1_fold0')
 
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
 parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy')
@@ -259,7 +259,7 @@ if __name__ == '__main__':
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
 
-    model = emo_ae_vgg()
+    model = emo_ae()
     model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
     model = model.to(device)
     for i in args.datapoints_list:

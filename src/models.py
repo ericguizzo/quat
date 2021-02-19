@@ -206,7 +206,8 @@ class emo_ae_vgg(nn.Module):
                 verbose=True,
                 batchnorm=True,
                 architecture='VGG16',
-                classifier_dropout=0.5
+                classifier_dropout=0.5,
+                quat=True
                 ):
         super(emo_ae_vgg, self).__init__()
 
