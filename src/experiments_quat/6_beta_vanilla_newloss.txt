@@ -4,12 +4,12 @@
         "experiment_description": "test_experiment",
         "script": "training_autoencoder.py",
         "dataset": "iemocap",
-        "num_experiment": 4,
+        "num_experiment": 6,
         "num_folds": 1,
         "num_epochs": 1,
         "learning_rate": 0.00005,
-        "batch_size": 20,
-        "model_name":"emo_ae_vgg",
+        "batch_size": 100,
+        "model_name":"emo_ae",
         "num_epochs": 100
       },
 
