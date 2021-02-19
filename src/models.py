@@ -9,7 +9,7 @@ class emo_ae(nn.Module):
     def __init__(self,
                 structure=[32, 64, 128, 256, 512],
                 classifier_structure=[2000,1000,500,100],
-                latent_dim=50,
+                latent_dim=1000,
                 verbose=True,
                 quat=True):
         super(emo_ae, self).__init__()
@@ -189,7 +189,7 @@ VGG_types = {
 
 class emo_ae_vgg(nn.Module):
     def __init__(self,
-                latent_dim=50,
+                latent_dim=1000,
                 in_channels=1,
                 verbose=True,
                 batchnorm=True,
