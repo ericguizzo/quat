@@ -10,4 +10,6 @@ butta fuori praticamente sempre la media (0.5)
   aumentato hidden dim a 1000. Il recon loss sembra essere un pelo piú basso ma
   la ricostruzione comunque non ha nulla a che vedere col segnale in ingresso
 - exp 8: come exp 7 ma con beta=0 in modo da avere recon loss puro,
- aggiunto retain_graph=True sul loss backwards
+        aggiunto retain_graph=True sul loss backwards
+        abbassato batch size perché se no il modell non ci sta piú 
+        => CON RETAIN_GRAPH=TRUE IL MODELLO OCCUPA MOLTA PIÚ MEMORIA
