@@ -291,8 +291,9 @@ for epoch in range(args.num_epochs):
         sounds = sounds.to(device)
         truth = truth.to(device)
 
-        recon, emo_preds = model(sounds)
-        loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
+        recon, v, a, d = model(sounds)
+        loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
+
         loss['total'].backward()
         #lotal_loss.backward()
 
