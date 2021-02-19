@@ -27,17 +27,17 @@ parser.add_argument('--test_perc', type=float, default=0.1)
 parser.add_argument('--normalize_predictors', type=bool, default=True)
 parser.add_argument('--time_dim', type=int, default=512)
 parser.add_argument('--freq_dim', type=int, default=128)
-parser.add_argument('--fast_test', type=bool, default=False)
+parser.add_argument('--fast_test', type=str, default='False')
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
-parser.add_argument('--use_cuda', type=bool, default=True)
+parser.add_argument('--use_cuda', type=str, default='True')
 parser.add_argument('--num_epochs', type=int, default=200)
 parser.add_argument('--batch_size', type=int, default=100)
 parser.add_argument('--learning_rate', type=float, default=0.00005)
 parser.add_argument('--regularization_lambda', type=float, default=0.)
-parser.add_argument('--early_stopping', type=bool, default=True)
+parser.add_argument('--early_stopping', type=str, default='True')
 parser.add_argument('--save_model_metric', type=str, default='total_loss')
-parser.add_argument('--patience', type=int, default=10)
+parser.add_argument('--patience', type=int, default=5)
 parser.add_argument('--load_pretrained', type=str, default=None)
 parser.add_argument('--num_folds', type=int, default=1)
 parser.add_argument('--num_fold', type=int, default=1)
@@ -69,6 +69,12 @@ parser.add_argument('--num_experiment', type=int, default=0)
 #eval string args
 args = parser.parse_args()
 #output filenames
+
+args.fast_test = eval(args.fast_test)
+args.use_cuda = eval(args.use_cuda)
+args.early_stopping = eval(args.early_stopping)
+
+
 
 
 if args.use_cuda:

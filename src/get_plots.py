@@ -10,7 +10,7 @@ import os
 import utility_functions as uf
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_6_beta_vanilla_newloss.txt/models/model_xval_iemocap_exp6_beta_vanilla_newloss.txt_run1_fold0')
+parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_7_beta_vanilla_newloss.txt/models/model_xval_iemocap_exp7_beta_vanilla_newloss.txt_run1_fold0')
 #parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_5_beta_vgg_higherbatch.txt/models/model_xval_iemocap_exp5_beta_vgg_higherbatch.txt_run1_fold0')
 
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
