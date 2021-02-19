@@ -41,7 +41,7 @@ parser.add_argument('--patience', type=int, default=5)
 parser.add_argument('--load_pretrained', type=str, default=None)
 parser.add_argument('--num_folds', type=int, default=1)
 parser.add_argument('--num_fold', type=int, default=1)
-parser.add_argument('--fixed_seed', type=bool, default=True)
+parser.add_argument('--fixed_seed', type=str, default='True')
 #loss parameters
 parser.add_argument('--loss_function', type=str, default='emo_loss')
 parser.add_argument('--loss_beta', type=float, default=1.)
@@ -50,9 +50,9 @@ parser.add_argument('--model_name', type=str, default='emo_ae_vgg')
 parser.add_argument('--model_cnn_structure', type=str, default='[32, 64, 128, 256, 512]')
 parser.add_argument('--model_classifier_structure', type=str, default='[2000,1000,500,100]')
 parser.add_argument('--model_latent_dim', type=int, default=1000)
-parser.add_argument('--verbose', type=bool, default=False)
-parser.add_argument('--model_quat', type=bool, default=False)
-parser.add_argument('--model_batchnorm', type=bool, default=True)
+parser.add_argument('--verbose', type=str, default='False')
+parser.add_argument('--model_quat', type=str, default='False')
+parser.add_argument('--model_batchnorm', type=str, default='True')
 parser.add_argument('--model_architecture', type=str, default='VGG16')
 parser.add_argument('--classifier_dropout', type=float, default=0.5)
 
@@ -73,6 +73,12 @@ args = parser.parse_args()
 args.fast_test = eval(args.fast_test)
 args.use_cuda = eval(args.use_cuda)
 args.early_stopping = eval(args.early_stopping)
+args.fixed_seed = eval(args.fixed_seed)
+args.model_quat = eval(args.model_quat)
+args.model_batchnorm = eval(args.model_batchnorm)
+args.model_architecture = eval(args.model_architecture)
+
+
 
 
 
