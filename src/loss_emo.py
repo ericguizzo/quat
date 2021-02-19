@@ -17,7 +17,7 @@ def emo_loss_old(input, recon, truth, emo_preds, beta):
 
 def emo_loss(input, recon, truth, v, a, d, beta):
     #input = input.repeat(1,4,1,1)
-    recon_loss = F.binary_cross_entropy(input, recon[:,0,:,:])
+    recon_loss = F.binary_cross_entropy(recon[:,0,:,:], input)
 
     valence_loss = F.mse_loss(v, truth[:,0])
     arousal_loss = F.mse_loss(a, truth[:,1])
