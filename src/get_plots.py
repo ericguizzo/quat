@@ -276,6 +276,9 @@ if __name__ == '__main__':
             a = a.cpu().numpy()
             d = d.cpu().numpy()
 
+        if y.shape[1] == 1:
+            y = y.repeat(1,4,1,1)
+            
         v = v.squeeze()
         a = a.squeeze()
         d = d.squeeze()
