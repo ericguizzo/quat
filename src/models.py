@@ -189,7 +189,7 @@ VGG_types = {
 
 class emo_ae_vgg(nn.Module):
     def __init__(self,
-                latent_dim=1000,
+                latent_dim=50,
                 in_channels=1,
                 verbose=True,
                 batchnorm=True,

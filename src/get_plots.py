@@ -22,7 +22,7 @@ parser.add_argument('--gpu_id', type=int, default=0)
 parser.add_argument('--sample_rate', type=int, default=16000)
 parser.add_argument('--time_dim', type=int, default=512)
 parser.add_argument('--freq_dim', type=int, default=128)
-parser.add_argument('--use_set', type=str, default='train')
+parser.add_argument('--use_set', type=str, default='training')
 args = parser.parse_args()
 
 args.use_cuda = eval(args.use_cuda)
