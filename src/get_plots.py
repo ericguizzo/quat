@@ -10,7 +10,7 @@ import os
 import utility_functions as uf
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_8_beta_vanilla_newloss_real.txt/models/model_xval_iemocap_exp8_beta_vanilla_newloss_real.txt_run1_fold0')
+parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_5_beta_vgg_higherbatch.txt/models/model_xval_iemocap_exp5_beta_vgg_higherbatch.txt_run1_fold0')
 #parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_5_beta_vgg_higherbatch.txt/models/model_xval_iemocap_exp5_beta_vgg_higherbatch.txt_run1_fold0')
 
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
@@ -22,7 +22,7 @@ parser.add_argument('--gpu_id', type=int, default=0)
 parser.add_argument('--sample_rate', type=int, default=16000)
 parser.add_argument('--time_dim', type=int, default=512)
 parser.add_argument('--freq_dim', type=int, default=128)
-parser.add_argument('--use_set', type=str, default='test')
+parser.add_argument('--use_set', type=str, default='train')
 args = parser.parse_args()
 
 args.use_cuda = eval(args.use_cuda)
@@ -261,7 +261,7 @@ if __name__ == '__main__':
     if not os.path.exists(args.output_path):
         os.makedirs(args.output_path)
 
-    model = emo_ae()
+    model = emo_ae_vgg()
     model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
     model = model.to(device)
     for i in args.datapoints_list:
