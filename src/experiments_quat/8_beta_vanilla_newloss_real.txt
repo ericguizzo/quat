@@ -14,7 +14,7 @@
       },
 
   "1":{"comment_1": "beta_0.5", "comment_2": "new_loss",
-       "loss_beta":0.
+       "loss_beta":0
         }
 
 }
