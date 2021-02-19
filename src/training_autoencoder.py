@@ -51,7 +51,7 @@ parser.add_argument('--model_cnn_structure', type=str, default='[32, 64, 128, 25
 parser.add_argument('--model_classifier_structure', type=str, default='[2000,1000,500,100]')
 parser.add_argument('--model_latent_dim', type=int, default=50)
 parser.add_argument('--verbose', type=bool, default=False)
-parser.add_argument('--model_quat', type=bool, default=True)
+parser.add_argument('--model_quat', type=bool, default=False)
 parser.add_argument('--model_batchnorm', type=bool, default=True)
 parser.add_argument('--model_architecture', type=str, default='VGG16')
 parser.add_argument('--classifier_dropout', type=float, default=0.5)
