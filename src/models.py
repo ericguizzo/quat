@@ -3,7 +3,51 @@ from torch import nn
 from quaternion_layers import (QuaternionConv, QuaternionLinear,
                                QuaternionTransposeConv)
 
+class simple_autoencoder(nn.Module):
+    def __init__(self,
+                latent_dim=50,
+                in_channels=1,
+                verbose=True,
+                batchnorm=True,
+                architecture='VGG16',
+                classifier_dropout=0.5,
+                quat=True
+                ):
+        super(simple_autoencoder, self).__init__()
 
+        self.encoder = nn.Sequential(nn.Linear(512*128),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(4096),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(2048),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(1024),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(512),
+                                     nn.LeakyReLU(),
+                                    )
+        self.decoder = nn.Sequential(nn.Linear(512),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(1024),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(2048),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(4096),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(512*128)
+                                    )
+
+        self.latent = nn.Linear(latent_dim)
+
+    def forward(self, x):
+        x = torch.flatten(x, start_dim=1)
+        x = self.encode(x)
+        x = self.latent(x)
+        x = self.decode(x)
+        x = torch.sigmoid(x.view(-1, 1, 512, 128))
+
+        dummy = torch.tensor([0])
+        return x, dummy, dummy, dummy
 
 class emo_ae(nn.Module):
     def __init__(self,
