@@ -33,9 +33,9 @@ class simple_autoencoder(nn.Module):
 
     def forward(self, x):
         x = torch.flatten(x, start_dim=1)
-        x = self.encode(x)
+        x = self.encoder(x)
         x = self.latent(x)
-        x = self.decode(x)
+        x = self.decoder(x)
         x = torch.sigmoid(x.view(-1, 1, 512, 128))
 
         dummy = torch.tensor([0])
