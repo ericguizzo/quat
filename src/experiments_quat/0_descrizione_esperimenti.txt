@@ -9,4 +9,5 @@ butta fuori praticamente sempre la media (0.5)
 - exp 7 aumentato learning rate a 0.0005(come qvae), uso rete vanilla non quat
   aumentato hidden dim a 1000. Il recon loss sembra essere un pelo piú basso ma
   la ricostruzione comunque non ha nulla a che vedere col segnale in ingresso
-- exp 8: esattamente come exp 7 ma con beta=0 in modo da avere recon loss puro
+- exp 8: come exp 7 ma con beta=0 in modo da avere recon loss puro,
+ aggiunto retain_graph=True sul loss backwards
