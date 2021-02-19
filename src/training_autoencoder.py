@@ -318,8 +318,8 @@ for epoch in range(args.num_epochs):
             sounds = sounds.to(device)
             truth = truth.to(device)
 
-            recon, emo_preds = model(sounds)
-            loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
+            recon, v, a, d = model(sounds)
+            loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
 
             train_batch_losses.append(loss)
         #validation data
@@ -327,8 +327,8 @@ for epoch in range(args.num_epochs):
             sounds = sounds.to(device)
             truth = truth.to(device)
 
-            recon, emo_preds = model(sounds)
-            loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
+            recon, v, a, d = model(sounds)
+            loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
 
             val_batch_losses.append(loss)
     #append to history and print
@@ -415,8 +415,8 @@ with torch.no_grad():
         sounds = sounds.to(device)
         truth = truth.to(device)
 
-        recon, emo_preds = model(sounds)
-        loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
+        recon, v, a, d = model(sounds)
+        loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
 
         train_batch_losses.append(loss)
 
@@ -425,8 +425,8 @@ with torch.no_grad():
         sounds = sounds.to(device)
         truth = truth.to(device)
 
-        recon, emo_preds = model(sounds)
-        loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
+        recon, v, a, d = model(sounds)
+        loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
 
         val_batch_losses.append(loss)
 
@@ -435,8 +435,8 @@ with torch.no_grad():
         sounds = sounds.to(device)
         truth = truth.to(device)
 
-        recon, emo_preds = model(sounds)
-        loss = loss_function(sounds, recon, truth, emo_preds, args.loss_beta)
+        recon, v, a, d = model(sounds)
+        loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
 
         test_batch_losses.append(loss)
 
@@ -462,6 +462,7 @@ for i in test_batch_losses:
         name = j
         value = i[j]
         test_loss[name].append(value.item())
+
 for i in train_loss:
     train_loss[i] = np.mean(train_loss[i])
     val_loss[i] = np.mean(val_loss[i])

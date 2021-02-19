@@ -121,16 +121,6 @@ class emo_ae(nn.Module):
                 nn.LeakyReLU()
             )
 
-    def autoencode(self, x):
-        x = self.encoder(x)
-        x = torch.flatten(x, start_dim=1)
-        x = self.latent_q(x)
-        x = self.decoder_input_q(x)
-        x = x.view(-1, 512, 16, 4)
-        x = self.decoder_q(x)
-        x = self.final_layer_decoder_q(x)
-        return x
-
 
     def forward(self, x):
         #encoder
@@ -186,9 +176,7 @@ class emo_ae(nn.Module):
         x_arousal = torch.sigmoid(self.final_layer_dominance(x_arousal))
         x_dominance = torch.sigmoid(self.final_layer_dominance(x_dominance))
 
-        emo_preds = torch.cat((x_valence,x_arousal,x_dominance),1)
-
-        return x, emo_preds
+        return x, x_valence, x_arousal, x_dominance
 
 
 VGG_types = {
@@ -357,4 +345,4 @@ class emo_ae_vgg(nn.Module):
 
         #emo_preds = torch.cat((x_valence,x_arousal,x_dominance),1)
 
-        return x, torch.cat((x_valence,x_arousal,x_dominance),1)
+        return x, x_valence, x_arousal, x_dominance
