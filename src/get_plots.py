@@ -280,7 +280,7 @@ if __name__ == '__main__':
         a = a.squeeze()
         d = d.squeeze()
         p = {'truth': target[i].squeeze(),
-            'prediction': [v,a,d]}
+            'prediction': [v[0],a[0],d[0]]}
         print (p)
         original = x.squeeze().numpy()
         real = y[:,0,:,:].squeeze()
