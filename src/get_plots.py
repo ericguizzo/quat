@@ -268,13 +268,17 @@ if __name__ == '__main__':
         x = data[i].unsqueeze(0)
         with torch.no_grad():
             y = x.to(device)
-            y, preds = model(y)
+            y, v,a,d = model(y)
             y = y.cpu().numpy()
-            preds = preds.cpu().numpy()
+            v = v.cpu().numpy()
+            a = a.cpu().numpy()
+            d = d.cpu().numpy()
 
-        preds = preds.squeeze()
-        p = {'truth': target[i],
-            'prediction': preds}
+        v = v.squeeze()
+        a = a.squeeze()
+        d = d.squeeze()
+        p = {'truth': target[i].squeeze(),
+            'prediction': [v,a,d]}
         print (p)
         original = x.squeeze().numpy()
         real = y[:,0,:,:].squeeze()
