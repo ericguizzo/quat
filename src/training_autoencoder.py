@@ -77,7 +77,7 @@ args.early_stopping = eval(args.early_stopping)
 args.fixed_seed = eval(args.fixed_seed)
 args.model_quat = eval(args.model_quat)
 args.model_batchnorm = eval(args.model_batchnorm)
-args.model_architecture = eval(args.model_architecture)
+args.verbose = eval(args.verbose)
 
 
 
