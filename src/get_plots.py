@@ -271,14 +271,15 @@ if __name__ == '__main__':
         with torch.no_grad():
             y = x.to(device)
             y, v,a,d = model(y)
+            if y.shape[1] == 1:
+                y = y.repeat(1,4,1,1)
             y = y.cpu().numpy()
             v = v.cpu().numpy()
             a = a.cpu().numpy()
             d = d.cpu().numpy()
 
-        if y.shape[1] == 1:
-            y = y.repeat(1,4,1,1)
-            
+
+
         v = v.squeeze()
         a = a.squeeze()
         d = d.squeeze()
