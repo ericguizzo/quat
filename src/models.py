@@ -5,13 +5,7 @@ from quaternion_layers import (QuaternionConv, QuaternionLinear,
 
 class simple_autoencoder(nn.Module):
     def __init__(self,
-                latent_dim=50,
-                in_channels=1,
-                verbose=True,
-                batchnorm=True,
-                architecture='VGG16',
-                classifier_dropout=0.5,
-                quat=True
+                latent_dim=500,
                 ):
         super(simple_autoencoder, self).__init__()
 
