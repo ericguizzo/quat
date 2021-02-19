@@ -307,7 +307,7 @@ for epoch in range(args.num_epochs):
         recon, v, a, d = model(sounds)
         loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
 
-        loss['total'].backward()
+        loss['total'].backward(retain_graph=True)
         #lotal_loss.backward()
 
         optimizer.step()
