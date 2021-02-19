@@ -271,8 +271,6 @@ if __name__ == '__main__':
         with torch.no_grad():
             y = x.to(device)
             y, v,a,d = model(y)
-            if y.shape[1] == 1:
-                y = y.repeat(1,4,1,1)
             y = y.cpu().numpy()
             v = v.cpu().numpy()
             a = a.cpu().numpy()
@@ -287,10 +285,16 @@ if __name__ == '__main__':
             'prediction': [v,a,d]}
         print (p)
         original = x.squeeze().numpy()
-        real = y[:,0,:,:].squeeze()
-        valence = y[:,1,:,:].squeeze()
-        arousal = y[:,2,:,:].squeeze()
-        dominance = y[:,3,:,:].squeeze()
+        if y.shape[1] == 1:
+            real = y.copy()
+            valence = y.copy()
+            arousal = y.copy()
+            dominance = y.copy()
+        else:            
+            real = y[:,0,:,:].squeeze()
+            valence = y[:,1,:,:].squeeze()
+            arousal = y[:,2,:,:].squeeze()
+            dominance = y[:,3,:,:].squeeze()
 
         print ('shapes')
         curr_path = os.path.join(args.output_path, str(i))
