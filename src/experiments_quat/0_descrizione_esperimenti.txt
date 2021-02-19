@@ -1,18 +1,25 @@
 - fino al 4 compreso l'outoencoder sputa fuori robe insensate e la classificazione
-  funziona molto malo: anche se l'mse loss é basso i modelli buttano fuori valori
+  =>funziona molto male: anche se l'mse loss é basso i modelli buttano fuori valori
   vicino alla media
+
 - exp 5 ho provato a togliere l'emo loss (beta=0) e il modello vgg ricostruisce meglio
 (ma non benissimo) il segnale nei 4 assi del quaternione. Qui la classificazione emozionale
 butta fuori praticamente sempre la media (0.5)
+
 - exp 6 cambiato loss function: messo recon solo sul primo canale del quaternione
-  e usato vanilla. Funziona malissimo
+  e usato vanilla.
+  =>Funziona malissimo
+
 - exp 7 aumentato learning rate a 0.0005(come qvae), uso rete vanilla non quat
   aumentato hidden dim a 1000. Il recon loss sembra essere un pelo piú basso ma
   la ricostruzione comunque non ha nulla a che vedere col segnale in ingresso
+
 - exp 8: come exp 7 ma con beta=0 in modo da avere recon loss puro,
         aggiunto retain_graph=True sul loss backwards
-        abbassato batch size perché se no il modell non ci sta piú
-        => CON RETAIN_GRAPH=TRUE IL MODELLO OCCUPA MOLTA PIÚ MEMORIA
+        abbassato batch size perché se no il modello non ci sta piú
+        CON RETAIN_GRAPH=TRUE IL MODELLO OCCUPA MOLTA PIÚ MEMORIA
+        => nessun miglioramento
 
-- exp 9. provo un autoencoder molto semplice solo FC senza emo loss per vedere se
-         almeno overfitta la ricostruzione dell'input
+- exp 9. provo un autoencoder molto semplice solo FC con loss semplificato
+         che calcola solo mse tra output e input per vedere se
+         almeno overfitta la ricostruzione dell'input.
