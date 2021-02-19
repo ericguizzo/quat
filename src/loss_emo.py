@@ -31,7 +31,7 @@ def emo_loss(input, recon, truth, v, a, d, beta):
 
 def simple_loss(input, recon, truth, v, a, d, beta):
     #just for testing. simplest reconstruction loss
-    recon_loss = F.binary_cross_entropy(input, recon)
+    recon_loss = F.mse_loss(input, recon)
 
     return {'total':recon_loss, 'recon': 0, 'emo':0,
         'valence':0,'arousal':0, 'dominance':0}
