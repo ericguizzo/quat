@@ -161,7 +161,7 @@ if __name__ == '__main__':
                                                                 target_merged, val_list)
     print ('\n test:')
     test_predictors, test_target = uf.build_matrix_dataset(predictors_merged,
-                                                                target_merged, test_list)
+                                                            target_merged, test_list)
 
     #normalize
     training_predictors = training_predictors / training_predictors.shape[-1]
@@ -276,21 +276,20 @@ if __name__ == '__main__':
             a = a.cpu().numpy()
             d = d.cpu().numpy()
 
-
-
         v = v.squeeze()
         a = a.squeeze()
         d = d.squeeze()
         p = {'truth': target[i].squeeze(),
             'prediction': [v,a,d]}
         print (p)
+
         original = x.squeeze().numpy()
         if y.shape[1] == 1:
-            real = y.copy()
-            valence = y.copy()
-            arousal = y.copy()
-            dominance = y.copy()
-        else:            
+            real = y.copy().squeeze()
+            valence = y.copy().squeeze()
+            arousal = y.copy().squeeze()
+            dominance = y.copy().squeeze()
+        else:
             real = y[:,0,:,:].squeeze()
             valence = y[:,1,:,:].squeeze()
             arousal = y[:,2,:,:].squeeze()
