@@ -275,7 +275,7 @@ if __name__ == '__main__':
             v = v.cpu().numpy()
             a = a.cpu().numpy()
             d = d.cpu().numpy()
-
+        print ('aaaaaaaaaaaaaaaa',np.max(y), np.min(y))
         v = v.squeeze()
         a = a.squeeze()
         d = d.squeeze()
