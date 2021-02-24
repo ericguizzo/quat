@@ -36,4 +36,6 @@ butta fuori praticamente sempre la media (0.5)
           FORSE uno dei problemi riguarda
 
 - exp 11: prova simple_cnn_ae, cioé il modello di eleonora senza la parte emotion
-          e usando il simplest loss
+          e usando il simplest loss.
+          => il loss si blocca sullo stesso valore di exp 10, nonostante l'architettura sia
+          siversa, quindi c'é qualcosa che non va.  
