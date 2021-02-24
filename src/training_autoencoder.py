@@ -267,12 +267,20 @@ test_data = utils.DataLoader(test_dataset, args.batch_size, shuffle=False, pin_m
 if args.model_name == 'simple_autoencoder':
     model = locals()[args.model_name](latent_dim=args.model_latent_dim)
 
-if args.model_name == 'emo_ae':
+elif args.model_name == 'emo_ae':
     model = locals()[args.model_name](structure=eval(args.model_cnn_structure),
                    classifier_structure=eval(args.model_classifier_structure),
                    latent_dim=args.model_latent_dim,
                    verbose=args.verbose,
                    quat=args.model_quat)
+
+elif args.model_name == 'simple_emo_ae':
+    model = locals()[args.model_name](structure=eval(args.model_cnn_structure),
+                   classifier_structure=eval(args.model_classifier_structure),
+                   latent_dim=args.model_latent_dim,
+                   verbose=args.verbose,
+                   quat=args.model_quat)
+
 elif args.model_name == 'emo_ae_vgg':
     model = locals()[args.model_name](architecture=args.model_architecture,
                    latent_dim=args.model_latent_dim,
