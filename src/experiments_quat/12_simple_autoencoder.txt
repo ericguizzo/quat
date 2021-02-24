@@ -11,7 +11,7 @@
         "batch_size": 100,
         "model_name":"simple_autoencoder",
         "num_epochs": 100,
-        "loss_function": "simplest_loss"
+        "loss_function": "simplest_loss",
         "fast_test": "True"
       },
 
