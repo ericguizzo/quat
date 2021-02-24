@@ -46,7 +46,7 @@ class simple_cnn_ae(nn.Module):
     def __init__(self,
                 structure=[32, 64, 128, 256, 512],
                 classifier_structure=[2000,1000,500,100],
-                latent_dim=1000,
+                latent_dim=100,
                 verbose=True,
                 quat=False):
         super(simple_cnn_ae, self).__init__()
@@ -201,7 +201,7 @@ class simple_cnn_ae(nn.Module):
                 print('final', x.shape)
 
         dummy = torch.tensor([0])
-        
+
         return x, dummy, dummy, dummy
 
 
