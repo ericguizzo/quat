@@ -35,3 +35,9 @@ def simple_loss(input, recon, truth, v, a, d, beta):
 
     return {'total':recon_loss, 'recon': torch.tensor([0]), 'emo':torch.tensor([0]),
         'valence':torch.tensor([0]),'arousal':torch.tensor([0]), 'dominance':torch.tensor([0])}
+
+def simplest_loss(input, recon, truth, v, a, d, beta):
+    #just for testing. simplest reconstruction loss
+    recon_loss = F.mse_loss(input, recon)
+
+    return {'total':recon_loss}

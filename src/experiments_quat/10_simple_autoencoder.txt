@@ -1,0 +1,21 @@
+{
+  "global_parameters":{
+        "gpu_id":0,
+        "experiment_description": "test_experiment",
+        "script": "training_autoencoder.py",
+        "dataset": "iemocap",
+        "num_experiment": 9,
+        "num_folds": 1,
+        "num_epochs": 1,
+        "learning_rate": 0.0005,
+        "batch_size": 400,
+        "model_name":"simple_autoencoder",
+        "num_epochs": 100,
+        "loss_function": "simplest_loss"
+      },
+
+  "1":{"comment_1": "beta_0.5", "comment_2": "new_loss",
+       "loss_beta":0
+        }
+
+}
