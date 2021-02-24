@@ -134,7 +134,7 @@ if args.fixed_seed:
 if args.fast_test:
     print ('FAST TEST: using unly 100 datapoints ')
     #take only 100 datapoints, just for quick testing
-    bound = 100
+    bound = 10
     training_predictors = training_predictors[:bound]
     training_target = training_target[:bound]
     validation_predictors = validation_predictors[:bound]
