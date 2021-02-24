@@ -309,6 +309,9 @@ val_loss_hist = []
 loading_time = float(time.perf_counter()) - float(loading_start)
 print ('\nLoading time: ' + str(np.round(float(loading_time), decimals=1)) + ' seconds')
 
+
+criterion = nn.MSELoss()
+
 def train_model():
     for epoch in range(args.num_epochs):
         epoch_start = time.perf_counter()
@@ -324,7 +327,9 @@ def train_model():
             recon, v, a, d = model(sounds)
             loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
 
-            loss['total'].backward(retain_graph=True)
+            l = criterion(sounds,recon)
+            l.backward()
+            #loss['total'].backward(retain_graph=True)
             #lotal_loss.backward()
 
             optimizer.step()
