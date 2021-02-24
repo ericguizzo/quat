@@ -20,13 +20,20 @@ butta fuori praticamente sempre la media (0.5)
         CON RETAIN_GRAPH=TRUE IL MODELLO OCCUPA MOLTA PIÚ MEMORIA
         => nessun miglioramento
 
-- exp 9. provo un autoencoder molto semplice solo FC con loss semplificato
+- exp 9: provo un autoencoder molto semplice solo FC con loss semplificato
          che calcola solo mse tra output e input per vedere se
          almeno overfitta la ricostruzione dell'input.
          => il modello sputa fuori solo matrici contenenti zeri. Stranamente il loss
         durante il training arriva comunque a valori ottimali (1e-10)
 
-- exp 10. come exp 9 con 2 differenze: nel loss ho tolto dal dict i velori emozionali,
+- exp 10: come exp 9 con 2 differenze: nel loss ho tolto dal dict i velori emozionali,
           tenendo solo l'mse loss. Normalizzo i predictors riscalando per il massimo
           del training set (e non dividendo per n_fft_bins).
-          loss resta a 0.3 => forse l'architettura é troppo semplice
+          loss resta a 0.3 =>  l'architettura é troppo semplice
+          => gli spettri in output sembrano white noise, decisamente piú sensato rispetto
+          ad avere solo zeri o agli output strani degli altri exp.
+          SICURSMENTE riscalare per max(training_set) é meglio
+          FORSE uno dei problemi riguarda
+
+- exp 11: prova simple_cnn_ae, cioé il modello di eleonora senza la parte emotion
+          e usando il simplest loss

@@ -274,7 +274,7 @@ elif args.model_name == 'emo_ae':
                    verbose=args.verbose,
                    quat=args.model_quat)
 
-elif args.model_name == 'simple_emo_ae':
+elif args.model_name == 'simple_cnn_ae':
     model = locals()[args.model_name](structure=eval(args.model_cnn_structure),
                    classifier_structure=eval(args.model_classifier_structure),
                    latent_dim=args.model_latent_dim,
