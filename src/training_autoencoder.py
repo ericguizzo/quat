@@ -328,11 +328,11 @@ def train_model():
             #lotal_loss.backward()
 
             optimizer.step()
-            loss['total'] = loss['total'].detach()
+            #loss['total'] = loss['total'].detach()
             #print progress
             perc = int(i / len(tr_data) * 20)
             inv_perc = int(20 - perc - 1)
-            loss_print_t = str(np.round(loss['total'].item(), decimals=5))
+            loss_print_t = str(np.round(loss['total'].detach().item(), decimals=5))
             #loss_print_t = str(np.round(loss.detach().item(), decimals=5))
 
             string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t

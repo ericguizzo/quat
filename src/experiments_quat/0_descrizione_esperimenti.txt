@@ -38,4 +38,6 @@ butta fuori praticamente sempre la media (0.5)
 - exp 11: prova simple_cnn_ae, cioé il modello di eleonora senza la parte emotion
           e usando il simplest loss.
           => il loss si blocca sullo stesso valore di exp 10, nonostante l'architettura sia
-          siversa, quindi c'é qualcosa che non va.  
+          siversa, quindi c'é qualcosa che non va.
+
+- exp 12: ritorno al simple_autoencoder, ma abbasso learning rate.
