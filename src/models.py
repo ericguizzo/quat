@@ -200,8 +200,10 @@ class simple_cnn_ae(nn.Module):
             if self.verbose:
                 print('final', x.shape)
 
+        dummy = torch.tensor([0])
+        
+        return x, dummy, dummy, dummy
 
-        return x
 
 
 class emo_ae(nn.Module):
