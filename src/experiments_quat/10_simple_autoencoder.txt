@@ -4,7 +4,7 @@
         "experiment_description": "test_experiment",
         "script": "training_autoencoder.py",
         "dataset": "iemocap",
-        "num_experiment": 9,
+        "num_experiment": 10,
         "num_folds": 1,
         "num_epochs": 1,
         "learning_rate": 0.0005,
