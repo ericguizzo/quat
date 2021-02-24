@@ -331,7 +331,7 @@ def train_model():
             l.backward()
             #loss['total'].backward(retain_graph=True)
             #lotal_loss.backward()
-
+            #print ('criterion:')
             optimizer.step()
             #loss['total'] = loss['total'].detach()
             #print progress
