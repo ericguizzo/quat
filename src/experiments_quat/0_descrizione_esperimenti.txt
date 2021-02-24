@@ -23,3 +23,10 @@ butta fuori praticamente sempre la media (0.5)
 - exp 9. provo un autoencoder molto semplice solo FC con loss semplificato
          che calcola solo mse tra output e input per vedere se
          almeno overfitta la ricostruzione dell'input.
+         => il modello sputa fuori solo matrici contenenti zeri. Stranamente il loss
+        durante il training arriva comunque a valori ottimali (1e-10)
+
+- exp 10. come exp 9 con 2 differenze: nel loss ho tolto dal dict i velori emozionali,
+          tenendo solo l'mse loss. Normalizzo i predictors riscalando per il massimo
+          del training set (e non dividendo per n_fft_bins).
+          loss resta a 0.3 => forse l'architettura é troppo semplice
