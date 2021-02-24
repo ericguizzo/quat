@@ -12,6 +12,7 @@
         "model_name":"simple_autoencoder",
         "num_epochs": 100,
         "loss_function": "simplest_loss"
+        "fast_test": "True"
       },
 
   "1":{"comment_1": "beta_0.5", "comment_2": "new_loss",
