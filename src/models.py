@@ -49,7 +49,7 @@ class simple_cnn_ae(nn.Module):
                 latent_dim=1000,
                 verbose=True,
                 quat=False):
-        super(emo_ae, self).__init__()
+        super(simple_cnn_ae, self).__init__()
 
         self.quat = quat
         self.latent_dim =latent_dim
