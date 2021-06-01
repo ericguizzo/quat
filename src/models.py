@@ -2,6 +2,7 @@ import torch
 from torch import nn
 from quaternion_layers import (QuaternionConv, QuaternionLinear,
                                QuaternionTransposeConv)
+from qbn import QuaternionBatchNorm2d
 
 VGG_types = {
     "VGG11": [64, "M", 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
@@ -106,7 +107,8 @@ class r2he(nn.Module):
                         stride=(1, 1),
                         padding=(1, 1),
                     ),
-                    nn.BatchNorm2d(batchnorm_dim),
+                    QuaternionBatchNorm2d(batchnorm_dim),
+                    #nn.BatchNorm2d(batchnorm_dim),
                     nn.ReLU(),
                 ]
                 in_channels = x
@@ -118,7 +120,8 @@ class r2he(nn.Module):
                                               kernel_size=(2, 2),
                                               stride=(2, 2)
                                               ),
-                           nn.BatchNorm2d(batchnorm_dim),
+                           #nn.BatchNorm2d(batchnorm_dim),
+                           QuaternionBatchNorm2d(batchnorm_dim),
                            nn.ReLU(),
                            ]
 
