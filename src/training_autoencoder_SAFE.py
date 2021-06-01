@@ -40,7 +40,7 @@ parser.add_argument('--save_model_metric', type=str, default='total_loss')
 parser.add_argument('--patience', type=int, default=5)
 parser.add_argument('--load_pretrained', type=str, default=None)
 parser.add_argument('--num_folds', type=int, default=1)
-parser.add_argument('--num_fold', type=int, default=1)
+parser.add_argument('--num_fold', type=int, default=0)
 parser.add_argument('--fixed_seed', type=str, default='True')
 #loss parameters
 parser.add_argument('--loss_function', type=str, default='emo_loss')
