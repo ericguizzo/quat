@@ -76,7 +76,7 @@ def get_label_IEMOCAP(wavname):
     str_label = eval(str_label)
     str_label = np.subtract(str_label, 1)
     str_label = np.divide(str_label, 4)
-    #print (str_label)
+    print ('cazzo', str_label)
 
     return str_label
 
@@ -140,7 +140,7 @@ def main():
     sounds_list = get_sounds_list(INPUT_IEMOCAP_FOLDER)  #get list of all soundfile paths
 
     #change this to have only 4 labels
-    filtered_list = filter_labels(sounds_list)  #filter only sounds of certain labels
+    #filtered_list = filter_labels(sounds_list)  #filter only sounds of certain labels
 
     #filter non-wav files
     filtered_list = list(filter(lambda x: x[-3:] == "wav", filtered_list))  #get only wav
