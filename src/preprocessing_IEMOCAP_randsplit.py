@@ -140,11 +140,11 @@ def main():
     sounds_list = get_sounds_list(INPUT_IEMOCAP_FOLDER)  #get list of all soundfile paths
 
     #change this to have only 4 labels
-    #filtered_list = filter_labels(sounds_list)  #filter only sounds of certain labels
+    #sounds_list = filter_labels(sounds_list)  #filter only sounds of certain labels
 
     #filter non-wav files
-    filtered_list = list(filter(lambda x: x[-3:] == "wav", filtered_list))  #get only wav
-    random.shuffle(filtered_list)
+    sounds_list = list(filter(lambda x: x[-3:] == "wav", filtered_list))  #get only wav
+    random.shuffle(sounds_list)
 
     #filtered_list = sounds_list
 
@@ -153,9 +153,9 @@ def main():
     if SEGMENTATION:
         max_file_length = 1
     else:
-        max_file_length=get_max_length_IEMOCAP(filtered_list)  #get longest file in samples
+        max_file_length=get_max_length_IEMOCAP(sounds_list)  #get longest file in samples
 
-    num_files = len(filtered_list)
+    num_files = len(sounds_list)
     #init predictors and target dicts
     predictors = {}
     target = {}
@@ -169,16 +169,11 @@ def main():
         target_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap_randsplit' + appendix + '_target.npy')
     index = 1  #index for progress bar
 
-    for i in filtered_list:
-        #print progress bar
-        #fold_string = '\nPreprocessing foldable item: ' + str(index) + '/' + str(num_foldables)
-        #print (fold_string)
+    for i in sounds_list:
+
         print ('\nPreprocessing files')
-        #get foldable item DIVIDING BY ACTORS. Every session hae 2 actors
         curr_list = [i]
 
-        #preprocess all sounds of the current actor
-        #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
         curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP)
         #print ('cazzo', curr_predictors.shape)
         print (curr_target)
