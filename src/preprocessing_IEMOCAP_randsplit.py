@@ -143,7 +143,7 @@ def main():
     #sounds_list = filter_labels(sounds_list)  #filter only sounds of certain labels
 
     #filter non-wav files
-    sounds_list = list(filter(lambda x: x[-3:] == "wav", filtered_list))  #get only wav
+    sounds_list = list(filter(lambda x: x[-3:] == "wav", sounds_list))  #get only wav
     random.shuffle(sounds_list)
 
     #filtered_list = sounds_list
