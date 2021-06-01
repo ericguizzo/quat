@@ -43,5 +43,6 @@ butta fuori praticamente sempre la media (0.5)
 - exp 12: ritorno al simple_autoencoder, ma abbasso learning rate.
           provo a usere criterion=nn.MSELoss invece che il mio loss curstom.
           inoltre faccio overfitting test: uso solo 10 samples come dataset
+          => il loss viene ottimizzato!
 
 **** QUI HO PROVATO UN PO DI COSE ON THE FLY

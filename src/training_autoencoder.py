@@ -163,12 +163,9 @@ if args.normalize_predictors:
 if args.normalize_predictors:
     #normalize to 0 mean and 1 std
     tr_max = np.max(training_predictors)
-    training_predictors = np.subtract(training_predictors, tr_max)
-    validation_predictors = np.subtract(validation_predictors, tr_max)
-    test_predictors = np.subtract(test_predictors, tr_max)
-
-
-
+    training_predictors = np.divide(training_predictors, tr_max)
+    validation_predictors = np.divide(validation_predictors, tr_max)
+    test_predictors = np.divide(test_predictors, tr_max)
 
 #reshaping for cnn
 training_predictors = training_predictors.reshape(training_predictors.shape[0], 1, training_predictors.shape[1],training_predictors.shape[2])

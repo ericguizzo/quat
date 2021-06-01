@@ -7,7 +7,7 @@
         "num_experiment": 11,
         "num_folds": 1,
         "num_epochs": 1,
-        "learning_rate": 0.00005,
+        "learning_rate": 0.0005,
         "batch_size": 100,
         "model_name":"simple_cnn_ae",
         "num_epochs": 100,
