@@ -20,8 +20,6 @@ NUM_AUG_SAMPLES = eval(cfg.get('feature_extraction', 'num_aug_samples'))
 SEGMENTATION = True
 INPUT_IEMOCAP_FOLDER = cfg.get('preprocessing', 'input_iemocap_folder')
 OUTPUT_FOLDER = cfg.get('preprocessing', 'output_folder')
-PADDED_TIME_DIM = cfg.get('preprocessing', 'padded_time_dim')
-PADDED_FREQ_DIM = cfg.get('preprocessing', 'padded_freq_dim')
 
 if not os.path.exists(OUTPUT_FOLDER):
     os.makedirs(OUTPUT_FOLDER)
@@ -172,68 +170,6 @@ def main():
         print ('\nPreprocessing files')
         curr_list = [i]
         curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP)
-
-        #pad/normalize predictors
-
-        if args.time_dim > curr_time_dim:
-            #
-            training_predictors_padded = np.zeros((training_predictors.shape[0],
-                                                     training_predictors.shape[1],
-                                                     args.time_dim,
-                                                     training_predictors.shape[3]))
-            training_predictors_padded[:,:,:curr_time_dim,:] = training_predictors
-            training_predictors = training_predictors_padded
-            #
-            validation_predictors_padded = np.zeros((validation_predictors.shape[0],
-                                                     validation_predictors.shape[1],
-                                                     args.time_dim,
-                                                     validation_predictors.shape[3]))
-            validation_predictors_padded[:,:,:curr_time_dim,:] = validation_predictors
-            validation_predictors = validation_predictors_padded
-            #
-            test_predictors_padded = np.zeros((test_predictors.shape[0],
-                                                     test_predictors.shape[1],
-                                                     args.time_dim,
-                                                     test_predictors.shape[3]))
-            test_predictors_padded[:,:,:curr_time_dim,:] = test_predictors
-            test_predictors = test_predictors_padded
-
-        elif args.time_dim < curr_time_dim:
-            training_predictors = training_predictors[:,:,:args.time_dim,:]
-            validation_predictors = validation_predictors[:,:,:args.time_dim,:]
-            test_predictors = test_predictors[:,:,:args.time_dim,:]
-        else:
-            pass
-
-        #zero-pad/cut freq tim
-        if args.freq_dim > curr_freq_dim:
-            #
-            training_predictors_padded = np.zeros((training_predictors.shape[0],
-                                                     training_predictors.shape[1],
-                                                     training_predictors.shape[2],
-                                                     args.freq_dim))
-            training_predictors_padded[:,:,:,:curr_freq_dim] = training_predictors
-            training_predictors = training_predictors_padded
-            #
-            validation_predictors_padded = np.zeros((validation_predictors.shape[0],
-                                                     validation_predictors.shape[1],
-                                                     validation_predictors.shape[2],
-                                                     args.freq_dim))
-            validation_predictors_padded[:,:,:,:curr_freq_dim] = validation_predictors
-            validation_predictors = validation_predictors_padded
-            #
-            test_predictors_padded = np.zeros((test_predictors.shape[0],
-                                                     test_predictors.shape[1],
-                                                     test_predictors.shape[2],
-                                                     args.freq_dim))
-            test_predictors_padded[:,:,:,:curr_freq_dim] = test_predictors
-            test_predictors = test_predictors_padded
-        elif args.freq_dim < curr_freq_dim:
-            training_predictors = training_predictors[:,:,:,:args.freq_dim]
-            validation_predictors = validation_predictors[:,:,:,:args.freq_dim]
-            test_predictors = test_predictors[:,:,:,:args.freq_dim]
-        else:
-            pass
 
 
 

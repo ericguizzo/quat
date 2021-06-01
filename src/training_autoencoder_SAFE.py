@@ -46,7 +46,7 @@ parser.add_argument('--fixed_seed', type=str, default='True')
 parser.add_argument('--loss_function', type=str, default='emo_loss')
 parser.add_argument('--loss_beta', type=float, default=1.)
 #model parameters
-parser.add_argument('--model_name', type=str, default='emo_ae_vgg')
+parser.add_argument('--model_name', type=str, default='r2he')
 parser.add_argument('--model_cnn_structure', type=str, default='[32, 64, 128, 256, 512]')
 parser.add_argument('--model_classifier_structure', type=str, default='[2000,1000,500,100]')
 parser.add_argument('--model_latent_dim', type=int, default=1000)
@@ -163,11 +163,10 @@ if args.normalize_predictors:
 if args.normalize_predictors:
     #normalize to 0 mean and 1 std
     tr_max = np.max(training_predictors)
+    tr_max = 128
     training_predictors = np.divide(training_predictors, tr_max)
     validation_predictors = np.divide(validation_predictors, tr_max)
     test_predictors = np.divide(test_predictors, tr_max)
-
-
 
 
 #reshaping for cnn
@@ -206,22 +205,10 @@ val_data = utils.DataLoader(val_dataset, args.batch_size, shuffle=False, pin_mem
 test_data = utils.DataLoader(test_dataset, args.batch_size, shuffle=False, pin_memory=True)  #no batch here!!
 
 #load model
-if args.model_name == 'simple_autoencoder':
+if args.model_name == 'r2he':
     model = locals()[args.model_name](latent_dim=args.model_latent_dim)
 
-if args.model_name == 'emo_ae':
-    model = locals()[args.model_name](structure=eval(args.model_cnn_structure),
-                   classifier_structure=eval(args.model_classifier_structure),
-                   latent_dim=args.model_latent_dim,
-                   verbose=args.verbose,
-                   quat=args.model_quat)
-elif args.model_name == 'emo_ae_vgg':
-    model = locals()[args.model_name](architecture=args.model_architecture,
-                   latent_dim=args.model_latent_dim,
-                   classifier_dropout=args.classifier_dropout,
-                   batchnorm=args.model_batchnorm,
-                   verbose=args.verbose
-                   )
+
 
 model = model.to(device)
 

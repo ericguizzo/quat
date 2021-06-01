@@ -12,20 +12,21 @@ VGG_types = {
 
 class r2he(nn.Module):
     def __init__(self,
-                latent_dim=50,
+                latent_dim=4096,
                 in_channels=1,
                 verbose=True,
                 batchnorm=True,
                 architecture='VGG16',
                 classifier_dropout=0.5,
-                quat=True
+                quat=True,
+                flattened_dim=32768
                 ):
         super(r2he, self).__init__()
 
         self.in_channels = in_channels
         self.latent_dim =latent_dim
         self.verbose = verbose
-        self.flattened_dim = 32768
+        self.flattened_dim = flattened_dim
         self.last_dim = [i for i in VGG_types[architecture] if type(i) != str][-1]
         self.first_dim = [i for i in VGG_types[architecture] if type(i) != str][0]
 
@@ -140,6 +141,7 @@ class r2he(nn.Module):
             print ('input: ', x.shape)
 
         x = self.encoder(x)
+        encoder_output_shape = x.shape
         if self.verbose:
             print('encoder: ', x.shape)
 
@@ -167,7 +169,7 @@ class r2he(nn.Module):
         #decoder
         x = torch.cat((x_r, x_v, x_a, x_d), dim=-1)
         x = self.decoder_input(x)
-        x = x.view(-1, 512, 4, 16)
+        x = x.view(-1, encoder_output_shape[-3], encoder_output_shape[-2], encoder_output_shape[-1])
         if self.verbose:
             print('decoder_input: ', x.shape)
 
@@ -188,7 +190,7 @@ class r2he(nn.Module):
             print('output x: ', x.shape)
             print('output v: ', valence.shape)
             print('output a: ', arousal.shape)
-            print('output d: ', dominance.shape)      
+            print('output d: ', dominance.shape)
 
         return x, valence, arousal, dominance
 
