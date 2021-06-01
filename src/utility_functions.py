@@ -228,3 +228,40 @@ def onehot(value, range):
     one_hot[value] = 1
 
     return one_hot
+
+def pad_tensor_dims(predictors, time_dim, freq_dim):
+
+    #zero-pad/cut time tim
+    curr_time_dim = predictors.shape[2]
+    curr_freq_dim = predictors.shape[3]
+
+    if time_dim > curr_time_dim:
+        #
+        predictors_padded = np.zeros((predictors.shape[0],
+                                                 predictors.shape[1],
+                                                 time_dim,
+                                                 predictors.shape[3]))
+        predictors_padded[:,:,:curr_time_dim,:] = predictors
+        predictors = predictors_padded
+
+    elif time_dim < curr_time_dim:
+        predictors = predictors[:,:,:time_dim,:]
+    else:
+        pass
+
+    #zero-pad/cut freq tim
+    if freq_dim > curr_freq_dim:
+        #
+        predictors_padded = np.zeros((predictors.shape[0],
+                                                 predictors.shape[1],
+                                                 predictors.shape[2],
+                                                 freq_dim))
+        predictors_padded[:,:,:,:curr_freq_dim] = predictors
+        predictors = predictors_padded
+
+    elif freq_dim < curr_freq_dim:
+        predictors = predictors[:,:,:,:freq_dim]
+    else:
+        pass
+
+    return predictors
