@@ -181,7 +181,7 @@ def main():
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
         curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP)
         #print ('cazzo', curr_predictors.shape)
-        print (cut_target)
+        print (curr_target)
         #append preprocessed predictors and target to the dict
         if curr_predictors.shape[0] != 0:
             print (curr_predictors.shape)
