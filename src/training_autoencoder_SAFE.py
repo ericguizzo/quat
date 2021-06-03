@@ -32,7 +32,7 @@ parser.add_argument('--fast_test', type=str, default='False')
 parser.add_argument('--gpu_id', type=int, default=1)
 parser.add_argument('--use_cuda', type=str, default='True')
 parser.add_argument('--num_epochs', type=int, default=200)
-parser.add_argument('--batch_size', type=int, default=100)
+parser.add_argument('--batch_size', type=int, default=10)
 parser.add_argument('--learning_rate', type=float, default=0.00005)
 parser.add_argument('--regularization_lambda', type=float, default=0.)
 parser.add_argument('--early_stopping', type=str, default='True')
@@ -78,11 +78,6 @@ args.fixed_seed = eval(args.fixed_seed)
 args.model_quat = eval(args.model_quat)
 args.model_batchnorm = eval(args.model_batchnorm)
 args.verbose = eval(args.verbose)
-
-
-
-
-
 
 if args.use_cuda:
     device = 'cuda:' + str(args.gpu_id)
@@ -142,30 +137,10 @@ if args.fast_test:
     test_predictors = test_predictors[:bound]
     test_target = test_target[:bound]
 
-'''
-if args.normalize_predictors:
-    #normalize to 0 mean and 1 std
-    tr_mean = np.mean(training_predictors)
-    tr_std = np.std(training_predictors)
-    training_predictors = np.subtract(training_predictors, tr_mean)
-    training_predictors = np.divide(training_predictors, tr_std)
-    validation_predictors = np.subtract(validation_predictors, tr_mean)
-    validation_predictors = np.divide(validation_predictors, tr_std)
-    test_predictors = np.subtract(test_predictors, tr_mean)
-    test_predictors = np.divide(test_predictors, tr_std)
-
-if args.normalize_predictors:
-    #normalize between 0 and 1
-    training_predictors = training_predictors / training_predictors.shape[-1]
-    validation_predictors = validation_predictors / validation_predictors.shape[-1]
-    test_predictors = test_predictors / test_predictors.shape[-1]
-'''
-print ("Predictors range: ", np.min(training_predictors), np.max(training_predictors))
-
 if args.normalize_predictors:
     #normalize to 0 mean and 1 std
     tr_max = np.max(training_predictors)
-    tr_max = 128
+    #tr_max = 128
     training_predictors = np.divide(training_predictors, tr_max)
     validation_predictors = np.divide(validation_predictors, tr_max)
     test_predictors = np.divide(test_predictors, tr_max)
@@ -187,8 +162,6 @@ print ('\nPadded dims:')
 print ('Training predictors: ', training_predictors.shape)
 print ('Validation predictors: ', validation_predictors.shape)
 print ('Test predictors: ', test_predictors.shape)
-
-sys.exit(0)
 
 #convert to tensor
 train_predictors = torch.tensor(training_predictors).float()
@@ -212,8 +185,6 @@ test_data = utils.DataLoader(test_dataset, args.batch_size, shuffle=False, pin_m
 if args.model_name == 'r2he':
     model = locals()[args.model_name](latent_dim=args.model_latent_dim)
 
-
-
 model = model.to(device)
 
 #print (model)
@@ -234,6 +205,21 @@ val_loss_hist = []
 loading_time = float(time.perf_counter()) - float(loading_start)
 print ('\nLoading time: ' + str(np.round(float(loading_time), decimals=1)) + ' seconds')
 
+def evaluate(model, device, criterion, dataloader):
+    #compute loss without backprop
+    model.eval()
+    test_loss = 0.
+    with tqdm(total=len(dataloader) // args.batch_size) as pbar, torch.no_grad():
+        for example_num, (x, target) in enumerate(dataloader):
+            target = target.to(device)
+            x = x.to(device)
+            outputs, v, a, d = model(x)
+            loss = criterion(outputs, target)
+
+            test_loss += (1. / float(example_num + 1)) * (loss - test_loss)
+            pbar.set_description("Current loss: {:.4f}".format(test_loss))
+            pbar.update(1)
+    return test_loss
 
 for epoch in range(args.num_epochs):
     epoch_start = time.perf_counter()
@@ -241,121 +227,124 @@ for epoch in range(args.num_epochs):
     print ('\n')
     string = 'Epoch: [' + str(epoch+1) + '/' + str(args.num_epochs) + '] '
     #iterate batches
-    for i, (sounds, truth) in enumerate(tr_data):
-        optimizer.zero_grad()
-        sounds = sounds.to(device)
-        truth = truth.to(device)
+    with tqdm(total=len(dataloader) // args.batch_size) as pbar, torch.no_grad():
 
-        recon, v, a, d = model(sounds)
-        loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
-
-        loss['total'].backward(retain_graph=True)
-        #lotal_loss.backward()
-
-        optimizer.step()
-        loss['total'] = loss['total'].detach()
-        #print progress
-        perc = int(i / len(tr_data) * 20)
-        inv_perc = int(20 - perc - 1)
-        loss_print_t = str(np.round(loss['total'].item(), decimals=5))
-        #loss_print_t = str(np.round(loss.detach().item(), decimals=5))
-
-        string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
-        print ('\r', string_progress, end='')
-        del loss
-
-    #create history
-    train_batch_losses = []
-    val_batch_losses = []
-    with torch.no_grad():
-        model.eval()
-        #training data
         for i, (sounds, truth) in enumerate(tr_data):
+            optimizer.zero_grad()
             sounds = sounds.to(device)
             truth = truth.to(device)
 
             recon, v, a, d = model(sounds)
             loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
 
-            train_batch_losses.append(loss)
-        #validation data
-        for i, (sounds, truth) in enumerate(val_data):
-            sounds = sounds.to(device)
-            truth = truth.to(device)
+            loss['total'].backward(retain_graph=True)
+            #lotal_loss.backward()
 
-            recon, v, a, d = model(sounds)
-            loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
+            optimizer.step()
+            loss['total'] = loss['total'].detach()
+            #print progress
+            perc = int(i / len(tr_data) * 20)
+            inv_perc = int(20 - perc - 1)
+            loss_print_t = str(np.round(loss['total'].item(), decimals=5))
+            #loss_print_t = str(np.round(loss.detach().item(), decimals=5))
 
-            val_batch_losses.append(loss)
-    #append to history and print
-    train_epoch_loss = {'total':[], 'emo':[], 'recon':[],
-                        'valence':[],'arousal':[], 'dominance':[]}
-    val_epoch_loss = {'total':[], 'emo':[], 'recon':[],
-                      'valence':[],'arousal':[], 'dominance':[]}
+            string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
+            print ('\r', string_progress, end='')
+            del loss
 
-    for i in train_batch_losses:
-        for j in i:
-            name = j
-            value = i[j]
-            train_epoch_loss[name].append(value.item())
-    for i in val_batch_losses:
-        for j in i:
-            name = j
-            value = i[j]
-            val_epoch_loss[name].append(value.item())
+        #create history
+        train_batch_losses = []
+        val_batch_losses = []
 
-    for i in train_epoch_loss:
-        train_epoch_loss[i] = np.mean(train_epoch_loss[i])
-        val_epoch_loss[i] = np.mean(val_epoch_loss[i])
-    print ('\n EPOCH LOSSES:')
-    print ('\n Training:')
-    print (train_epoch_loss)
-    print ('\n Validation:')
-    print (val_epoch_loss)
+        with torch.no_grad():
+            model.eval()
+            #training data
+            for i, (sounds, truth) in enumerate(tr_data):
+                sounds = sounds.to(device)
+                truth = truth.to(device)
+
+                recon, v, a, d = model(sounds)
+                loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
+
+                train_batch_losses.append(loss)
+            #validation data
+            for i, (sounds, truth) in enumerate(val_data):
+                sounds = sounds.to(device)
+                truth = truth.to(device)
+
+                recon, v, a, d = model(sounds)
+                loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
+
+                val_batch_losses.append(loss)
+        #append to history and print
+        train_epoch_loss = {'total':[], 'emo':[], 'recon':[],
+                            'valence':[],'arousal':[], 'dominance':[]}
+        val_epoch_loss = {'total':[], 'emo':[], 'recon':[],
+                          'valence':[],'arousal':[], 'dominance':[]}
+
+        for i in train_batch_losses:
+            for j in i:
+                name = j
+                value = i[j]
+                train_epoch_loss[name].append(value.item())
+        for i in val_batch_losses:
+            for j in i:
+                name = j
+                value = i[j]
+                val_epoch_loss[name].append(value.item())
+
+        for i in train_epoch_loss:
+            train_epoch_loss[i] = np.mean(train_epoch_loss[i])
+            val_epoch_loss[i] = np.mean(val_epoch_loss[i])
+        print ('\n EPOCH LOSSES:')
+        print ('\n Training:')
+        print (train_epoch_loss)
+        print ('\n Validation:')
+        print (val_epoch_loss)
 
 
-    train_loss_hist.append(train_epoch_loss)
-    val_loss_hist.append(val_epoch_loss)
+        train_loss_hist.append(train_epoch_loss)
+        val_loss_hist.append(val_epoch_loss)
 
-    #print ('\n  Train loss: ' + str(np.round(train_epoch_loss.item(), decimals=5)) + ' | Val loss: ' + str(np.round(val_epoch_loss.item(), decimals=5)))
+        #print ('\n  Train loss: ' + str(np.round(train_epoch_loss.item(), decimals=5)) + ' | Val loss: ' + str(np.round(val_epoch_loss.item(), decimals=5)))
 
-    #compute epoch time
-    epoch_time = float(time.perf_counter()) - float(epoch_start)
-    print ('\n Epoch time: ' + str(np.round(float(epoch_time), decimals=1)) + ' seconds')
+        #compute epoch time
+        epoch_time = float(time.perf_counter()) - float(epoch_start)
+        print ('\n Epoch time: ' + str(np.round(float(epoch_time), decimals=1)) + ' seconds')
 
-    #save best model (metrics = validation loss)
-    if epoch == 0:
-        torch.save(model.state_dict(), args.model_path)
-        print ('\nModel saved')
-        saved_epoch = epoch + 1
-    else:
-        if args.save_model_metric == 'total_loss':
-            best_loss = min([i['total'] for i in val_loss_hist[:-1]])
-            #best_loss = min(val_loss_hist['total'].item()[:-1])  #not looking at curr_loss
-            curr_loss = val_loss_hist[-1]['total']
-            if curr_loss < best_loss:
-                torch.save(model.state_dict(), args.model_path)
-                print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
-                saved_epoch = epoch + 1
-
-
+        #save best model (metrics = validation loss)
+        if epoch == 0:
+            torch.save(model.state_dict(), args.model_path)
+            print ('\nModel saved')
+            saved_epoch = epoch + 1
         else:
-            raise ValueError('Wrong metric selected')
-    '''
-    if args.num_experiment != 0:
-        #print info on dataset, experiment and instance if performing a grid search
-        utilstring = 'dataset: ' + str(args.dataset) + ', exp: ' + str(args.num_experiment) + ', run: ' + str(args.num_run) + ', fold: ' + str(args.num_fold)
-        print ('')
-        print (utilstring)
-    '''
+            if args.save_model_metric == 'total_loss':
+                best_loss = min([i['total'] for i in val_loss_hist[:-1]])
+                #best_loss = min(val_loss_hist['total'].item()[:-1])  #not looking at curr_loss
+                curr_loss = val_loss_hist[-1]['total']
+                if curr_loss < best_loss:
+                    torch.save(model.state_dict(), args.model_path)
+                    print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
+                    saved_epoch = epoch + 1
 
-    if args.early_stopping and epoch >= args.patience+1:
-        patience_vec = [i['total'] for i in val_loss_hist[-args.patience+1:]]
-        #patience_vec = val_loss_hist[-args.patience+1:]
-        best_l = np.argmin(patience_vec)
-        if best_l == 0:
-            print ('Training early-stopped')
-            break
+
+            else:
+                raise ValueError('Wrong metric selected')
+        '''
+        if args.num_experiment != 0:
+            #print info on dataset, experiment and instance if performing a grid search
+            utilstring = 'dataset: ' + str(args.dataset) + ', exp: ' + str(args.num_experiment) + ', run: ' + str(args.num_run) + ', fold: ' + str(args.num_fold)
+            print ('')
+            print (utilstring)
+        '''
+
+        if args.early_stopping and epoch >= args.patience+1:
+            patience_vec = [i['total'] for i in val_loss_hist[-args.patience+1:]]
+            #patience_vec = val_loss_hist[-args.patience+1:]
+            best_l = np.argmin(patience_vec)
+            if best_l == 0:
+                print ('Training early-stopped')
+                break
 
 
 #COMPUTE
