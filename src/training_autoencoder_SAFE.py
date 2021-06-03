@@ -11,6 +11,7 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 from models import *
 from loss_emo import *
 import utility_functions as uf
+import tqdm
 
 parser = argparse.ArgumentParser()
 #saving parameters
