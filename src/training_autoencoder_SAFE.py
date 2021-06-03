@@ -228,8 +228,7 @@ for epoch in range(args.num_epochs):
     print ('\n')
     string = 'Epoch: [' + str(epoch+1) + '/' + str(args.num_epochs) + '] '
     #iterate batches
-    with tqdm(total=len(dataloader) // args.batch_size) as pbar, torch.no_grad():
-
+    with tqdm(total=len(tr_data) // args.batch_size) as pbar:
         for i, (sounds, truth) in enumerate(tr_data):
             optimizer.zero_grad()
             sounds = sounds.to(device)
@@ -248,10 +247,10 @@ for epoch in range(args.num_epochs):
             inv_perc = int(20 - perc - 1)
             loss_print_t = str(np.round(loss['total'].item(), decimals=5))
             #loss_print_t = str(np.round(loss.detach().item(), decimals=5))
-
-            string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
-            print ('\r', string_progress, end='')
-            del loss
+            pbar.update(1)
+            #string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
+            #print ('\r', string_progress, end='')
+            #del loss
 
         #create history
         train_batch_losses = []
