@@ -168,6 +168,8 @@ if args.normalize_predictors:
     validation_predictors = np.divide(validation_predictors, tr_max)
     test_predictors = np.divide(test_predictors, tr_max)
 
+print ("predictors range: "", np.min(training_predictors), np.max(training_predictors))
+
 
 #reshaping for cnn
 training_predictors = training_predictors.reshape(training_predictors.shape[0], 1, training_predictors.shape[1],training_predictors.shape[2])
