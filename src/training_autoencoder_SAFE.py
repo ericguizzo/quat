@@ -228,7 +228,7 @@ for epoch in range(args.num_epochs):
     print ('\n')
     string = 'Epoch: [' + str(epoch+1) + '/' + str(args.num_epochs) + '] '
     #iterate batches
-    with tqdm(total=len(tr_data // args.batch_size) as pbar:
+    with tqdm(total=len(tr_data) // args.batch_size) as pbar:
         for i, (sounds, truth) in enumerate(tr_data):
             optimizer.zero_grad()
             sounds = sounds.to(device)
