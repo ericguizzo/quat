@@ -11,7 +11,7 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 from models import *
 from loss_emo import *
 import utility_functions as uf
-import tqdm
+from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
 #saving parameters
@@ -228,7 +228,7 @@ for epoch in range(args.num_epochs):
     print ('\n')
     string = 'Epoch: [' + str(epoch+1) + '/' + str(args.num_epochs) + '] '
     #iterate batches
-    with tqdm(total=len(tr_dataset) // args.batch_size) as pbar:
+    with tqdm(total=len(tr_data // args.batch_size) as pbar:
         for i, (sounds, truth) in enumerate(tr_data):
             optimizer.zero_grad()
             sounds = sounds.to(device)
