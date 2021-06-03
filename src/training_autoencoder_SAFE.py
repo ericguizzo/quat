@@ -160,6 +160,8 @@ if args.normalize_predictors:
     validation_predictors = validation_predictors / validation_predictors.shape[-1]
     test_predictors = test_predictors / test_predictors.shape[-1]
 '''
+print ("Predictors range: ", np.min(training_predictors), np.max(training_predictors))
+
 if args.normalize_predictors:
     #normalize to 0 mean and 1 std
     tr_max = np.max(training_predictors)
