@@ -8,7 +8,7 @@ import numpy as np
 def emo_loss(input, recon, truth, v, a, d, beta):
     #split activation (sum quat channels)
 
-    recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1)
+    recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
     print ('CAZZOOOOOO', input.shape, recon.shape)
     recon_loss = F.binary_cross_entropy(recon, input)
     #print ('cazzo', v, truth.shape)
