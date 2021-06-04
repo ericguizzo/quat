@@ -52,7 +52,7 @@ parser.add_argument('--model_in_channels', type=int, default=1)
 parser.add_argument('--model_flattened_dim', type=int, default=32768)
 parser.add_argument('--model_latent_dim', type=int, default=1000)
 parser.add_argument('--model_verbose', type=str, default='False')
-parser.add_argument('--model_architecture', type=str, default='VGG13')
+parser.add_argument('--model_architecture', type=str, default='VGG16')
 parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
 
 #grid search parameters
