@@ -242,7 +242,7 @@ for epoch in range(args.num_epochs):
 
             loss['total'].backward(retain_graph=True)
             optimizer.step()
-            
+
             loss['total'] = loss['total'].detach()
             #print progress
             perc = int(i / len(tr_data) * 20)
@@ -267,6 +267,7 @@ for epoch in range(args.num_epochs):
 
             val_batch_losses.append(loss)
             pbar.update(1)
+
     #append to history and print
     train_epoch_loss = {'total':[], 'emo':[], 'recon':[],
                         'valence':[],'arousal':[], 'dominance':[]}
@@ -277,16 +278,17 @@ for epoch in range(args.num_epochs):
         for j in i:
             name = j
             value = i[j]
-            train_epoch_loss[name].append(value.item())
+            train_epoch_loss[name].append(value)
     for i in val_batch_losses:
         for j in i:
             name = j
             value = i[j]
-            val_epoch_loss[name].append(value.item())
+            val_epoch_loss[name].append(value)
 
     for i in train_epoch_loss:
         train_epoch_loss[i] = np.mean(train_epoch_loss[i])
         val_epoch_loss[i] = np.mean(val_epoch_loss[i])
+
     print ('\n EPOCH LOSSES:')
     print ('\n Training:')
     print (train_epoch_loss)
