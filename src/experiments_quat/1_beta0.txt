@@ -13,7 +13,7 @@
         "fast_test": "False"
       },
 
-  "1":{"comment_1": "beta 0", "comment_2": "no emo",
+  "1":{"comment_1": "beta_0", "comment_2": "no_emo",
        "loss_beta": 0
         }
 
