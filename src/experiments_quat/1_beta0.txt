@@ -14,7 +14,7 @@
       },
 
   "1":{"comment_1": "beta 0", "comment_2": "no emo",
-       "model_beta": 0,
+       "model_beta": "0",
         },
   "2":{"comment_1": "pretrain on ", "comment_2": "bla"
       },
