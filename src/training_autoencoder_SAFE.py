@@ -241,15 +241,15 @@ for epoch in range(args.num_epochs):
             loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
 
             loss['total'].backward(retain_graph=True)
-
             optimizer.step()
-
+            
+            loss['total'] = loss['total'].detach()
             #print progress
             perc = int(i / len(tr_data) * 20)
             inv_perc = int(20 - perc - 1)
             loss_print_t = str(np.round(loss['total'].detach().item(), decimals=5))
             #loss_print_t = str(np.round(loss.detach().item(), decimals=5))
-            train_batch_losses.append(loss.detach())
+            train_batch_losses.append(loss)
             pbar.update(1)
             #string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
             #print ('\r', string_progress, end='')
