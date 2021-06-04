@@ -279,13 +279,13 @@ for epoch in range(args.num_epochs):
         for j in i:
             name = j
             value = i[j]
-            print (value)
+            print (name, value)
             train_epoch_loss[name].append(value)
     for i in val_batch_losses:
         for j in i:
             name = j
             value = i[j]
-            print (value)
+            print (name, value)
             val_epoch_loss[name].append(value)
 
     for i in train_epoch_loss:
