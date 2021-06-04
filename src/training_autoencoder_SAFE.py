@@ -263,7 +263,7 @@ for epoch in range(args.num_epochs):
             truth = truth.to(device)
 
             recon, v, a, d = model(sounds)
-            #loss['total'] = loss['total'].item()
+            loss['total'] = loss['total'].cpu().numpy()
             loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
 
             val_batch_losses.append(loss)
