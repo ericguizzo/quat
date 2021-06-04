@@ -11,7 +11,7 @@
         "batch_size": 4,
         "model_name": "r2he",
         "fast_test": "False",
-        "patience": 100,
+        "patience": 100
       },
 
   "1":{"comment_1": "beta_0", "comment_2": "no_emo",
