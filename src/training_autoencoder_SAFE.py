@@ -73,7 +73,7 @@ args.normalize_predictors = eval(args.normalize_predictors)
 args.use_cuda = eval(args.use_cuda)
 args.early_stopping = eval(args.early_stopping)
 args.fixed_seed = eval(args.fixed_seed)
-args.model_verbose = eval(args.verbose)
+args.model_verbose = eval(args.model_verbose)
 
 if args.use_cuda:
     device = 'cuda:' + str(args.gpu_id)
