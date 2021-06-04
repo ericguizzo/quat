@@ -161,8 +161,8 @@ def main():
         predictors_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap_randsplit' + appendix + '_aug' + str(NUM_AUG_SAMPLES) + '_predictors.npy')
         target_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap_randsplit' + appendix + '_aug' + str(NUM_AUG_SAMPLES) + '_target.npy')
     else:
-        predictors_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap_randsplit' + appendix + '_predictors.npy')
-        target_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap_randsplit' + appendix + '_target.npy')
+        predictors_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap_randsplit' + '_predictors.npy')
+        target_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap_randsplit' + '_target.npy')
     index = 1  #index for progress bar
 
     for i in sounds_list:

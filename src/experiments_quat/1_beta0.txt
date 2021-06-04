@@ -6,11 +6,11 @@
         "dataset": "iemocap",
         "num_experiment": 0,
         "num_folds": 1,
-        "num_epochs": 1,
+        "num_epochs": 2000,
         "learning_rate": 0.000001,
         "batch_size": 5,
         "model_name": "r2he",
-        "fast_test": "True"
+        "fast_test": "False"
       },
 
   "1":{"comment_1": "beta_0", "comment_2": "no_emo",
