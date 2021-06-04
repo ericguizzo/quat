@@ -243,11 +243,11 @@ for epoch in range(args.num_epochs):
             loss['total'].backward(retain_graph=True)
             optimizer.step()
 
-            loss['total'] = loss['total'].detach()
+            loss['total'] = loss['total'].detach().item()
             #print progress
             perc = int(i / len(tr_data) * 20)
             inv_perc = int(20 - perc - 1)
-            loss_print_t = str(np.round(loss['total'].detach().item(), decimals=5))
+            #loss_print_t = str(np.round(loss['total'], decimals=5))
             #loss_print_t = str(np.round(loss.detach().item(), decimals=5))
             train_batch_losses.append(loss)
             pbar.update(1)
