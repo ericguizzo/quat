@@ -206,21 +206,24 @@ val_loss_hist = []
 loading_time = float(time.perf_counter()) - float(loading_start)
 print ('\nLoading time: ' + str(np.round(float(loading_time), decimals=1)) + ' seconds')
 
-def evaluate(model, device, criterion, dataloader):
+def evaluate(model, device, loss_function, dataloader):
     #compute loss without backprop
     model.eval()
-    test_loss = 0.
+    temp_loss = []
     with tqdm(total=len(dataloader) // args.batch_size) as pbar, torch.no_grad():
-        for example_num, (x, target) in enumerate(dataloader):
-            target = target.to(device)
-            x = x.to(device)
-            outputs, v, a, d = model(x)
-            loss = criterion(outputs, target)
+        #validation data
+        for i, (sounds, truth) in enumerate(val_data):
+            sounds = sounds.to(device)
+            truth = truth.to(device)
 
-            test_loss += (1. / float(example_num + 1)) * (loss - test_loss)
-            pbar.set_description("Current loss: {:.4f}".format(test_loss))
+            recon, v, a, d = model(sounds)
+            loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
+            loss['total'] = loss['total'].cpu().numpy()
+
+            temp_loss.append(loss)
             pbar.update(1)
-    return test_loss
+
+    return temp_loss
 
 for epoch in range(args.num_epochs):
     epoch_start = time.perf_counter()
@@ -243,7 +246,7 @@ for epoch in range(args.num_epochs):
             loss['total'].backward(retain_graph=True)
             optimizer.step()
 
-            loss['total'] = loss['total'].detach().item()
+            loss['total'] = loss['total'].detach().cpu().item()
             #print progress
             perc = int(i / len(tr_data) * 20)
             inv_perc = int(20 - perc - 1)
@@ -263,8 +266,8 @@ for epoch in range(args.num_epochs):
             truth = truth.to(device)
 
             recon, v, a, d = model(sounds)
-            loss['total'] = loss['total'].cpu().numpy()
             loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
+            loss['total'] = loss['total'].cpu().numpy()
 
             val_batch_losses.append(loss)
             pbar.update(1)
