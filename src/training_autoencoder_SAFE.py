@@ -143,7 +143,6 @@ if args.normalize_predictors:
 
 print ("Predictors range: ", np.min(training_predictors), np.max(training_predictors))
 
-
 #reshaping for cnn
 training_predictors = training_predictors.reshape(training_predictors.shape[0], 1, training_predictors.shape[1],training_predictors.shape[2])
 validation_predictors = validation_predictors.reshape(validation_predictors.shape[0], 1, validation_predictors.shape[1], validation_predictors.shape[2])
@@ -188,8 +187,6 @@ if args.model_name == 'r2he':
                                       verbose=args.model_verbose)
 
 model = model.to(device)
-
-#print (model)
 
 #compute number of parameters
 model_params = sum([np.prod(p.size()) for p in model.parameters()])
@@ -238,15 +235,14 @@ def mean_batch_loss(batch_loss):
         d[i] = np.mean(d[i])
     return d
 
+#training loop
 for epoch in range(args.num_epochs):
     epoch_start = time.perf_counter()
-    model.train()
     print ('\n')
     print ('Epoch: [' + str(epoch+1) + '/' + str(args.num_epochs) + '] ')
-    #history
     train_batch_losses = []
-    val_batch_losses = []
-
+    model.train()
+    #train data
     with tqdm(total=len(tr_data)) as pbar:
         for i, (sounds, truth) in enumerate(tr_data):
             optimizer.zero_grad()
@@ -255,45 +251,17 @@ for epoch in range(args.num_epochs):
 
             recon, v, a, d = model(sounds)
             loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
-
             loss['total'].backward(retain_graph=True)
             optimizer.step()
 
             loss['total'] = loss['total'].detach().cpu().item()
-            #print progress
-            perc = int(i / len(tr_data) * 20)
-            inv_perc = int(20 - perc - 1)
-            #loss_print_t = str(np.round(loss['total'], decimals=5))
-            #loss_print_t = str(np.round(loss.detach().item(), decimals=5))
             train_batch_losses.append(loss)
             pbar.update(1)
-            #string_progress = string + '[' + '=' * perc + '>' + '.' * inv_perc + ']' + ' loss: ' + loss_print_t
-            #print ('\r', string_progress, end='')
             #del loss
 
+    #validation data
     val_batch_losses = evaluate(model, device, loss_function, val_data)
-    '''
-    #append to history and print
-    train_epoch_loss = {'total':[], 'emo':[], 'recon':[],
-                        'valence':[],'arousal':[], 'dominance':[]}
-    val_epoch_loss = {'total':[], 'emo':[], 'recon':[],
-                      'valence':[],'arousal':[], 'dominance':[]}
 
-    for i in train_batch_losses:
-        for j in i:
-            name = j
-            value = i[j]
-            train_epoch_loss[name].append(value)
-    for i in val_batch_losses:
-        for j in i:
-            name = j
-            value = i[j]
-            val_epoch_loss[name].append(value)
-
-    for i in train_epoch_loss:
-        train_epoch_loss[i] = np.mean(train_epoch_loss[i])
-        val_epoch_loss[i] = np.mean(val_epoch_loss[i])
-    '''
     train_epoch_loss = mean_batch_loss(train_batch_losses)
     val_epoch_loss = mean_batch_loss(val_batch_losses)
 
@@ -347,7 +315,9 @@ for epoch in range(args.num_epochs):
             break
 
 
-#COMPUTE
+#COMPUTE METRICS WITH BEST SAVED MODEL
+print ('\nComputing metrics with best saved model')
+
 model.load_state_dict(torch.load(args.model_path), strict=False)  #load best model
 
 train_batch_losses = evaluate(model, device, loss_function, tr_data)
@@ -357,39 +327,6 @@ test_batch_losses = evaluate(model, device, loss_function, test_data)
 train_loss = mean_batch_loss(train_batch_losses)
 val_loss = mean_batch_loss(val_batch_losses)
 test_loss = mean_batch_loss(test_batch_losses)
-'''
-#compute final mean of batch losses for train, validation and test set
-train_loss = {'total':[], 'emo':[], 'recon':[],
-              'valence':[], 'arousal':[], 'dominance':[]}
-val_loss = {'total':[], 'emo':[], 'recon':[],
-            'valence':[],'arousal':[], 'dominance':[]}
-test_loss = {'total':[], 'emo':[], 'recon':[],
-             'valence':[],'arousal':[], 'dominance':[]}
-
-for i in train_batch_losses:
-    for j in i:
-        name = j
-        value = i[j]
-        train_loss[name].append(value.item())
-for i in val_batch_losses:
-    for j in i:
-        name = j
-        value = i[j]
-        val_loss[name].append(value.item())
-for i in test_batch_losses:
-    for j in i:
-        name = j
-        value = i[j]
-        test_loss[name].append(value.item())
-
-for i in train_loss:
-    train_loss[i] = np.mean(train_loss[i])
-    val_loss[i] = np.mean(val_loss[i])
-    test_loss[i] = np.mean(test_loss[i])
-'''
-
-
-
 
 #save results in temp dict file
 temp_results = {}
@@ -422,7 +359,6 @@ temp_results['test_loss_dominance'] = test_loss['dominance']
 temp_results['train_loss_hist'] = train_loss_hist
 temp_results['val_loss_hist'] = train_loss_hist
 temp_results['parameters'] = vars(args)
-
 
 np.save(args.results_path, temp_results)
 
