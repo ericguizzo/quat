@@ -258,19 +258,7 @@ for epoch in range(args.num_epochs):
             #print ('\r', string_progress, end='')
             #del loss
 
-    model.eval()
-    with tqdm(total=len(val_data) // args.batch_size) as pbar, torch.no_grad():
-        #validation data
-        for i, (sounds, truth) in enumerate(val_data):
-            sounds = sounds.to(device)
-            truth = truth.to(device)
-
-            recon, v, a, d = model(sounds)
-            loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
-            loss['total'] = loss['total'].cpu().numpy()
-
-            val_batch_losses.append(loss)
-            pbar.update(1)
+    val_batch_losses = evaluate(model, device, loss_function, val_data)
 
     #append to history and print
     train_epoch_loss = {'total':[], 'emo':[], 'recon':[],
