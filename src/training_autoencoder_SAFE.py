@@ -183,6 +183,7 @@ val_data = utils.DataLoader(val_dataset, args.batch_size, shuffle=False, pin_mem
 test_data = utils.DataLoader(test_dataset, args.batch_size, shuffle=False, pin_memory=True)  #no batch here!!
 
 #load model
+print ('\nMoving model to device')
 if args.model_name == 'r2he':
     model = locals()[args.model_name](latent_dim=args.model_latent_dim)
 
@@ -225,6 +226,7 @@ def evaluate(model, device, loss_function, dataloader):
     return temp_loss
 
 def mean_batch_loss(batch_loss):
+    #compute mean of each loss item
     d = {'total':[], 'emo':[], 'recon':[],
                   'valence':[], 'arousal':[], 'dominance':[]}
     for i in batch_loss:
