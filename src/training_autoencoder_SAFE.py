@@ -54,7 +54,7 @@ parser.add_argument('--model_latent_dim', type=int, default=1000)
 parser.add_argument('--verbose', type=str, default='False')
 parser.add_argument('--model_quat', type=str, default='False')
 parser.add_argument('--model_batchnorm', type=str, default='True')
-parser.add_argument('--model_architecture', type=str, default='VGG16')
+parser.add_argument('--model_architecture', type=str, default='VGG13')
 parser.add_argument('--classifier_dropout', type=float, default=0.5)
 
 #grid search parameters
