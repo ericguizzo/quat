@@ -231,7 +231,7 @@ def mean_batch_loss(batch_loss):
         for j in i:
             name = j
             value = i[j]
-            d[name].append(value.item())
+            d[name].append(value)
     for i in d:
         d[i] = np.mean(d[i])
     return d
