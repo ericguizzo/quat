@@ -34,7 +34,7 @@ parser.add_argument('--gpu_id', type=int, default=1)
 parser.add_argument('--use_cuda', type=str, default='True')
 parser.add_argument('--num_epochs', type=int, default=2)
 parser.add_argument('--batch_size', type=int, default=5)
-parser.add_argument('--learning_rate', type=float, default=0.00005)
+parser.add_argument('--learning_rate', type=float, default=0.00001)
 parser.add_argument('--regularization_lambda', type=float, default=0.)
 parser.add_argument('--early_stopping', type=str, default='True')
 parser.add_argument('--save_model_metric', type=str, default='total_loss')
@@ -211,7 +211,7 @@ def evaluate(model, device, loss_function, dataloader):
     #compute loss without backprop
     model.eval()
     temp_loss = []
-    with tqdm(total=len(dataloader) // args.batch_size) as pbar, torch.no_grad():
+    with tqdm(total=len(dataloader)) as pbar, torch.no_grad():
         #validation data
         for i, (sounds, truth) in enumerate(val_data):
             sounds = sounds.to(device)
@@ -242,12 +242,12 @@ for epoch in range(args.num_epochs):
     epoch_start = time.perf_counter()
     model.train()
     print ('\n')
-    string = 'Epoch: [' + str(epoch+1) + '/' + str(args.num_epochs) + '] '
+    print ('Epoch: [' + str(epoch+1) + '/' + str(args.num_epochs) + '] ')
     #history
     train_batch_losses = []
     val_batch_losses = []
 
-    with tqdm(total=len(tr_data) // args.batch_size) as pbar:
+    with tqdm(total=len(tr_data)) as pbar:
         for i, (sounds, truth) in enumerate(tr_data):
             optimizer.zero_grad()
             sounds = sounds.to(device)
