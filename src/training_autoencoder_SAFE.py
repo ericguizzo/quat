@@ -222,8 +222,19 @@ def evaluate(model, device, loss_function, dataloader):
 
             temp_loss.append(loss)
             pbar.update(1)
-
     return temp_loss
+
+def mean_batch_loss(batch_loss):
+    d = {'total':[], 'emo':[], 'recon':[],
+                  'valence':[], 'arousal':[], 'dominance':[]}
+    for i in batch_loss:
+        for j in i:
+            name = j
+            value = i[j]
+            d[name].append(value.item())
+    for i in d:
+        d[i] = np.mean(d[i])
+    return d
 
 for epoch in range(args.num_epochs):
     epoch_start = time.perf_counter()
@@ -259,7 +270,7 @@ for epoch in range(args.num_epochs):
             #del loss
 
     val_batch_losses = evaluate(model, device, loss_function, val_data)
-
+    '''
     #append to history and print
     train_epoch_loss = {'total':[], 'emo':[], 'recon':[],
                         'valence':[],'arousal':[], 'dominance':[]}
@@ -280,6 +291,9 @@ for epoch in range(args.num_epochs):
     for i in train_epoch_loss:
         train_epoch_loss[i] = np.mean(train_epoch_loss[i])
         val_epoch_loss[i] = np.mean(val_epoch_loss[i])
+    '''
+    train_epoch_loss = mean_batch_loss(train_batch_losses)
+    val_epoch_loss = mean_batch_loss(val_batch_losses)
 
     print ('\n EPOCH LOSSES:')
     print ('\n Training:')
@@ -333,42 +347,15 @@ for epoch in range(args.num_epochs):
 
 #COMPUTE
 model.load_state_dict(torch.load(args.model_path), strict=False)  #load best model
-train_batch_losses = []
-val_batch_lesses = []
-test_batch_losses = []
 
-model.eval()
-with torch.no_grad():
-    #TRAINING DATA
-    for i, (sounds, truth) in enumerate(tr_data):
-        sounds = sounds.to(device)
-        truth = truth.to(device)
+train_batch_losses = evaluate(model, device, loss_function, tr_data)
+val_batch_losses = evaluate(model, device, loss_function, val_data)
+test_batch_losses = evaluate(model, device, loss_function, test_data)
 
-        recon, v, a, d = model(sounds)
-        loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
-
-        train_batch_losses.append(loss)
-
-    #VALIDATION DATA
-    for i, (sounds, truth) in enumerate(val_data):
-        sounds = sounds.to(device)
-        truth = truth.to(device)
-
-        recon, v, a, d = model(sounds)
-        loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
-
-        val_batch_losses.append(loss)
-
-    #TEST DATA
-    for i, (sounds, truth) in enumerate(test_data):
-        sounds = sounds.to(device)
-        truth = truth.to(device)
-
-        recon, v, a, d = model(sounds)
-        loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
-
-        test_batch_losses.append(loss)
-
+train_loss = mean_batch_loss(train_batch_losses)
+val_loss = mean_batch_loss(val_batch_losses)
+train_loss = mean_batch_loss(test_batch_losses)
+'''
 #compute final mean of batch losses for train, validation and test set
 train_loss = {'total':[], 'emo':[], 'recon':[],
               'valence':[], 'arousal':[], 'dominance':[]}
@@ -376,6 +363,7 @@ val_loss = {'total':[], 'emo':[], 'recon':[],
             'valence':[],'arousal':[], 'dominance':[]}
 test_loss = {'total':[], 'emo':[], 'recon':[],
              'valence':[],'arousal':[], 'dominance':[]}
+
 for i in train_batch_losses:
     for j in i:
         name = j
@@ -396,6 +384,9 @@ for i in train_loss:
     train_loss[i] = np.mean(train_loss[i])
     val_loss[i] = np.mean(val_loss[i])
     test_loss[i] = np.mean(test_loss[i])
+'''
+
+
 
 
 #save results in temp dict file
