@@ -32,7 +32,7 @@ parser.add_argument('--fast_test', type=str, default='True')
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
 parser.add_argument('--use_cuda', type=str, default='True')
-parser.add_argument('--num_epochs', type=int, default=200)
+parser.add_argument('--num_epochs', type=int, default=2)
 parser.add_argument('--batch_size', type=int, default=5)
 parser.add_argument('--learning_rate', type=float, default=0.00005)
 parser.add_argument('--regularization_lambda', type=float, default=0.)
@@ -270,13 +270,11 @@ for epoch in range(args.num_epochs):
         for j in i:
             name = j
             value = i[j]
-            print (name, value)
             train_epoch_loss[name].append(value)
     for i in val_batch_losses:
         for j in i:
             name = j
             value = i[j]
-            print (name, value)
             val_epoch_loss[name].append(value)
 
     for i in train_epoch_loss:
@@ -288,7 +286,6 @@ for epoch in range(args.num_epochs):
     print (train_epoch_loss)
     print ('\n Validation:')
     print (val_epoch_loss)
-
 
     train_loss_hist.append(train_epoch_loss)
     val_loss_hist.append(val_epoch_loss)
