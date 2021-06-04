@@ -356,7 +356,7 @@ test_batch_losses = evaluate(model, device, loss_function, test_data)
 
 train_loss = mean_batch_loss(train_batch_losses)
 val_loss = mean_batch_loss(val_batch_losses)
-train_loss = mean_batch_loss(test_batch_losses)
+test_loss = mean_batch_loss(test_batch_losses)
 '''
 #compute final mean of batch losses for train, validation and test set
 train_loss = {'total':[], 'emo':[], 'recon':[],
