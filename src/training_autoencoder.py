@@ -192,6 +192,12 @@ model = model.to(device)
 model_params = sum([np.prod(p.size()) for p in model.parameters()])
 print ('Total paramters: ' + str(model_params))
 
+#load pretrained model if desired
+if args.load_pretrained is not None:
+    print ('Loading pretrained model: ' + args.load_pretrained)
+    model.load_state_dict(torch.load(args.load_pretrained), strict=False)  #load best model
+
+
 #define optimizer and loss
 optimizer = optim.Adam(model.parameters(), lr=args.learning_rate,
                               weight_decay=args.regularization_lambda)
