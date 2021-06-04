@@ -8,7 +8,7 @@
         "num_folds": 1,
         "num_epochs": 2000,
         "learning_rate": 0.000001,
-        "batch_size": 5,
+        "batch_size": 4,
         "model_name": "r2he",
         "fast_test": "False"
       },

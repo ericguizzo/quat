@@ -263,7 +263,7 @@ for epoch in range(args.num_epochs):
             loss['total'] = loss['total'].detach().cpu().item()
             train_batch_losses.append(loss)
             pbar.update(1)
-            #del loss
+            del loss
 
     #validation data
     val_batch_losses = evaluate(model, device, loss_function, val_data)
