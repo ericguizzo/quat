@@ -15,12 +15,10 @@ class r2he(nn.Module):
     def __init__(self,
                 latent_dim=4096,
                 in_channels=1,
-                verbose=False,
-                batchnorm=True,
                 architecture='VGG16',
                 classifier_dropout=0.5,
-                quat=True,
-                flattened_dim=32768
+                flattened_dim=32768,
+                verbose=False,
                 ):
         super(r2he, self).__init__()
 

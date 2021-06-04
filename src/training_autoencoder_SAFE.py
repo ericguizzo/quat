@@ -48,14 +48,12 @@ parser.add_argument('--loss_function', type=str, default='emo_loss')
 parser.add_argument('--loss_beta', type=float, default=1.)
 #model parameters
 parser.add_argument('--model_name', type=str, default='r2he')
-parser.add_argument('--model_cnn_structure', type=str, default='[32, 64, 128, 256, 512]')
-parser.add_argument('--model_classifier_structure', type=str, default='[2000,1000,500,100]')
-parser.add_argument('--model_latent_dim', type=int, default=1000)
-parser.add_argument('--verbose', type=str, default='False')
-parser.add_argument('--model_quat', type=str, default='False')
-parser.add_argument('--model_batchnorm', type=str, default='True')
+parser.add_argument('--model_in_channels', type=int, default=1)
+parser.add_argument('--model_flattened_dim', type=int, default=32768)
+parser.add_argument('--model_latent_dim', type=int, default=4096)
+parser.add_argument('--model_verbose', type=str, default='False')
 parser.add_argument('--model_architecture', type=str, default='VGG13')
-parser.add_argument('--classifier_dropout', type=float, default=0.5)
+parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
 
 #grid search parameters
 #SPECIFY ONLY IF PERFORMING A GRID SEARCH WITH exp_instance.py SCRIPT
@@ -65,7 +63,6 @@ parser.add_argument('--comment_2', type=str, default='none')
 parser.add_argument('--experiment_description', type=str, default='none')
 parser.add_argument('--dataset', type=str, default='none')
 parser.add_argument('--num_experiment', type=int, default=0)
-
 
 #eval string args
 args = parser.parse_args()
@@ -185,7 +182,12 @@ test_data = utils.DataLoader(test_dataset, args.batch_size, shuffle=False, pin_m
 #load model
 print ('\nMoving model to device')
 if args.model_name == 'r2he':
-    model = locals()[args.model_name](latent_dim=args.model_latent_dim)
+    model = locals()[args.model_name](latent_dim=args.model_latent_dim,
+                                      in_channels=args.model_in_channels,
+                                      architecture=args.model_architecture,
+                                      classifier_dropout=args.model_classifier_dropout,
+                                      flattened_dim=args.model_flattened_dim,
+                                      verbose=args.model_verbose)
 
 model = model.to(device)
 
