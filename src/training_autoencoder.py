@@ -216,7 +216,7 @@ def evaluate(model, device, loss_function, dataloader):
     temp_loss = []
     with tqdm(total=len(dataloader)) as pbar, torch.no_grad():
         #validation data
-        for i, (sounds, truth) in enumerate(val_data):
+        for i, (sounds, truth) in enumerate(dataloader):
             sounds = sounds.to(device)
             truth = truth.to(device)
 
@@ -363,7 +363,7 @@ temp_results['val_loss_dominance'] = val_loss['dominance']
 temp_results['test_loss_dominance'] = test_loss['dominance']
 
 temp_results['train_loss_hist'] = train_loss_hist
-temp_results['val_loss_hist'] = train_loss_hist
+temp_results['val_loss_hist'] = val_loss_hist
 temp_results['parameters'] = vars(args)
 
 np.save(args.results_path, temp_results)
