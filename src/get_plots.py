@@ -9,8 +9,7 @@ import argparse
 import os
 import utility_functions as uf
 parser = argparse.ArgumentParser()
-parser.add_argument('--model_path', type=str, default='../new_experiments/experiment_1_beta0.txt/models/model_xval_iemocap_exp1_beta0.txt_run1_fold0')
-parser.add_argument('--model_name', type=str, default='r2he')
+
 parser.add_argument('--datapoints_list', type=str, default='[1,2,3,4,5]')
 parser.add_argument('--output_path', type=str, default='../properties/NEW_experiments')
 parser.add_argument('--use_cuda', type=str, default='True')
@@ -32,6 +31,16 @@ parser.add_argument('--fast_test', type=str, default='True')
 parser.add_argument('--num_folds', type=int, default=1)
 parser.add_argument('--num_fold', type=int, default=0)
 parser.add_argument('--sample_rate', type=int, default=16000)
+
+#model parameters
+parser.add_argument('--model_path', type=str, default='../new_experiments/experiment_1_beta0.txt/models/model_xval_iemocap_exp1_beta0.txt_run1_fold0')
+parser.add_argument('--model_name', type=str, default='r2he')
+parser.add_argument('--model_in_channels', type=int, default=1)
+parser.add_argument('--model_flattened_dim', type=int, default=32768)
+parser.add_argument('--model_latent_dim', type=int, default=1000)
+parser.add_argument('--model_verbose', type=str, default='False')
+parser.add_argument('--model_architecture', type=str, default='VGG16')
+parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
 
 args = parser.parse_args()
 
