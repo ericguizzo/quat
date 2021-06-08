@@ -14,7 +14,7 @@
         "patience": 100
       },
 
-  "1":{"comment_1": "beta_0", "comment_2": "no_emo",
+  "1":{"comment_1": "beta_0", "comment_2": "no_batchnorm_fasttest",
        "loss_beta": 0
         }
 
