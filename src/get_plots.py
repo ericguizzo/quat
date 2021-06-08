@@ -119,7 +119,7 @@ if __name__ == '__main__':
     with tqdm(total=len(tr_data)) as pbar:
         for i, (sounds, truth) in enumerate(tr_data), torch.no_grad():
             if i in args.datapoints_list:
-                print ('AJAJAJAJAJ', x.shape, truth.shape)
+                print ('AJAJAJAJAJ', sounds.shape, truth.shape)
                 #x = x.to(device)
 
 
