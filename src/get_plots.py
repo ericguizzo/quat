@@ -55,11 +55,12 @@ args.fase_test = eval(args.fast_test)
 def gen_plot(sounds, pred, save_path, args):
     #pred = pred.cpu().numpy()
     sounds = sounds[0].cpu().numpy()
-    r,v,a,d = pred
-    r = r[0].cpu().numpy()
-    v = v[0].cpu().numpy()
-    a = a[0].cpu().numpy()
-    d = d[0].cpu().numpy()
+    pred,_,_,_ = pred
+    pred = pred[0].cpu().numpy().squeeze()
+    r = pred[0]
+    v = pred[1]
+    a = pred[2]
+    d = pred[3]
 
     print ('AAAIFIEOEJFN', r.shape, v.shape, a.shape, d.shape)
 
