@@ -235,13 +235,13 @@ class r2he(nn.Module):
         #valence = self.classifier_valence(x_v)
         #arousal = self.classifier_valence(x_a)
         #dominance = self.classifier_valence(x_d)
-
+        '''
         if self.verbose:
             print('output x: ', x.shape)
             print('output v: ', valence.shape)
             print('output a: ', arousal.shape)
             print('output d: ', dominance.shape)
-
+        '''
         return x
 
 
