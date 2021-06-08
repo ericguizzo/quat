@@ -7,6 +7,7 @@ import numpy as np
 from models import *
 import argparse
 import os
+import tqdm
 import utility_functions as uf
 parser = argparse.ArgumentParser()
 
