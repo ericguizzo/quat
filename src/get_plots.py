@@ -98,6 +98,13 @@ if __name__ == '__main__':
     #load data loaders
     tr_data, val_data, test_data = uf.load_datasets(args)
 
+    if args.use_set == 'training':
+        dataloader = tr_data
+    elif args.use_set == 'validation':
+        dataloader = val_data
+    elif args.use_set == 'test':
+        dataloader = test_data
+
     #load model
     print ('\nMoving model to device')
     if args.model_name == 'r2he':
@@ -117,21 +124,20 @@ if __name__ == '__main__':
 
     #iterate batches
     model.eval()
-    with tqdm(total=len(args.datapoints_list)) as pbar:
-        for i, (sounds, truth) in enumerate(tr_data), torch.no_grad():
+    with tqdm(total=len(args.datapoints_list)) as pbar, torch.no_grad():
+        for i, (sounds, truth) in enumerate(dataloader):
             if i in args.datapoints_list:
                 print ('AJAJAJAJAJ', sounds.shape, truth.shape)
                 sounds = sounds.to(device)
-                truth = truth.to(device)
+                #truth = truth.to(device)
 
                 pbar.update(1)
 
-        '''
-        print ('shapes')
-        curr_path = os.path.join(args.output_path, str(i))
-        if not os.path.exists(curr_path):
-            os.makedirs(curr_path)
-        print ('    Processing: ', str(i))
+            '''
+            curr_path = os.path.join(args.output_path, str(i))
+            if not os.path.exists(curr_path):
+                os.makedirs(curr_path)
+            print ('    Processing: ', str(i))
 
-        gen_plot(pred, truth)
-        '''
+            gen_plot(pred, truth)
+            '''
