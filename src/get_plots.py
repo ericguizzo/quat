@@ -33,8 +33,9 @@ parser.add_argument('--num_folds', type=int, default=1)
 parser.add_argument('--num_fold', type=int, default=0)
 parser.add_argument('--sample_rate', type=int, default=16000)
 #model parameters
+'../new_experiments/experiment_4_beta0.txt/models/model_xval_iemocap_exp4_beta0.txt_run1_fold0'
 #'../new_experiments/experiment_3_beta0.txt/models/model_xval_iemocap_exp3_beta0.txt_run1_fold0'
-parser.add_argument('--model_path', type=str, default='../new_experiments/experiment_3_beta0.txt/models/model_xval_iemocap_exp3_beta0.txt_run1_fold0')
+parser.add_argument('--model_path', type=str, default='../new_experiments/experiment_4_beta0.txt/models/model_xval_iemocap_exp4_beta0.txt_run1_fold0')
 parser.add_argument('--model_name', type=str, default='r2he')
 parser.add_argument('--model_in_channels', type=int, default=1)
 parser.add_argument('--model_flattened_dim', type=int, default=32768)
