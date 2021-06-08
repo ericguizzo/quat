@@ -114,14 +114,13 @@ if __name__ == '__main__':
     #load pretrained model if desired
     model.load_state_dict(torch.load(args.model_path), strict=False)  #load best model
 
-
-    for i in args.datapoints_list:
-        #get autoencoder's outputs
-        (x, truth) = test_data[i]
-        print ('AJAJAJAJAJ', x.shape, truth.shape)
-        '''
-        with torch.no_grad():
-            x = x.to(device)
+    #iterate batches
+    model.eval()
+    with tqdm(total=len(tr_data)) as pbar:
+        for i, (sounds, truth) in enumerate(tr_data), torch.no_grad():
+            if i in args.datapoints_list:
+                print ('AJAJAJAJAJ', x.shape, truth.shape)
+                #x = x.to(device)
 
 
 
