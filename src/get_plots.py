@@ -33,9 +33,10 @@ parser.add_argument('--num_folds', type=int, default=1)
 parser.add_argument('--num_fold', type=int, default=0)
 parser.add_argument('--sample_rate', type=int, default=16000)
 #model parameters
-'../new_experiments/experiment_4_beta0.txt/models/model_xval_iemocap_exp4_beta0.txt_run1_fold0'
+#'../new_experiments/experiment_6_beta0_noquat.txt/models/model_xval_iemocap_exp6_beta0_noquat.txt_run1_fold0'
+#'../new_experiments/experiment_4_beta0.txt/models/model_xval_iemocap_exp4_beta0.txt_run1_fold0'
 #'../new_experiments/experiment_3_beta0.txt/models/model_xval_iemocap_exp3_beta0.txt_run1_fold0'
-parser.add_argument('--model_path', type=str, default='../new_experiments/experiment_4_beta0.txt/models/model_xval_iemocap_exp4_beta0.txt_run1_fold0')
+parser.add_argument('--model_path', type=str, default='../new_experiments/experiment_6_beta0_noquat.txt/models/model_xval_iemocap_exp6_beta0_noquat.txt_run1_fold0')
 parser.add_argument('--model_name', type=str, default='r2he')
 parser.add_argument('--model_quat', type=str, default='True')
 parser.add_argument('--model_in_channels', type=int, default=1)
@@ -63,10 +64,18 @@ def gen_plot(sounds, pred, sound_id, args):
 
     pred,_,_,_ = pred
     pred = pred[0].cpu().numpy().squeeze()
-    r = pred[0]
-    v = pred[1]
-    a = pred[2]
-    d = pred[3]
+
+    if len(pred.shape0 == 3:
+        r = pred[0]
+        v = pred[1]
+        a = pred[2]
+        d = pred[3]
+    else:
+        r = pred
+        v = pred
+        a = pred
+        d = pred
+
     print ('ajajajajaj', sounds.shape, pred.shape)
     recon = np.sum(pred, axis=0)
     #r = np.flip(r.T,-1)
