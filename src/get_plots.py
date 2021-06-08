@@ -11,12 +11,11 @@ import utility_functions as uf
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_12_simple_autoencoder.txt/models/model_xval_iemocap_exp12_simple_autoencoder.txt_run1_fold0')
-#parser.add_argument('--model_path', type=str, default='../beta_exp/experiment_5_beta_vgg_higherbatch.txt/models/model_xval_iemocap_exp5_beta_vgg_higherbatch.txt_run1_fold0')
-
+parser.add_argument('--model_name', type=str, default='rh2e')
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
 parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy')
 parser.add_argument('--datapoints_list', type=str, default='[1,2,3,4,5]')
-parser.add_argument('--output_path', type=str, default='../properties/emo_ae_1')
+parser.add_argument('--output_path', type=str, default='../properties/NEW_experiments')
 parser.add_argument('--use_cuda', type=str, default='True')
 parser.add_argument('--gpu_id', type=int, default=0)
 parser.add_argument('--sample_rate', type=int, default=16000)
@@ -36,7 +35,6 @@ def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
     v = (np.flip(v.T,-1)/np.max(v))**exponent
     a = (np.flip(a.T,-1)/np.max(a))**exponent
     d = (np.flip(d.T,-1)/np.max(d))**exponent
-
 
     plt.figure(1)
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
@@ -63,72 +61,9 @@ def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
     plt.savefig(fig_name, format = format, dpi=300)
     #plt.show()
 
-def gen_sounds(o, r, v, a, d, sound_id,
-               curr_path, sr=args.sample_rate, n_iter=100):
-    pad = np.zeros(shape=[512,129])
-    pad [:,:128] = o
-    o = pad * pad.shape[-1]
-    pad = np.zeros(shape=[512,129])
-    pad [:,:128] = r
-    r = pad * pad.shape[-1]
-    pad = np.zeros(shape=[512,129])
-    pad [:,:128] = v
-    v = pad * pad.shape[-1]
-    pad = np.zeros(shape=[512,129])
-    pad [:,:128] = a
-    a = pad * pad.shape[-1]
-    pad = np.zeros(shape=[512,129])
-    pad [:,:128] = d
-    d = pad * pad.shape[-1]
-
-    o = np.flip(o.T,-1)
-    r = (np.flip(r.T,-1) - np.mean(r)) / np.std(r)
-    v = np.flip(v.T,-1)
-    a = np.flip(a.T,-1)
-    d = np.flip(d.T,-1)
-
-    original_wave = librosa.griffinlim(o, hop_length=128, n_iter=n_iter)
-    real_wave = librosa.griffinlim(r, hop_length=128, n_iter=n_iter)
-    valence_wave = librosa.griffinlim(v, hop_length=128, n_iter=n_iter)
-    arousal_wave = librosa.griffinlim(a, hop_length=128, n_iter=n_iter)
-    dominance_wave = librosa.griffinlim(d, hop_length=128, n_iter=n_iter)
-
-    original_wave = (original_wave / np.max(original_wave)) * 0.9
-    real_wave = (real_wave / np.max(real_wave)) * 0.9
-    valence_wave = (valence_wave / np.max(valence_wave)) * 0.9
-    arousal_wave = (arousal_wave / np.max(arousal_wave)) * 0.9
-    dominance_wave = (dominance_wave / np.max(dominance_wave)) * 0.9
-
-    name_o = name = str(sound_id) + '_original_wave.wav'
-    name_r = name = str(sound_id) + '_real_wave.wav'
-    name_v = name = str(sound_id) + '_valence_wave.wav'
-    name_a = name = str(sound_id) + '_arousal_wave.wav'
-    name_d = name = str(sound_id) + '_dominance_wave.wav'
-
-    name_o = os.path.join(curr_path, name_o)
-    name_r = os.path.join(curr_path, name_r)
-    name_v = os.path.join(curr_path, name_v)
-    name_a = os.path.join(curr_path, name_a)
-    name_d = os.path.join(curr_path, name_d)
-
-    soundfile.write(name_o, original_wave, sr, 'PCM_16')
-    soundfile.write(name_r, real_wave, sr, 'PCM_16')
-    soundfile.write(name_v, valence_wave, sr, 'PCM_16')
-    soundfile.write(name_a, arousal_wave, sr, 'PCM_16')
-    soundfile.write(name_d, dominance_wave, sr, 'PCM_16')
-
-
-
 
 if __name__ == '__main__':
     print ('Loading dataset')
-    seed=1
-    np.random.seed(seed)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
-    torch.manual_seed(seed)
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed_all(seed)
     if args.use_cuda:
         device = 'cuda:' + str(args.gpu_id)
     else:
@@ -163,107 +98,66 @@ if __name__ == '__main__':
     test_predictors, test_target = uf.build_matrix_dataset(predictors_merged,
                                                             target_merged, test_list)
 
-    #normalize
-    training_predictors = training_predictors / training_predictors.shape[-1]
-    validation_predictors = validation_predictors / validation_predictors.shape[-1]
-    test_predictors = test_predictors / test_predictors.shape[-1]
 
-    #reshaping for cnn
-    training_predictors = training_predictors.reshape(training_predictors.shape[0], 1, training_predictors.shape[1],training_predictors.shape[2])
-    validation_predictors = validation_predictors.reshape(validation_predictors.shape[0], 1, validation_predictors.shape[1], validation_predictors.shape[2])
-    test_predictors = test_predictors.reshape(test_predictors.shape[0], 1, test_predictors.shape[1], test_predictors.shape[2])
+if args.normalize_predictors:
+    #normalize to 0 mean and 1 std
+    tr_max = np.max(training_predictors)
+    #tr_max = 128
+    training_predictors = np.divide(training_predictors, tr_max)
+    validation_predictors = np.divide(validation_predictors, tr_max)
+    test_predictors = np.divide(test_predictors, tr_max)
 
-    #zero-pad/cut time tim
-    curr_time_dim = training_predictors.shape[2]
-    curr_freq_dim = training_predictors.shape[3]
+print ("Predictors range: ", np.min(training_predictors), np.max(training_predictors))
 
-    if args.time_dim > curr_time_dim:
-        #
-        training_predictors_padded = np.zeros((training_predictors.shape[0],
-                                                 training_predictors.shape[1],
-                                                 args.time_dim,
-                                                 training_predictors.shape[3]))
-        training_predictors_padded[:,:,:curr_time_dim,:] = training_predictors
-        training_predictors = training_predictors_padded
-        #
-        validation_predictors_padded = np.zeros((validation_predictors.shape[0],
-                                                 validation_predictors.shape[1],
-                                                 args.time_dim,
-                                                 validation_predictors.shape[3]))
-        validation_predictors_padded[:,:,:curr_time_dim,:] = validation_predictors
-        validation_predictors = validation_predictors_padded
-        #
-        test_predictors_padded = np.zeros((test_predictors.shape[0],
-                                                 test_predictors.shape[1],
-                                                 args.time_dim,
-                                                 test_predictors.shape[3]))
-        test_predictors_padded[:,:,:curr_time_dim,:] = test_predictors
-        test_predictors = test_predictors_padded
+#reshaping for cnn
+training_predictors = training_predictors.reshape(training_predictors.shape[0], 1, training_predictors.shape[1],training_predictors.shape[2])
+validation_predictors = validation_predictors.reshape(validation_predictors.shape[0], 1, validation_predictors.shape[1], validation_predictors.shape[2])
+test_predictors = test_predictors.reshape(test_predictors.shape[0], 1, test_predictors.shape[1], test_predictors.shape[2])
 
-    elif args.time_dim < curr_time_dim:
-        training_predictors = training_predictors[:,:,:args.time_dim,:]
-        validation_predictors = validation_predictors[:,:,:args.time_dim,:]
-        test_predictors = test_predictors[:,:,:args.time_dim,:]
-    else:
-        pass
+#cut/pad dims
+training_predictors = uf.pad_tensor_dims(training_predictors, args.time_dim, args.freq_dim)
+validation_predictors = uf.pad_tensor_dims(validation_predictors, args.time_dim, args.freq_dim)
+test_predictors = uf.pad_tensor_dims(test_predictors, args.time_dim, args.freq_dim)
 
-    #zero-pad/cut freq tim
-    if args.freq_dim > curr_freq_dim:
-        #
-        training_predictors_padded = np.zeros((training_predictors.shape[0],
-                                                 training_predictors.shape[1],
-                                                 training_predictors.shape[2],
-                                                 args.freq_dim))
-        training_predictors_padded[:,:,:,:curr_freq_dim] = training_predictors
-        training_predictors = training_predictors_padded
-        #
-        validation_predictors_padded = np.zeros((validation_predictors.shape[0],
-                                                 validation_predictors.shape[1],
-                                                 validation_predictors.shape[2],
-                                                 args.freq_dim))
-        validation_predictors_padded[:,:,:,:curr_freq_dim] = validation_predictors
-        validation_predictors = validation_predictors_padded
-        #
-        test_predictors_padded = np.zeros((test_predictors.shape[0],
-                                                 test_predictors.shape[1],
-                                                 test_predictors.shape[2],
-                                                 args.freq_dim))
-        test_predictors_padded[:,:,:,:curr_freq_dim] = test_predictors
-        test_predictors = test_predictors_padded
-    elif args.freq_dim < curr_freq_dim:
-        training_predictors = training_predictors[:,:,:,:args.freq_dim]
-        validation_predictors = validation_predictors[:,:,:,:args.freq_dim]
-        test_predictors = test_predictors[:,:,:,:args.freq_dim]
-    else:
-        pass
+print ('\nPadded dims:')
+print ('Training predictors: ', training_predictors.shape)
+print ('Validation predictors: ', validation_predictors.shape)
+print ('Test predictors: ', test_predictors.shape)
 
-    print ('\nPadded dims:')
-    print ('Training predictors: ', training_predictors.shape)
-    print ('Validation predictors: ', validation_predictors.shape)
-    print ('Test predictors: ', test_predictors.shape)
+#convert to tensor
+train_predictors = torch.tensor(training_predictors).float()
+val_predictors = torch.tensor(validation_predictors).float()
+test_predictors = torch.tensor(test_predictors).float()
+train_target = torch.tensor(training_target).float()
+val_target = torch.tensor(validation_target).float()
+test_target = torch.tensor(test_target).float()
+
+#build dataset from tensors
+tr_dataset = utils.TensorDataset(train_predictors, train_target)
+val_dataset = utils.TensorDataset(val_predictors, val_target)
+test_dataset = utils.TensorDataset(test_predictors, test_target)
+
+#build data loader from dataset
+tr_data = utils.DataLoader(tr_dataset, args.batch_size, shuffle=True, pin_memory=True)
+val_data = utils.DataLoader(val_dataset, args.batch_size, shuffle=False, pin_memory=True)
+test_data = utils.DataLoader(test_dataset, args.batch_size, shuffle=False, pin_memory=True)  #no batch here!!
+
+#load model
+print ('\nMoving model to device')
+if args.model_name == 'r2he':
+    model = locals()[args.model_name](latent_dim=args.model_latent_dim,
+                                      in_channels=args.model_in_channels,
+                                      architecture=args.model_architecture,
+                                      classifier_dropout=args.model_classifier_dropout,
+                                      flattened_dim=args.model_flattened_dim,
+                                      verbose=args.model_verbose)
+
+model = model.to(device)
+
+#load pretrained model if desired
+model.load_state_dict(torch.load(args.model_path), strict=False)  #load best model
 
 
-    #convert to tensor
-    train_predictors = torch.tensor(training_predictors).float()
-    val_predictors = torch.tensor(validation_predictors).float()
-    test_predictors = torch.tensor(test_predictors).float()
-
-    if args.use_set == 'training':
-        data = train_predictors
-        target = training_target
-    elif args.use_set == 'validation':
-        data = val_predictors
-        target = validation_target
-    elif args.use_set == 'test':
-        data = test_predictors
-        target = test_target
-
-    if not os.path.exists(args.output_path):
-        os.makedirs(args.output_path)
-
-    model = simple_autoencoder()
-    model.load_state_dict(torch.load(args.model_path), strict=False)  #load model
-    model = model.to(device)
     for i in args.datapoints_list:
 
         #get autoencoder's outputs
@@ -302,4 +196,3 @@ if __name__ == '__main__':
         print ('    Processing: ', str(i))
 
         gen_plot(original,real,valence,arousal,dominance,i, curr_path)
-        gen_sounds(original,real,valence,arousal,dominance,i, curr_path)
