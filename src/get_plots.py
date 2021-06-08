@@ -28,7 +28,7 @@ parser.add_argument('--time_dim', type=int, default=512)
 parser.add_argument('--freq_dim', type=int, default=128)
 parser.add_argument('--fast_test', type=str, default='True')
 parser.add_argument('--num_folds', type=int, default=1)
-parser.add_argument('--num_fold', type=int, default=1)
+parser.add_argument('--num_fold', type=int, default=0)
 parser.add_argument('--sample_rate', type=int, default=16000)
 
 args = parser.parse_args()
