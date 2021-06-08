@@ -274,6 +274,16 @@ class simple_autoencoder(nn.Module):
                                     )
 
         self.latent = nn.Linear(time_dim, latent_dim)
+        
+    def forward(self, x):
+        x = torch.flatten(x, start_dim=1)
+        x = self.encoder(x)
+        x = self.latent(x)
+        x = self.decoder(x)
+        x = torch.sigmoid(x.view(-1, 1, self.time_dim, 128))
+
+        #dummy = torch.tensor([0])
+        return x
 '''
 
 class r2he(nn.Module):
@@ -508,14 +518,3 @@ class r2he(nn.Module):
 
         return x, valence, arousal, dominance
 '''
-
-
-    def forward(self, x):
-        x = torch.flatten(x, start_dim=1)
-        x = self.encoder(x)
-        x = self.latent(x)
-        x = self.decoder(x)
-        x = torch.sigmoid(x.view(-1, 1, self.time_dim, 128))
-
-        #dummy = torch.tensor([0])
-        return x
