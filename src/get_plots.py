@@ -33,7 +33,7 @@ parser.add_argument('--num_folds', type=int, default=1)
 parser.add_argument('--num_fold', type=int, default=0)
 parser.add_argument('--sample_rate', type=int, default=16000)
 #model parameters
-'../new_experiments/experiment_3_beta0.txt/models/model_xval_iemocap_exp3_beta0.txt_run1_fold0'
+#'../new_experiments/experiment_3_beta0.txt/models/model_xval_iemocap_exp3_beta0.txt_run1_fold0'
 parser.add_argument('--model_path', type=str, default='../new_experiments/experiment_3_beta0.txt/models/model_xval_iemocap_exp3_beta0.txt_run1_fold0')
 parser.add_argument('--model_name', type=str, default='r2he')
 parser.add_argument('--model_in_channels', type=int, default=1)
@@ -57,6 +57,7 @@ def gen_plot(sounds, pred, sound_id, args):
     recon = torch.unsqueeze(torch.sum(pred, axis=1), dim=1) / 4.
     recon = recon.cpu().numpy().squeeze()
     sounds = sounds[0].cpu().numpy().squeeze()
+
     pred,_,_,_ = pred
     pred = pred[0].cpu().numpy().squeeze()
     r = pred[0]
@@ -64,6 +65,7 @@ def gen_plot(sounds, pred, sound_id, args):
     a = pred[2]
     d = pred[3]
     print ('ajajajajaj', sounds.shape, pred.shape)
+    recon = np.sum(pred, axis=0)
     #r = np.flip(r.T,-1)
     #v = np.flip(v.T,-1)
     #a = np.flip(a.T,-1)
@@ -72,7 +74,7 @@ def gen_plot(sounds, pred, sound_id, args):
 
     #print ('max: ', np.max(o), np.max(r),np.max(v),np.max(a),np.max(d))
     #print ('mean: ', np.mean(o), np.mean(r),np.mean(v),np.mean(a),np.mean(d))
-    exponent = 0.5/3
+    exponent = 2/3
     #exponent = 1.
 
     r = (np.flip(r.T,-1)/np.max(r))**exponent
