@@ -136,7 +136,7 @@ def evaluate(model, device, loss_function, dataloader):
             truth = truth.to(device)
 
             recon = model(sounds)
-            loss = loss_function(sounds, recon)
+            loss = loss_function(recon, sounds)
             loss = loss.cpu().numpy()
 
             temp_loss.append(loss)
@@ -171,7 +171,7 @@ for epoch in range(args.num_epochs):
             truth = truth.to(device)
 
             recon = model(sounds)
-            loss = loss_function(sounds, recon)
+            loss = loss_function(recon, sounds)
             loss.backward()
             optimizer.step()
 
