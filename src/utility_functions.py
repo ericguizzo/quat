@@ -371,4 +371,7 @@ def load_datasets(args):
     val_data = utils.DataLoader(val_dataset, args.batch_size, shuffle=False, pin_memory=True)
     test_data = utils.DataLoader(test_dataset, args.batch_size, shuffle=False, pin_memory=True)  #no batch here!!
 
+    loading_time = float(time.perf_counter()) - float(loading_start)
+    print ('\nLoading time: ' + str(np.round(float(loading_time), decimals=1)) + ' seconds')
+
     return tr_data, val_data, test_data

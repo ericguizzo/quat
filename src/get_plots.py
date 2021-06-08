@@ -19,7 +19,7 @@ parser.add_argument('--fixed_seed', type=str, default='True')
 
 #dataset parameters
 parser.add_argument('--batch_size', type=int, default=5)
-parser.add_argument('--use_set', type=str, default='test')
+parser.add_argument('--use_set', type=str, default='training')
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
 parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy')
 parser.add_argument('--train_perc', type=float, default=0.7)
@@ -70,13 +70,14 @@ def gen_plot(sounds, pred, sound_id, args):
     #print ('max: ', np.max(o), np.max(r),np.max(v),np.max(a),np.max(d))
     #print ('mean: ', np.mean(o), np.mean(r),np.mean(v),np.mean(a),np.mean(d))
     exponent = 0.5/3
-
     #exponent = 1.
+    '''
     r = (np.flip(r.T,-1)/np.max(r))**exponent
     v = (np.flip(v.T,-1)/np.max(v))**exponent
     a = (np.flip(a.T,-1)/np.max(a))**exponent
     d = (np.flip(d.T,-1)/np.max(d))**exponent
-
+    sounds = (np.flip(sounds.T,-1)/np.max(sounds))**exponent
+    '''
 
     plt.figure(1)
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')

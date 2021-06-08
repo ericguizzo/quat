@@ -115,9 +115,6 @@ loss_function = locals()[args.loss_function]
 train_loss_hist = []
 val_loss_hist = []
 
-loading_time = float(time.perf_counter()) - float(loading_start)
-print ('\nLoading time: ' + str(np.round(float(loading_time), decimals=1)) + ' seconds')
-
 def evaluate(model, device, loss_function, dataloader):
     #compute loss without backprop
     model.eval()
