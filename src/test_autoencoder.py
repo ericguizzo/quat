@@ -5,7 +5,7 @@ from models import r2he, simple_autoencoder
 from torchsummary import summary
 
 
-x = torch.rand(4,1,512, 128)
+x = torch.rand(4,1,128, 128)
 model = simple_autoencoder()
 print ('input_dim', x.shape)
 x=model(x)
