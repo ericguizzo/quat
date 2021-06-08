@@ -232,9 +232,9 @@ class r2he(nn.Module):
             print('final: ', x.shape)
 
         #classifiers
-        valence = self.classifier_valence(x_v)
-        arousal = self.classifier_valence(x_a)
-        dominance = self.classifier_valence(x_d)
+        #valence = self.classifier_valence(x_v)
+        #arousal = self.classifier_valence(x_a)
+        #dominance = self.classifier_valence(x_d)
 
         if self.verbose:
             print('output x: ', x.shape)
@@ -274,7 +274,7 @@ class simple_autoencoder(nn.Module):
                                     )
 
         self.latent = nn.Linear(time_dim, latent_dim)
-        
+
     def forward(self, x):
         x = torch.flatten(x, start_dim=1)
         x = self.encoder(x)
