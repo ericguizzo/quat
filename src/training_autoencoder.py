@@ -208,6 +208,11 @@ for epoch in range(args.num_epochs):
                 torch.save(model.state_dict(), args.model_path)
                 print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
                 saved_epoch = epoch + 1
+        if args.save_model_metric == 'epochs':
+            if epoch % 100 == 0:
+                torch.save(model.state_dict(), args.model_path)
+                print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
+                saved_epoch = epoch + 1
 
 
         else:
