@@ -128,15 +128,12 @@ if __name__ == '__main__':
     with tqdm(total=len(args.datapoints_list)) as pbar, torch.no_grad():
         for i, (sounds, truth) in enumerate(dataloader):
             if i in args.datapoints_list:
-                print ('AJAJAJAJAJ', sounds.shape, truth.shape)
                 sounds = sounds.to(device)
                 pred = model(sounds)
 
                 save_path = os.path.join(args.output_path, str(i))
-                if not os.path.exists(curr_path):
-                    os.makedirs(curr_path)
+                if not os.path.exists(save_path):
+                    os.makedirs(save_path)
 
-
-                #truth = truth.to(device)
                 gen_plot(sounds, pred, save_path, args)
                 pbar.update(1)
