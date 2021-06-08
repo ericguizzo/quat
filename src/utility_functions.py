@@ -320,7 +320,7 @@ def load_datasets(args):
     if args.fast_test:
         print ('FAST TEST: using unly 100 datapoints ')
         #take only 100 datapoints, just for quick testing
-        bound = 5
+        bound = args.fast_test_bound
         training_predictors = training_predictors[:bound]
         training_target = training_target[:bound]
         validation_predictors = validation_predictors[:bound]

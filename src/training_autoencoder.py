@@ -30,6 +30,8 @@ parser.add_argument('--normalize_predictors', type=str, default='True')
 parser.add_argument('--time_dim', type=int, default=512)
 parser.add_argument('--freq_dim', type=int, default=128)
 parser.add_argument('--fast_test', type=str, default='True')
+parser.add_argument('--fast_test_bound', type=int, default=5)
+
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
 parser.add_argument('--use_cuda', type=str, default='True')

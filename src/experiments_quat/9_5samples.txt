@@ -15,7 +15,8 @@
       },
 
   "1":{"comment_1": "beta_0", "comment_2": "no_batchnorm_fasttest",
-       "loss_beta": 0, "save_model_metric": "epochs", "early_stopping": "False"
+       "loss_beta": 0, "save_model_metric": "epochs", "early_stopping": "False",
+       "model_architecture":"VGG16"
         }
 
 }
