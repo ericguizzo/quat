@@ -170,7 +170,7 @@ for epoch in range(args.num_epochs):
             sounds = sounds.to(device)
             truth = truth.to(device)
 
-            recon, v, a, d = model(sounds)
+            recon = model(sounds)
             loss = loss_function(sounds, recon)
             loss.backward()
             optimizer.step()
