@@ -18,6 +18,7 @@ parser.add_argument('--gpu_id', type=int, default=0)
 parser.add_argument('--fixed_seed', type=str, default='True')
 
 #dataset parameters
+parser.add_argument('--batch_size', type=int, default=5)
 parser.add_argument('--use_set', type=str, default='training')
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
 parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy')
