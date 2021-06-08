@@ -99,6 +99,7 @@ if args.model_name == 'r2he':
                                       quat=args.model_quat,
                                       verbose=args.model_verbose)
 if args.model_name == 'simple_autoencoder':
+    print ('AAAAAFJFJFJFJFJFJFJFJFJFJFJFJ')
     model = locals()[args.model_name]()
 
 
