@@ -10,7 +10,7 @@
         "learning_rate": 0.00005,
         "batch_size": 4,
         "model_name": "r2he",
-        "fast_test": "False",
+        "fast_test": "True",
         "patience": 100
       },
 
