@@ -20,6 +20,7 @@ parser.add_argument('--results_folder', type=str, default='../results')
 parser.add_argument('--results_path', type=str, default='../results/results.npy')
 parser.add_argument('--model_path', type=str, default='../results/model')
 #dataset parameters
+#'../new_experiments/experiment_1_beta0.txt/models/model_xval_iemocap_exp1_beta0.txt_run1_fold0'
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
 parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy')
 parser.add_argument('--train_perc', type=float, default=0.7)

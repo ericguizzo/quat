@@ -5,9 +5,11 @@ from models import r2he
 from torchsummary import summary
 
 
-x = torch.rand(1,1,128,512)
-print ('input_dim', x.shape)
+x = torch.rand(1,1,512, 128)
 
-#torch.manual_seed(0)
 model = r2he(verbose=True,latent_dim=20)
+print (model)
+
+print ('TESTING DIMENSIONS')
+print ('input_dim', x.shape)
 x,v,a,d=model(x)

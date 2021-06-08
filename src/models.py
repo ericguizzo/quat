@@ -54,6 +54,7 @@ class r2he(nn.Module):
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(4096, 1),
+                             nn.Sigmoid()
                              ]
 
         self.classifier_valence = nn.Sequential(*classifier_layers)
@@ -77,7 +78,7 @@ class r2he(nn.Module):
                         stride=(1, 1),
                         padding=(1, 1),
                     ),
-                    nn.BatchNorm2d(x),
+                    #nn.BatchNorm2d(x),
                     nn.ReLU(),
                 ]
                 in_channels = x
@@ -105,7 +106,7 @@ class r2he(nn.Module):
                         stride=(1, 1),
                         padding=(1, 1),
                     ),
-                    QuaternionBatchNorm2d(batchnorm_dim),
+                    #QuaternionBatchNorm2d(batchnorm_dim),
                     #nn.BatchNorm2d(batchnorm_dim),
                     nn.ReLU(),
                 ]
@@ -119,7 +120,7 @@ class r2he(nn.Module):
                                               stride=(2, 2)
                                               ),
                            #nn.BatchNorm2d(batchnorm_dim),
-                           QuaternionBatchNorm2d(batchnorm_dim),
+                           #QuaternionBatchNorm2d(batchnorm_dim),
                            nn.ReLU(),
                            ]
 
@@ -169,23 +170,27 @@ class r2he(nn.Module):
 
         #decoder
         x = torch.cat((x_r, x_v, x_a, x_d), dim=-1)
+        if self.verbose:
+            print('latent cat: ', x.shape)
         x = self.decoder_input(x)
-        x = x.view(-1, encoder_output_shape[-3], encoder_output_shape[-2], encoder_output_shape[-1])
         if self.verbose:
             print('decoder_input: ', x.shape)
+        x = x.view(-1, encoder_output_shape[-3], encoder_output_shape[-2], encoder_output_shape[-1])
+        if self.verbose:
+            print('decoder_input view: ', x.shape)
 
         x = self.decoder(x)
         if self.verbose:
             print('decoder: ', x.shape)
 
-        x = torch.sigmoid(self.decoder_output(x))
+        x = self.decoder_output(x)
         if self.verbose:
             print('final: ', x.shape)
 
         #classifiers
-        valence = torch.sigmoid(self.classifier_valence(x_v))
-        arousal = torch.sigmoid(self.classifier_valence(x_a))
-        dominance = torch.sigmoid(self.classifier_valence(x_d))
+        valence = self.classifier_valence(x_v)
+        arousal = self.classifier_valence(x_a)
+        dominance = self.classifier_valence(x_d)
 
         if self.verbose:
             print('output x: ', x.shape)
