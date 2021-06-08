@@ -124,7 +124,7 @@ if __name__ == '__main__':
 
 
 
-
+        '''
         print ('shapes')
         curr_path = os.path.join(args.output_path, str(i))
         if not os.path.exists(curr_path):
