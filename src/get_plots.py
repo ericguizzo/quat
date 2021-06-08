@@ -49,10 +49,11 @@ args.use_cuda = eval(args.use_cuda)
 args.datapoints_list = eval(args.datapoints_list)
 
 #def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
-def gen_plot(sounds, truth, args):
+def gen_plot(sounds, pred, save_path, args):
     pred = pred.cpu().numpy()
+    sounds = sounds.cpu().numpy()
     y, v,a,d = pred
-    print ('AAAIFIEOEJFN', pred.shape)
+    print ('AAAIFIEOEJFN', y.shape, v.shape, a.shape, d.shape)
     '''
     #print ('max: ', np.max(o), np.max(r),np.max(v),np.max(a),np.max(d))
     #print ('mean: ', np.mean(o), np.mean(r),np.mean(v),np.mean(a),np.mean(d))
@@ -129,15 +130,13 @@ if __name__ == '__main__':
             if i in args.datapoints_list:
                 print ('AJAJAJAJAJ', sounds.shape, truth.shape)
                 sounds = sounds.to(device)
+                pred = model(sounds)
+
+                save_path = os.path.join(args.output_path, str(i))
+                if not os.path.exists(curr_path):
+                    os.makedirs(curr_path)
+
+
                 #truth = truth.to(device)
-
+                gen_plot(sounds, pred, save_path, args)
                 pbar.update(1)
-
-            '''
-            curr_path = os.path.join(args.output_path, str(i))
-            if not os.path.exists(curr_path):
-                os.makedirs(curr_path)
-            print ('    Processing: ', str(i))
-
-            gen_plot(pred, truth)
-            '''
