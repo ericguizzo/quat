@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--datapoints_list', type=str, default='[1,2,3,4,5]')
 parser.add_argument('--output_path', type=str, default='../properties/NEW_experiments')
 parser.add_argument('--use_cuda', type=str, default='True')
-parser.add_argument('--gpu_id', type=int, default=0)
+parser.add_argument('--gpu_id', type=int, default=1)
 parser.add_argument('--fixed_seed', type=str, default='True')
 
 #dataset parameters
@@ -89,7 +89,6 @@ def gen_plot(pred, truth, args):
 
 
 if __name__ == '__main__':
-    print ('Loading dataset')
     if args.use_cuda:
         device = 'cuda:' + str(args.gpu_id)
     else:
