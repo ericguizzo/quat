@@ -104,7 +104,7 @@ def gen_plot(sounds, pred, sound_id, args):
         os.makedirs(args.figures_path)
     name = str(sound_id) + '_plot.png'
     fig_name = os.path.join(args.figures_path, name)
-    plt.savefig(fig_name, format = format, dpi=300)
+    plt.savefig(fig_name, format = 'png', dpi=300)
 
 
 
