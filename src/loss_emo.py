@@ -9,7 +9,7 @@ def emo_loss(input, recon, truth, v, a, d, beta):
     #split activation (sum quat channels)
 
     recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
-    recon_loss = F.mse_loss(recon, input)
+    recon_loss = F.binary_cross_entropy(recon, input)
 
     valence_loss = F.mse_loss(v.squeeze(), truth[:,0].squeeze())
     arousal_loss = F.mse_loss(a.squeeze(), truth[:,1].squeeze())
