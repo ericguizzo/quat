@@ -50,9 +50,14 @@ args.datapoints_list = eval(args.datapoints_list)
 
 #def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
 def gen_plot(sounds, pred, save_path, args):
-    pred = pred.cpu().numpy()
+    #pred = pred.cpu().numpy()
     sounds = sounds.cpu().numpy()
     y, v,a,d = pred
+    y = y.cpu().numpy()
+    v = v.cpu().numpy()
+    a = a.cpu().numpy()
+    d = d.cpu().numpy()
+
     print ('AAAIFIEOEJFN', y.shape, v.shape, a.shape, d.shape)
     '''
     #print ('max: ', np.max(o), np.max(r),np.max(v),np.max(a),np.max(d))
