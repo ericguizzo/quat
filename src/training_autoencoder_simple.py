@@ -98,6 +98,9 @@ if args.model_name == 'r2he':
                                       flattened_dim=args.model_flattened_dim,
                                       quat=args.model_quat,
                                       verbose=args.model_verbose)
+if args.model_name == 'simple_autoencoder':
+    model = locals()[args.model_name]()
+
 
 model = model.to(device)
 

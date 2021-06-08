@@ -9,7 +9,7 @@
         "num_epochs": 2000,
         "learning_rate": 0.00005,
         "batch_size": 4,
-        "model_name": "r2he",
+        "model_name": "simple_autoencoder",
         "fast_test": "True",
         "patience": 100
       },
