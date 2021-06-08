@@ -15,7 +15,8 @@
       },
 
   "1":{"comment_1": "beta_0", "comment_2": "no_batchnorm_fasttest",
-       "loss_beta": 0, "model_architecture":"simple", "model_flattened_dim":524288
+       "loss_beta": 0, "model_architecture":"simple", "model_flattened_dim":524288,
+       "model_latent_dim":100
         }
 
 }

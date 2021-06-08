@@ -8,10 +8,10 @@ from torchsummary import summary
 x = torch.rand(1,1,512, 128)
 
 model = r2he(verbose=True,
-             latent_dim=20,
-             quat=False,
-             flattened_dim=524288,
-             architecture='simple')
+             latent_dim=100,
+             quat=True,
+             #flattened_dim=524288,
+             architecture='VGG16')
 print (model)
 
 print ('TESTING DIMENSIONS')
