@@ -100,8 +100,8 @@ def gen_plot(sounds, pred, sound_id, args):
     plt.tight_layout( rect=[0, 0.0, 0.95, 0.95])
 
     #save fig
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
+    if not os.path.exists(args.figures_path):
+        os.makedirs(args.figures_path)
     name = str(sound_id) + '_plot.png'
     fig_name = os.path.join(args.figures_path, name)
     plt.savefig(fig_name, format = format, dpi=300)
