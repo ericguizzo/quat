@@ -37,6 +37,7 @@ parser.add_argument('--sample_rate', type=int, default=16000)
 #'../new_experiments/experiment_3_beta0.txt/models/model_xval_iemocap_exp3_beta0.txt_run1_fold0'
 parser.add_argument('--model_path', type=str, default='../new_experiments/experiment_4_beta0.txt/models/model_xval_iemocap_exp4_beta0.txt_run1_fold0')
 parser.add_argument('--model_name', type=str, default='r2he')
+parser.add_argument('--model_quat', type=str, default='True')
 parser.add_argument('--model_in_channels', type=int, default=1)
 parser.add_argument('--model_flattened_dim', type=int, default=32768)
 parser.add_argument('--model_latent_dim', type=int, default=1000)
@@ -49,7 +50,8 @@ args = parser.parse_args()
 args.use_cuda = eval(args.use_cuda)
 args.datapoints_list = eval(args.datapoints_list)
 args.model_verbose = eval(args.model_verbose)
-args.fase_test = eval(args.fast_test)
+args.fast_test = eval(args.fast_test)
+args.model_quat = eval(args.model_quat)
 
 
 #def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
@@ -140,6 +142,7 @@ if __name__ == '__main__':
                                           architecture=args.model_architecture,
                                           classifier_dropout=args.model_classifier_dropout,
                                           flattened_dim=args.model_flattened_dim,
+                                          quat=args.model_quat,
                                           verbose=args.model_verbose)
     else:
         raise ValueError('Invalid model name')

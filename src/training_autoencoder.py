@@ -49,6 +49,7 @@ parser.add_argument('--loss_function', type=str, default='emo_loss')
 parser.add_argument('--loss_beta', type=float, default=1.)
 #model parameters
 parser.add_argument('--model_name', type=str, default='r2he')
+parser.add_argument('--model_quat', type=str, default='True')
 parser.add_argument('--model_in_channels', type=int, default=1)
 parser.add_argument('--model_flattened_dim', type=int, default=32768)
 parser.add_argument('--model_latent_dim', type=int, default=1000)
@@ -75,6 +76,7 @@ args.use_cuda = eval(args.use_cuda)
 args.early_stopping = eval(args.early_stopping)
 args.fixed_seed = eval(args.fixed_seed)
 args.model_verbose = eval(args.model_verbose)
+args.model_quat = eval(args.model_quat)
 
 if args.use_cuda:
     device = 'cuda:' + str(args.gpu_id)
@@ -92,6 +94,7 @@ if args.model_name == 'r2he':
                                       architecture=args.model_architecture,
                                       classifier_dropout=args.model_classifier_dropout,
                                       flattened_dim=args.model_flattened_dim,
+                                      quat=args.model_quat
                                       verbose=args.model_verbose)
 
 model = model.to(device)

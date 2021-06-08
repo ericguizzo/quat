@@ -19,9 +19,11 @@ class r2he(nn.Module):
                 classifier_dropout=0.5,
                 flattened_dim=32768,
                 verbose=False,
+                quat=True
                 ):
         super(r2he, self).__init__()
 
+        self.quat = quat
         self.in_channels = in_channels
         self.latent_dim =latent_dim
         self.verbose = verbose
@@ -37,15 +39,27 @@ class r2he(nn.Module):
         self.latent_a =  nn.Linear(self.flattened_dim,  latent_dim)
         self.latent_d =  nn.Linear(self.flattened_dim,  latent_dim)
 
+        if self.quat:
+            self.decoder_input = QuaternionLinear(latent_dim*4, self.flattened_dim)
+        else:
+            self.decoder_input = nn.Linear(latent_dim*4, self.flattened_dim)
 
-        self.decoder_input = QuaternionLinear(latent_dim*4, self.flattened_dim)
         self.decoder = self.create_conv_layers_decoder(VGG_types[architecture])
-        self.decoder_output = nn.Sequential(QuaternionConv(self.first_dim,
-                                                           out_channels=4,
-                                                           kernel_size=3,
-                                                           stride=1,
-                                                           padding=1),
-                                            nn.Sigmoid())
+
+        if self.quat:
+            self.decoder_output = nn.Sequential(QuaternionConv(self.first_dim,
+                                                               out_channels=4,
+                                                               kernel_size=3,
+                                                               stride=1,
+                                                               padding=1),
+                                                nn.Sigmoid())
+        else:
+            self.decoder_output = nn.Sequential(nn.Conv2d(self.first_dim,
+                                                               out_channels=1,
+                                                               kernel_size=3,
+                                                               stride=1,
+                                                               padding=1),
+                                                nn.Sigmoid())
 
         classifier_layers = [nn.Linear(self.latent_dim, 4096),
                              nn.ReLU(),
@@ -94,35 +108,64 @@ class r2he(nn.Module):
         batchnorm_dim = self.last_dim
         architecture = architecture[::-1]  #reverse list
 
-        for x in architecture:
-            if type(x) == int:
-                out_channels = x
-                batchnorm_dim = x
-                layers += [
-                    QuaternionTransposeConv(
-                        in_channels=in_channels,
-                        out_channels=out_channels,
-                        kernel_size=(3, 3),
-                        stride=(1, 1),
-                        padding=(1, 1),
-                    ),
-                    #QuaternionBatchNorm2d(batchnorm_dim),
-                    #nn.BatchNorm2d(batchnorm_dim),
-                    nn.ReLU(),
-                ]
-                in_channels = x
-            elif x == "M":
-
-                #out_channels = architecture[i+1]
-                layers += [QuaternionTransposeConv(in_channels=in_channels,
-                                              out_channels=out_channels,
-                                              kernel_size=(2, 2),
-                                              stride=(2, 2)
-                                              ),
-                           #nn.BatchNorm2d(batchnorm_dim),
-                           #QuaternionBatchNorm2d(batchnorm_dim),
-                           nn.ReLU(),
-                           ]
+        if self.quat:
+            for x in architecture:
+                if type(x) == int:
+                    out_channels = x
+                    batchnorm_dim = x
+                    layers += [
+                        QuaternionTransposeConv(
+                            in_channels=in_channels,
+                            out_channels=out_channels,
+                            kernel_size=(3, 3),
+                            stride=(1, 1),
+                            padding=(1, 1),
+                        ),
+                        #QuaternionBatchNorm2d(batchnorm_dim),
+                        #nn.BatchNorm2d(batchnorm_dim),
+                        nn.ReLU(),
+                    ]
+                    in_channels = x
+                elif x == "M":
+                    #out_channels = architecture[i+1]
+                    layers += [QuaternionTransposeConv(in_channels=in_channels,
+                                                  out_channels=out_channels,
+                                                  kernel_size=(2, 2),
+                                                  stride=(2, 2)
+                                                  ),
+                               #nn.BatchNorm2d(batchnorm_dim),
+                               #QuaternionBatchNorm2d(batchnorm_dim),
+                               nn.ReLU(),
+                               ]
+        else:
+            for x in architecture:
+                if type(x) == int:
+                    out_channels = x
+                    batchnorm_dim = x
+                    layers += [
+                        nn.ConvTranspose2d(
+                            in_channels=in_channels,
+                            out_channels=out_channels,
+                            kernel_size=(3, 3),
+                            stride=(1, 1),
+                            padding=(1, 1),
+                        ),
+                        #QuaternionBatchNorm2d(batchnorm_dim),
+                        #nn.BatchNorm2d(batchnorm_dim),
+                        nn.ReLU(),
+                    ]
+                    in_channels = x
+                elif x == "M":
+                    #out_channels = architecture[i+1]
+                    layers += [nn.ConvTranspose2d(in_channels=in_channels,
+                                                  out_channels=out_channels,
+                                                  kernel_size=(2, 2),
+                                                  stride=(2, 2)
+                                                  ),
+                               #nn.BatchNorm2d(batchnorm_dim),
+                               #QuaternionBatchNorm2d(batchnorm_dim),
+                               nn.ReLU(),
+                               ]
 
 
         return nn.Sequential(*layers)
