@@ -19,7 +19,7 @@ parser.add_argument('--fixed_seed', type=str, default='True')
 
 #dataset parameters
 parser.add_argument('--batch_size', type=int, default=5)
-parser.add_argument('--use_set', type=str, default='training')
+parser.add_argument('--use_set', type=str, default='test')
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
 parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy')
 parser.add_argument('--train_perc', type=float, default=0.7)
@@ -54,6 +54,8 @@ args.fase_test = eval(args.fast_test)
 #def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
 def gen_plot(sounds, pred, sound_id, args):
     #pred = pred.cpu().numpy()
+    recon = torch.unsqueeze(torch.sum(pred, axis=1), dim=1) / 4.
+    recon = recon.cpu().numpy().squeeze()
     sounds = sounds[0].cpu().numpy().squeeze()
     pred,_,_,_ = pred
     pred = pred[0].cpu().numpy().squeeze()
@@ -97,6 +99,9 @@ def gen_plot(sounds, pred, sound_id, args):
     plt.subplot(235)
     plt.title('Input')
     plt.pcolormesh(sounds)
+    plt.subplot(235)
+    plt.title('Output Split Act.')
+    plt.pcolormesh(recon)
 
     plt.tight_layout( rect=[0, 0.0, 0.95, 0.95])
 
