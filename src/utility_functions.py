@@ -10,6 +10,7 @@ from shutil import copyfile
 import librosa
 import configparser
 import time
+import torch
 
 cfg = configparser.ConfigParser()
 cfg.read('preprocessing_config.ini')
