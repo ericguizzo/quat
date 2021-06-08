@@ -139,14 +139,15 @@ def evaluate(model, device, loss_function, dataloader):
             loss = loss_function(recon, sounds)
             loss = loss.cpu().numpy()
 
-            temp_loss.append(loss)
+            temp_loss.append({'total':loss, 'emo':0, 'recon':0,
+                          'valence':0, 'arousal':0, 'dominance':0})
             pbar.update(1)
     return temp_loss
 
 def mean_batch_loss(batch_loss):
     #compute mean of each loss item
-    d = {'total':[0], 'emo':[0], 'recon':[0],
-                  'valence':[0], 'arousal':[0], 'dominance':[0]}
+    d = {'total':[], 'emo':[], 'recon':[],
+                  'valence':[], 'arousal':[], 'dominance':[]}
     for i in batch_loss:
         for j in i:
             name = j
