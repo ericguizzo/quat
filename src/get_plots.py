@@ -147,7 +147,7 @@ if __name__ == '__main__':
     model = model.to(device)
 
     #load pretrained model if desired
-    #model.load_state_dict(torch.load(args.model_path), strict=False)  #load best model
+    model.load_state_dict(torch.load(args.model_path), strict=False)  #load best model
 
     #iterate batches
     model.eval()
