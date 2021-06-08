@@ -62,6 +62,11 @@ def gen_plot(sounds, pred, save_path, args):
     a = pred[2]
     d = pred[3]
 
+    r = np.flip(r.T,-1)
+    v = np.flip(v.T,-1)
+    a = np.flip(a.T,-1)
+    d = np.flip(d.T,-1)
+
     print ('AAAIFIEOEJFN', r.shape, v.shape, a.shape, d.shape)
 
     #print ('max: ', np.max(o), np.max(r),np.max(v),np.max(a),np.max(d))
@@ -73,7 +78,7 @@ def gen_plot(sounds, pred, save_path, args):
     v = (np.flip(v.T,-1)/np.max(v))**exponent
     a = (np.flip(a.T,-1)/np.max(a))**exponent
     d = (np.flip(d.T,-1)/np.max(d))**exponent
-
+    '''
 
     plt.figure(1)
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
@@ -91,7 +96,7 @@ def gen_plot(sounds, pred, save_path, args):
     plt.pcolormesh(d)
     plt.subplot(235)
     plt.title('Original')
-    plt.pcolormesh(np.flip(o.T,-1)/np.max(o))
+    plt.pcolormesh(o)
 
     plt.tight_layout( rect=[0, 0.0, 0.95, 0.95])
 
