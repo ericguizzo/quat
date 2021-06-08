@@ -47,7 +47,7 @@ args = parser.parse_args()
 
 args.use_cuda = eval(args.use_cuda)
 args.datapoints_list = eval(args.datapoints_list)
-args.verbose = eval(args.verbose)
+args.model_verbose = eval(args.model_verbose)
 args.fase_test = eval(args.fast_test)
 
 
@@ -73,7 +73,7 @@ def gen_plot(sounds, pred, save_path, args):
     v = (np.flip(v.T,-1)/np.max(v))**exponent
     a = (np.flip(a.T,-1)/np.max(a))**exponent
     d = (np.flip(d.T,-1)/np.max(d))**exponent
-    
+
 
     plt.figure(1)
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
