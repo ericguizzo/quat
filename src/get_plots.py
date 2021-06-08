@@ -117,7 +117,7 @@ def gen_plot(sounds, pred, sound_id, args):
     plt.subplot(236)
     if len(pred.shape)== 3:
         plt.title('Output Split Act.')
-        plt.pcolormesh(recon)
+        plt.pcolormesh(np.flip(recon.T,-1)/np.max(recon))**exponent)
 
     plt.tight_layout( rect=[0, 0.0, 0.95, 0.95])
 
