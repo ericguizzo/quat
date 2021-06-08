@@ -78,7 +78,7 @@ def gen_plot(sounds, pred, sound_id, args):
     a = (np.flip(a.T,-1)/np.max(a))**exponent
     d = (np.flip(d.T,-1)/np.max(d))**exponent
     sounds = (np.flip(sounds.T,-1)/np.max(sounds))**exponent
-    
+
 
     plt.figure(1)
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
