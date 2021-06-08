@@ -94,7 +94,7 @@ if args.model_name == 'r2he':
                                       architecture=args.model_architecture,
                                       classifier_dropout=args.model_classifier_dropout,
                                       flattened_dim=args.model_flattened_dim,
-                                      quat=args.model_quat
+                                      quat=args.model_quat,
                                       verbose=args.model_verbose)
 
 model = model.to(device)
