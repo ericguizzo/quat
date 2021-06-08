@@ -12,7 +12,7 @@ import utility_functions as uf
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--datapoints_list', type=str, default='[1,2,3,4,5]')
-parser.add_argument('--output_path', type=str, default='../properties/NEW_experiments')
+parser.add_argument('--figures_path', type=str, default='../properties/NEW_experiments/figures')
 parser.add_argument('--use_cuda', type=str, default='True')
 parser.add_argument('--gpu_id', type=int, default=1)
 parser.add_argument('--fixed_seed', type=str, default='True')
@@ -52,7 +52,7 @@ args.fase_test = eval(args.fast_test)
 
 
 #def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
-def gen_plot(sounds, pred, save_path, args):
+def gen_plot(sounds, pred, sound_id, args):
     #pred = pred.cpu().numpy()
     sounds = sounds[0].cpu().numpy()
     pred,_,_,_ = pred
@@ -67,7 +67,6 @@ def gen_plot(sounds, pred, save_path, args):
     a = np.flip(a.T,-1)
     d = np.flip(d.T,-1)
 
-    print ('AAAIFIEOEJFN', r.shape, v.shape, a.shape, d.shape)
 
     #print ('max: ', np.max(o), np.max(r),np.max(v),np.max(a),np.max(d))
     #print ('mean: ', np.mean(o), np.mean(r),np.mean(v),np.mean(a),np.mean(d))
@@ -100,11 +99,13 @@ def gen_plot(sounds, pred, save_path, args):
 
     plt.tight_layout( rect=[0, 0.0, 0.95, 0.95])
 
-    name = str(sound_id) + '_plot.' + format
-    fig_name = os.path.join(curr_path, name)
+    #save fig
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
+    name = str(sound_id) + '_plot.png'
+    fig_name = os.path.join(args.figures_path, name)
     plt.savefig(fig_name, format = format, dpi=300)
-    #plt.show()
-    '''
+
 
 
 if __name__ == '__main__':
@@ -148,9 +149,5 @@ if __name__ == '__main__':
                 sounds = sounds.to(device)
                 pred = model(sounds)
 
-                save_path = os.path.join(args.output_path, str(i))
-                if not os.path.exists(save_path):
-                    os.makedirs(save_path)
-
-                gen_plot(sounds, pred, save_path, args)
+                gen_plot(sounds, pred, i, args)
                 pbar.update(1)
