@@ -7,7 +7,7 @@ import numpy as np
 from models import *
 import argparse
 import os
-import tqdm
+from tqdm import tqdm
 import utility_functions as uf
 parser = argparse.ArgumentParser()
 
@@ -49,7 +49,7 @@ args.use_cuda = eval(args.use_cuda)
 args.datapoints_list = eval(args.datapoints_list)
 
 #def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
-def gen_plot(pred, truth, args):
+def gen_plot(sounds, truth, args):
     pred = pred.cpu().numpy()
     y, v,a,d = pred
     print ('AAAIFIEOEJFN', pred.shape)
@@ -117,13 +117,14 @@ if __name__ == '__main__':
 
     #iterate batches
     model.eval()
-    with tqdm(total=len(tr_data)) as pbar:
+    with tqdm(total=len(args.datapoints_list)) as pbar:
         for i, (sounds, truth) in enumerate(tr_data), torch.no_grad():
             if i in args.datapoints_list:
                 print ('AJAJAJAJAJ', sounds.shape, truth.shape)
-                #x = x.to(device)
+                sounds = sounds.to(device)
+                truth = truth.to(device)
 
-
+                pbar.update(1)
 
         '''
         print ('shapes')
