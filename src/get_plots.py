@@ -10,7 +10,7 @@ import os
 import utility_functions as uf
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_path', type=str, default='../new_experiments/experiment_1_beta0.txt/models/model_xval_iemocap_exp1_beta0.txt_run1_fold0')
-parser.add_argument('--model_name', type=str, default='rh2e')
+parser.add_argument('--model_name', type=str, default='r2he')
 parser.add_argument('--datapoints_list', type=str, default='[1,2,3,4,5]')
 parser.add_argument('--output_path', type=str, default='../properties/NEW_experiments')
 parser.add_argument('--use_cuda', type=str, default='True')
@@ -19,7 +19,7 @@ parser.add_argument('--fixed_seed', type=str, default='True')
 
 #dataset parameters
 parser.add_argument('--batch_size', type=int, default=5)
-parser.add_argument('--use_set', type=str, default='training')
+parser.add_argument('--use_set', type=str, default='test')
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
 parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy')
 parser.add_argument('--train_perc', type=float, default=0.7)
@@ -98,6 +98,8 @@ if __name__ == '__main__':
                                           classifier_dropout=args.model_classifier_dropout,
                                           flattened_dim=args.model_flattened_dim,
                                           verbose=args.model_verbose)
+    else:
+        raise ValueError('Invalid model name')
 
     model = model.to(device)
 
