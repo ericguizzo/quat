@@ -101,7 +101,7 @@ def gen_plot(sounds, pred, sound_id, args):
     plt.subplot(235)
     plt.title('Input')
     plt.pcolormesh(sounds)
-    plt.subplot(235)
+    plt.subplot(236)
     plt.title('Output Split Act.')
     plt.pcolormesh(recon)
 
