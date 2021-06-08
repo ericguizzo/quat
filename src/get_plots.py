@@ -62,22 +62,22 @@ def gen_plot(sounds, pred, sound_id, args):
     a = pred[2]
     d = pred[3]
 
-    r = np.flip(r.T,-1)
-    v = np.flip(v.T,-1)
-    a = np.flip(a.T,-1)
-    d = np.flip(d.T,-1)
+    #r = np.flip(r.T,-1)
+    #v = np.flip(v.T,-1)
+    #a = np.flip(a.T,-1)
+    #d = np.flip(d.T,-1)
 
 
     #print ('max: ', np.max(o), np.max(r),np.max(v),np.max(a),np.max(d))
     #print ('mean: ', np.mean(o), np.mean(r),np.mean(v),np.mean(a),np.mean(d))
     #exponent = 0.5/3
-    '''
+
     exponent = 1.
     r = (np.flip(r.T,-1)/np.max(r))**exponent
     v = (np.flip(v.T,-1)/np.max(v))**exponent
     a = (np.flip(a.T,-1)/np.max(a))**exponent
     d = (np.flip(d.T,-1)/np.max(d))**exponent
-    '''
+
 
     plt.figure(1)
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
@@ -105,7 +105,6 @@ def gen_plot(sounds, pred, sound_id, args):
     name = str(sound_id) + '_plot.png'
     fig_name = os.path.join(args.figures_path, name)
     plt.savefig(fig_name, format = 'png', dpi=300)
-
 
 
 if __name__ == '__main__':
