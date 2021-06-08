@@ -114,7 +114,8 @@ if args.load_pretrained is not None:
 #define optimizer and loss
 optimizer = optim.Adam(model.parameters(), lr=args.learning_rate,
                               weight_decay=args.regularization_lambda)
-loss_function = locals()[args.loss_function]
+
+loss_function = nn.BCELoss()
 
 #init history
 train_loss_hist = []
@@ -130,9 +131,9 @@ def evaluate(model, device, loss_function, dataloader):
             sounds = sounds.to(device)
             truth = truth.to(device)
 
-            recon, v, a, d = model(sounds)
-            loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
-            loss['total'] = loss['total'].cpu().numpy()
+            recon = model(sounds)
+            loss = loss_function(sounds, recon)
+            loss = loss.cpu().numpy()
 
             temp_loss.append(loss)
             pbar.update(1)
@@ -140,8 +141,8 @@ def evaluate(model, device, loss_function, dataloader):
 
 def mean_batch_loss(batch_loss):
     #compute mean of each loss item
-    d = {'total':[], 'emo':[], 'recon':[],
-                  'valence':[], 'arousal':[], 'dominance':[]}
+    d = {'total':[0], 'emo':[0], 'recon':[0],
+                  'valence':[0], 'arousal':[0], 'dominance':[0]}
     for i in batch_loss:
         for j in i:
             name = j
@@ -166,12 +167,13 @@ for epoch in range(args.num_epochs):
             truth = truth.to(device)
 
             recon, v, a, d = model(sounds)
-            loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
-            loss['total'].backward()
+            loss = loss_function(sounds, recon)
+            loss.backward()
             optimizer.step()
 
-            loss['total'] = loss['total'].detach().cpu().item()
-            train_batch_losses.append(loss)
+            loss = loss.detach().cpu().item()
+            train_batch_losses.append({'total':loss, 'emo':[0], 'recon':[0],
+                          'valence':[0], 'arousal':[0], 'dominance':[0]})
             pbar.update(1)
             del loss
 

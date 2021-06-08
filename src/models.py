@@ -243,3 +243,43 @@ class r2he(nn.Module):
             print('output d: ', dominance.shape)
 
         return x, valence, arousal, dominance
+
+
+
+class simple_autoencoder(nn.Module):
+    def __init__(self,
+                latent_dim=1000,
+                ):
+        super(simple_autoencoder, self).__init__()
+
+        self.encoder = nn.Sequential(nn.Linear(512*128, 4096),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(4096, 2048),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(2048, 1024),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(1024, 512),
+                                     nn.LeakyReLU(),
+                                    )
+        self.decoder = nn.Sequential(nn.Linear(latent_dim, 512),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(512, 1024),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(1024, 2048),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(2048, 4096),
+                                     nn.LeakyReLU(),
+                                     nn.Linear(4096, 512*128)
+                                    )
+
+        self.latent = nn.Linear(512, latent_dim)
+
+    def forward(self, x):
+        x = torch.flatten(x, start_dim=1)
+        x = self.encoder(x)
+        x = self.latent(x)
+        x = self.decoder(x)
+        x = torch.sigmoid(x.view(-1, 1, 512, 128))
+
+        #dummy = torch.tensor([0])
+        return x
