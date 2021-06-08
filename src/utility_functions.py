@@ -327,7 +327,7 @@ def load_datasets(args):
         validation_target = validation_target[:bound]
         test_predictors = test_predictors[:bound]
         test_target = test_target[:bound]
-
+    '''
     if args.normalize_predictors:
         #normalize to 0 mean and 1 std
         tr_max = np.max(training_predictors)
@@ -335,6 +335,17 @@ def load_datasets(args):
         training_predictors = np.divide(training_predictors, tr_max)
         validation_predictors = np.divide(validation_predictors, tr_max)
         test_predictors = np.divide(test_predictors, tr_max)
+    '''
+    if args.normalize_predictors:
+        #normalize to 0 mean and 1 std
+        tr_mean = np.mean(training_predictors)
+        tr_std = np.std(training_predictors)
+        training_predictors = np.subtract(training_predictors, tr_mean)
+        training_predictors = np.divide(training_predictors, tr_std)
+        validation_predictors = np.subtract(validation_predictors, tr_mean)
+        validation_predictors = np.divide(validation_predictors, tr_std)
+        test_predictors = np.subtract(test_predictors, tr_mean)
+        test_predictors = np.divide(test_predictors, tr_std)
 
     print ("Predictors range: ", np.min(training_predictors), np.max(training_predictors))
 
