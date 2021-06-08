@@ -54,8 +54,8 @@ args.fase_test = eval(args.fast_test)
 #def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
 def gen_plot(sounds, pred, sound_id, args):
     #pred = pred.cpu().numpy()
-    recon = torch.unsqueeze(torch.sum(pred, axis=1), dim=1) / 4.
-    recon = recon.cpu().numpy().squeeze()
+    #recon = torch.unsqueeze(torch.sum(pred, axis=1), dim=1) / 4.
+    #recon = recon.cpu().numpy().squeeze()
     sounds = sounds[0].cpu().numpy().squeeze()
 
     pred,_,_,_ = pred
