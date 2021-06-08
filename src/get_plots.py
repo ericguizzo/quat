@@ -36,15 +36,16 @@ parser.add_argument('--sample_rate', type=int, default=16000)
 #'../new_experiments/experiment_6_beta0_noquat.txt/models/model_xval_iemocap_exp6_beta0_noquat.txt_run1_fold0'
 #'../new_experiments/experiment_4_beta0.txt/models/model_xval_iemocap_exp4_beta0.txt_run1_fold0'
 #'../new_experiments/experiment_3_beta0.txt/models/model_xval_iemocap_exp3_beta0.txt_run1_fold0'
-'../new_experiments/experiment_7_beta0.txt/models/model_xval_iemocap_exp7_beta0.txt_run1_fold0'
-parser.add_argument('--model_path', type=str, default='../new_experiments/experiment_7_beta0.txt/models/model_xval_iemocap_exp7_beta0.txt_run1_fold0')
+#'../new_experiments/experiment_7_beta0.txt/models/model_xval_iemocap_exp7_beta0.txt_run1_fold0'
+'../new_experiments/experiment_8_beta0_simple.txt/models/model_xval_iemocap_exp8_beta0_simple.txt_run1_fold0'
+parser.add_argument('--model_path', type=str, default='../new_experiments/experiment_8_beta0_simple.txt/models/model_xval_iemocap_exp8_beta0_simple.txt_run1_fold0')
 parser.add_argument('--model_name', type=str, default='r2he')
 parser.add_argument('--model_quat', type=str, default='True')
 parser.add_argument('--model_in_channels', type=int, default=1)
-parser.add_argument('--model_flattened_dim', type=int, default=32768)
+parser.add_argument('--model_flattened_dim', type=int, default=524288)
 parser.add_argument('--model_latent_dim', type=int, default=1000)
 parser.add_argument('--model_verbose', type=str, default='False')
-parser.add_argument('--model_architecture', type=str, default='VGG16')
+parser.add_argument('--model_architecture', type=str, default='simple')
 parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
 
 args = parser.parse_args()
