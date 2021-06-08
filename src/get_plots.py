@@ -60,7 +60,7 @@ def gen_plot(sounds, pred, sound_id, args):
     v = pred[1]
     a = pred[2]
     d = pred[3]
-
+    print ('ajajajajaj', sounds.shape, pred.shape)
     #r = np.flip(r.T,-1)
     #v = np.flip(v.T,-1)
     #a = np.flip(a.T,-1)
