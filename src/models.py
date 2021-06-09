@@ -329,7 +329,7 @@ class simple_autoencoder(nn.Module):
         x = torch.flatten(x, start_dim=1)
         x = F.sigmoid(self.hidden(x))
         x = F.relu(self.decoder_input(x))
-        x = x.view(-1, 32, 32, 16)
+        x = x.view(-1, 32, 64, 16)
         ## decode ##
         x = F.relu(self.t_conv1(x))
         x = F.relu(self.t_conv2(x))
