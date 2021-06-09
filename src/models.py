@@ -324,7 +324,7 @@ class simple_autoencoder(nn.Module):
         x = self.pool(x)
         x = F.relu(self.conv3(x))
         x = self.pool(x)
-        print (x.shape)
+        #print (x.shape)
         #hidden dim
         x = torch.flatten(x, start_dim=1)
         x = F.relu(self.hidden(x))
