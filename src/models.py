@@ -171,9 +171,21 @@ class r2he(nn.Module):
 
         return nn.Sequential(*layers)
 
+    def autoencode(self, x):
+        x = self.encoder(x)
+        x = torch.flatten(x, start_dim=1)
+        x = self.latent(x)
+        x = self.decoder_input(x)
+        x = x.view(-1, 512, 16, 4)
+        x = self.decoder(x)
+        x = self.decoder_output(x)
+        return x
+
     def forward(self, x):
         #encoder
-        '''
+
+
+
         if self.verbose:
             print ('input: ', x.shape)
 
@@ -233,7 +245,7 @@ class r2he(nn.Module):
         #    print('output a: ', arousal.shape)
         #    print('output d: ', dominance.shape)
 
-        '''
+        
         x = torch.tensor(x, requires_grad=True)
         return x
 
