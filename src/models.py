@@ -234,6 +234,7 @@ class r2he(nn.Module):
         #    print('output d: ', dominance.shape)
 
         '''
+        x = torch.tensor(x, requires_grad=True)
         return x
 
 
@@ -275,9 +276,7 @@ class simple_autoencoder(nn.Module):
         x = torch.sigmoid(x.view(-1, 1, self.time_dim, 128))
 
         #dummy = torch.tensor([0])
-        x = torch.tensor(x, requires_grad=True)
-        #return x
-        return torch.sigmoid(x)
+        return x
 '''
 
 class r2he(nn.Module):
