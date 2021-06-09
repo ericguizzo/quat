@@ -295,7 +295,7 @@ class simple_autoencoder(nn.Module):
 #"VGG16": [64,64,"M",128,128,"M",256,256,256,"M",512,512,512,"M",512,512,512,"M",],
 
 class simple_autoencoder(nn.Module):
-    def __init__(self, hidden_size=100 ,flatten_dim=65536):
+    def __init__(self, hidden_size=1000 ,flatten_dim=65536):
         super(simple_autoencoder, self).__init__()
         ## encoder layers ##
         # conv layer (depth from 3 --> 16), 3x3 kernels
@@ -327,7 +327,7 @@ class simple_autoencoder(nn.Module):
         #print (x.shape)
         #hidden dim
         x = torch.flatten(x, start_dim=1)
-        x = F.relu(self.hidden(x))
+        x = F.sigmoid(self.hidden(x))
         x = F.relu(self.decoder_input(x))
         x = x.view(-1, 64, 64, 16)
         ## decode ##
