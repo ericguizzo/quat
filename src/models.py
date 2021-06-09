@@ -275,7 +275,8 @@ class simple_autoencoder(nn.Module):
         x = torch.sigmoid(x.view(-1, 1, self.time_dim, 128))
 
         #dummy = torch.tensor([0])
-        return x
+        x = torch.tensor(x, requires_grad=True)
+        #return x
         return torch.sigmoid(x)
 '''
 
