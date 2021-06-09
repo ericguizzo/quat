@@ -53,14 +53,14 @@ class r2he(nn.Module):
                                                                kernel_size=3,
                                                                stride=1,
                                                                padding=1),
-                                                nn.Sigmoid())
+                                                #nn.Sigmoid())
         else:
             self.decoder_output = nn.Sequential(nn.Conv2d(self.first_dim,
                                                                out_channels=1,
                                                                kernel_size=3,
                                                                stride=1,
                                                                padding=1),
-                                                nn.Sigmoid())
+                                                #nn.Sigmoid())
 
         classifier_layers = [nn.Linear(self.latent_dim, 4096),
                              nn.ReLU(),
@@ -69,7 +69,7 @@ class r2he(nn.Module):
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(4096, 1),
-                             nn.Sigmoid()
+                             #nn.Sigmoid()
                              ]
 
         self.classifier_valence = nn.Sequential(*classifier_layers)
@@ -170,16 +170,6 @@ class r2he(nn.Module):
 
 
         return nn.Sequential(*layers)
-
-    def autoencode(self, x):
-        x = self.encoder(x)
-        x = torch.flatten(x, start_dim=1)
-        x = self.latent(x)
-        x = self.decoder_input(x)
-        x = x.view(-1, 512, 16, 4)
-        x = self.decoder(x)
-        x = self.decoder_output(x)
-        return x
 
     def forward(self, x):
         #encoder
