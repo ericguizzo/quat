@@ -295,7 +295,7 @@ class simple_autoencoder(nn.Module):
         super(simple_autoencoder, self).__init__()
         ## encoder layers ##
         # conv layer (depth from 3 --> 16), 3x3 kernels
-        self.conv1 = nn.Conv2d(3, 16, 3, padding=1)
+        self.conv1 = nn.Conv2d(1, 16, 3, padding=1)
         # conv layer (depth from 16 --> 4), 3x3 kernels
         self.conv2 = nn.Conv2d(16, 4, 3, padding=1)
         # pooling layer to reduce x-y dims by two; kernel and stride of 2
