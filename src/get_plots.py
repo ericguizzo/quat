@@ -48,7 +48,7 @@ parser.add_argument('--model_latent_dim', type=int, default=1000)
 parser.add_argument('--model_verbose', type=str, default='False')
 parser.add_argument('--model_architecture', type=str, default='simple')
 parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
-parser.add_argument('--fast_test_bound', type=int, default=5)
+parser.add_argument('--fast_test_bound', type=int, default=100)
 
 args = parser.parse_args()
 
