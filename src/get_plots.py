@@ -68,7 +68,7 @@ def gen_plot(sounds, pred, sound_id, args):
 
     #pred,_,_,_ = pred
     pred = pred[0].cpu().numpy().squeeze()
-
+    '''
     if len(pred.shape)== 3:
         r = pred[0]
         v = pred[1]
@@ -79,7 +79,11 @@ def gen_plot(sounds, pred, sound_id, args):
         v = pred
         a = pred
         d = pred
-
+    '''
+    r = pred
+    v = pred
+    a = pred
+    d = pred
     print ('ajajajajaj', sounds.shape, pred.shape)
     recon = np.sum(pred, axis=0)
     #r = np.flip(r.T,-1)
