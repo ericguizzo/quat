@@ -66,7 +66,7 @@ def gen_plot(sounds, pred, sound_id, args):
     #recon = recon.cpu().numpy().squeeze()
     sounds = sounds[0].cpu().numpy().squeeze()
 
-    pred,_,_,_ = pred
+    #pred,_,_,_ = pred
     pred = pred[0].cpu().numpy().squeeze()
 
     if len(pred.shape)== 3:
