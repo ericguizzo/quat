@@ -295,16 +295,19 @@ class simple_autoencoder(nn.Module):
 #"VGG16": [64,64,"M",128,128,"M",256,256,256,"M",512,512,512,"M",512,512,512,"M",],
 
 class simple_autoencoder(nn.Module):
-    def __init__(self):
+    def __init__(self, hidden_size=500 ,flatten_dim=65536):
         super(simple_autoencoder, self).__init__()
         ## encoder layers ##
         # conv layer (depth from 3 --> 16), 3x3 kernels
+        self.flatten_dim = flatten_dim
+        self.hidden_size = hidden_size
         self.conv1 = nn.Conv2d(1, 16, 3, padding=1)
         self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
         self.conv3 = nn.Conv2d(32, 64, 3, padding=1)
 
         self.pool = nn.MaxPool2d(2, 2)
-        self.hidden = nn.Linear(134, 100)
+        self.hidden = nn.Linear(flatten_dim, hidden_size*4)
+        self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
         ## decoder layers ##
         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
         self.t_conv1 = nn.ConvTranspose2d(64, 32, 2, stride=2)
@@ -321,6 +324,12 @@ class simple_autoencoder(nn.Module):
         x = self.pool(x)
         x = F.relu(self.conv3(x))
         x = self.pool(x)
+        print (x.shape)
+        #hidden dim
+        x = torch.flatten(x, start_dim=1)
+        x = F.relu(self.hidden(x))
+        x = F.relu(self.decoder_input(x))
+        x = x.view(-1, 64, 64, 16)
         ## decode ##
         x = F.relu(self.t_conv1(x))
         x = F.relu(self.t_conv2(x))
