@@ -52,14 +52,14 @@ class r2he(nn.Module):
                                                                out_channels=4,
                                                                kernel_size=3,
                                                                stride=1,
-                                                               padding=1),
+                                                               padding=1),)
                                                 #nn.Sigmoid())
         else:
             self.decoder_output = nn.Sequential(nn.Conv2d(self.first_dim,
                                                                out_channels=1,
                                                                kernel_size=3,
                                                                stride=1,
-                                                               padding=1),
+                                                               padding=1),)
                                                 #nn.Sigmoid())
 
         classifier_layers = [nn.Linear(self.latent_dim, 4096),
