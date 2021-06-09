@@ -176,7 +176,7 @@ for epoch in range(args.num_epochs):
             loss.backward()
             optimizer.step()
 
-            #loss = loss.detach().cpu().item()
+            loss = loss.detach().cpu().item()
             train_batch_losses.append({'total':loss, 'emo':0, 'recon':0,
                           'valence':0, 'arousal':0, 'dominance':0})
             pbar.update(1)
