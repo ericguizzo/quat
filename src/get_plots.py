@@ -80,10 +80,10 @@ def gen_plot(sounds, pred, sound_id, args):
         a = pred
         d = pred
     '''
-    r = pred
-    v = pred
-    a = pred
-    d = pred
+    r = pred[0]
+    v = pred[0]
+    a = pred[0]
+    d = pred[0]
     print ('ajajajajaj', sounds.shape, pred.shape)
     recon = np.sum(pred, axis=0)
     #r = np.flip(r.T,-1)
