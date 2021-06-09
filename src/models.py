@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+import torch.nn.functional as F
 from quaternion_layers import (QuaternionConv, QuaternionLinear,
                                QuaternionTransposeConv)
 from qbn import QuaternionBatchNorm2d
