@@ -302,16 +302,16 @@ class simple_autoencoder(nn.Module):
         self.flatten_dim = flatten_dim
         self.hidden_size = hidden_size
         self.conv1 = nn.Conv2d(1, 16, 3, padding=1)
-        self.conv2 = nn.Conv2d(16, 4, 3, padding=1)
-        #self.conv3 = nn.Conv2d(32, 32, 3, padding=1)
+        self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
+        self.conv3 = nn.Conv2d(32, 4, 3, padding=1)
 
         self.pool = nn.MaxPool2d(2, 2)
-        self.hidden = nn.Linear(flatten_dim, hidden_size*4)
-        self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
+        #self.hidden = nn.Linear(flatten_dim, hidden_size*4)
+        #self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
         ## decoder layers ##
         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
-        #self.t_conv1 = nn.ConvTranspose2d(32, 32, 2, stride=2)
-        self.t_conv2 = nn.ConvTranspose2d(4, 16, 2, stride=2)
+        self.t_conv1 = nn.ConvTranspose2d(4, 32, 2, stride=2)
+        self.t_conv2 = nn.ConvTranspose2d(32, 16, 2, stride=2)
         self.t_conv3 = nn.ConvTranspose2d(16, 1, 2, stride=2)
 
 
@@ -322,21 +322,21 @@ class simple_autoencoder(nn.Module):
         x = self.pool(x)
         x = F.relu(self.conv2(x))
         x = self.pool(x)
-        #x = F.relu(self.conv3(x))
-        #x = self.pool(x)
+        x = F.relu(self.conv3(x))
+        x = self.pool(x)
         #print ('cazzo', x.shape)
         #hidden dim
-        x = torch.flatten(x, start_dim=1)
+        #x = torch.flatten(x, start_dim=1)
         #print (x.shape)
-        x = F.sigmoid(self.hidden(x))
+        #x = F.sigmoid(self.hidden(x))
         #print (x.shape)
-        x = F.relu(self.decoder_input(x))
+        #x = F.relu(self.decoder_input(x))
         #print (x.shape)
-        x = x.view(-1, 4, 128, 32)
+        #x = x.view(-1, 4, 128, 32)
         ## decode ##
+        x = F.relu(self.t_conv1(x))
         x = F.relu(self.t_conv2(x))
         x = self.t_conv3(x)
-        #x = self.t_conv3(x)
 
         return F.sigmoid(x)
 '''
