@@ -108,6 +108,12 @@ def gen_plot(sounds, pred, sound_id, args):
     sounds = (np.flip(sounds.T,-1)/np.max(sounds))**exponent
     '''
 
+    r = (np.flip(r.T,-1))**exponent
+    v = (np.flip(v.T,-1))**exponent
+    a = (np.flip(a.T,-1))**exponent
+    d = (np.flip(d.T,-1))**exponent
+    sounds = (np.flip(sounds.T,-1))**exponent
+
     plt.figure(1)
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
     plt.subplot(231)
@@ -128,7 +134,7 @@ def gen_plot(sounds, pred, sound_id, args):
     plt.subplot(236)
     if len(pred.shape)== 3:
         plt.title('Output Split Act.')
-        plt.pcolormesh(np.flip(recon.T,-1)/np.max(recon)**exponent)
+        plt.pcolormesh(np.flip(recon.T,-1)**exponent)
 
     plt.tight_layout( rect=[0, 0.0, 0.95, 0.95])
 
