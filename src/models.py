@@ -316,6 +316,8 @@ class simple_autoencoder(nn.Module):
 
 
 
+
+
     def forward(self, x):
         ## encode ##
         x = F.relu(self.conv1(x))
@@ -324,7 +326,7 @@ class simple_autoencoder(nn.Module):
         x = self.pool(x)
         x = F.relu(self.conv3(x))
         x = self.pool(x)
-        print ('cazzo', x.shape)
+        #print ('cazzo', x.shape)
         #hidden dim
         #x = torch.flatten(x, start_dim=1)
         #print (x.shape)
