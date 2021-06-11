@@ -308,16 +308,16 @@ class simple_autoencoder(nn.Module):
         self.conv5 = nn.Conv2d(128, 256, 3, padding=1)
 
         self.pool = nn.MaxPool2d(2, 2)
-        self.hidden = nn.Linear(flatten_dim, hidden_size*4)
-        self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
+        #self.hidden = nn.Linear(flatten_dim, hidden_size*4)
+        #self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
         ## decoder layers ##
         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
         if quat:
-            self.t_conv1 = QuaternionTransposeConv(256, 128, kernel_size=(2,2), stride=2, padding=1)
-            self.t_conv2 = QuaternionTransposeConv(128, 64, kernel_size=(2,2), stride=2, padding=1)
-            self.t_conv3 = QuaternionTransposeConv(64, 32, kernel_size=(2,2), stride=2, padding=1)
-            self.t_conv4 = QuaternionTransposeConv(32, 16, kernel_size=(2,2), stride=2, padding=1)
-            self.t_conv5 = QuaternionTransposeConv(16, 4, kernel_size=(2,2), stride=2, padding=1)
+            self.t_conv1 = QuaternionTransposeConv(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.t_conv2 = QuaternionTransposeConv(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.t_conv3 = QuaternionTransposeConv(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.t_conv4 = QuaternionTransposeConv(32, 16, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.t_conv5 = QuaternionTransposeConv(16, 4, kernel_size=3, stride=2, padding=1, output_padding=1)
         else:
             self.t_conv1 = nn.ConvTranspose2d(256, 128, 2, stride=2)
             self.t_conv2 = nn.ConvTranspose2d(128, 64, 2, stride=2)
@@ -364,13 +364,13 @@ class simple_autoencoder(nn.Module):
         x = self.pool(x)
         #print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
-        x = torch.flatten(x, start_dim=1)
+        #x = torch.flatten(x, start_dim=1)
         #print (x.shape)
-        x = F.sigmoid(self.hidden(x))
+        #x = F.sigmoid(self.hidden(x))
         #print (x.shape)
-        x = F.relu(self.decoder_input(x))
+        #x = F.relu(self.decoder_input(x))
         #print (x.shape)
-        x = x.view(-1, 256, 16, 4)
+        #x = x.view(-1, 256, 16, 4)
         ## decode ##
         x = F.relu(self.t_conv1(x))
         x = F.relu(self.t_conv2(x))
@@ -378,6 +378,7 @@ class simple_autoencoder(nn.Module):
         x = F.relu(self.t_conv4(x))
         x = F.sigmoid(self.t_conv5(x))
 
+        x = torch.unsqueeze(torch.sum(x, axis=1), dim=1) / 4.
         return x
 '''
 class simple_autoencoder(nn.Module):

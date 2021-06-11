@@ -6,7 +6,7 @@ from torchsummary import summary
 
 
 x = torch.rand(4,1,512, 128)
-model = simple_autoencoder(quat=False)
+model = simple_autoencoder(quat=True)
 print ('input_dim', x.shape)
 x=model(x)
 print ('output_dim', x.shape)
