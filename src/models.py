@@ -295,7 +295,7 @@ class simple_autoencoder(nn.Module):
 #"VGG16": [64,64,"M",128,128,"M",256,256,256,"M",512,512,512,"M",512,512,512,"M",],
 
 class simple_autoencoder(nn.Module):
-    def __init__(self, hidden_size=1000 ,flatten_dim=16384):
+    def __init__(self, quat=False, hidden_size=100 ,flatten_dim=16384):
         super(simple_autoencoder, self).__init__()
         ## encoder layers ##
         # conv layer (depth from 3 --> 16), 3x3 kernels
@@ -305,21 +305,36 @@ class simple_autoencoder(nn.Module):
         self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
         self.conv3 = nn.Conv2d(32, 64, 3, padding=1)
         self.conv4 = nn.Conv2d(64, 128, 3, padding=1)
+        self.conv5 = nn.Conv2d(128, 256, 3, padding=1)
 
         self.pool = nn.MaxPool2d(2, 2)
-        #self.hidden = nn.Linear(flatten_dim, hidden_size*4)
-        #self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
+        self.hidden = nn.Linear(flatten_dim, hidden_size*4)
+        self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
         ## decoder layers ##
         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
-        self.t_conv1 = nn.ConvTranspose2d(128, 64, 2, stride=2)
-        self.t_conv2 = nn.ConvTranspose2d(64, 32, 2, stride=2)
-        self.t_conv3 = nn.ConvTranspose2d(32, 16, 2, stride=2)
-        self.t_conv4 = nn.ConvTranspose2d(16, 1, 2, stride=2)
-
-
-
-
-
+        if quat:
+            self.t_conv1 = QuaternionTransposeConv(256, 128, kernel_size=(2,2), stride=2, padding=1)
+            self.t_conv2 = QuaternionTransposeConv(128, 64, kernel_size=(2,2), stride=2, padding=1)
+            self.t_conv3 = QuaternionTransposeConv(64, 32, kernel_size=(2,2), stride=2, padding=1)
+            self.t_conv4 = QuaternionTransposeConv(32, 16, kernel_size=(2,2), stride=2, padding=1)
+            self.t_conv5 = QuaternionTransposeConv(16, 4, kernel_size=(2,2), stride=2, padding=1)
+        else:
+            self.t_conv1 = nn.ConvTranspose2d(256, 128, 2, stride=2)
+            self.t_conv2 = nn.ConvTranspose2d(128, 64, 2, stride=2)
+            self.t_conv3 = nn.ConvTranspose2d(64, 32, 2, stride=2)
+            self.t_conv4 = nn.ConvTranspose2d(32, 16, 2, stride=2)
+            self.t_conv5 = nn.ConvTranspose2d(16, 1, 2, stride=2)
+        '''
+        classifier_layers = [nn.Linear(self.latent_dim, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             nn.Linear(4096, 1000),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             nn.Linear(1000, 1),
+                             #nn.Sigmoid()
+                             ]
+        '''
     def forward(self, x):
         ## encode ##
         x = F.relu(self.conv1(x))
@@ -330,21 +345,23 @@ class simple_autoencoder(nn.Module):
         x = self.pool(x)
         x = F.relu(self.conv4(x))
         x = self.pool(x)
-
-        #print ('cazzo', x.shape)
+        x = F.relu(self.conv5(x))
+        x = self.pool(x)
+        #print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
-        #x = torch.flatten(x, start_dim=1)
+        x = torch.flatten(x, start_dim=1)
         #print (x.shape)
-        #x = F.sigmoid(self.hidden(x))
+        x = F.sigmoid(self.hidden(x))
         #print (x.shape)
-        #x = F.relu(self.decoder_input(x))
+        x = F.relu(self.decoder_input(x))
         #print (x.shape)
-        #x = x.view(-1, 4, 128, 32)
+        x = x.view(-1, 256, 16, 4)
         ## decode ##
         x = F.relu(self.t_conv1(x))
         x = F.relu(self.t_conv2(x))
         x = F.relu(self.t_conv3(x))
-        x = F.sigmoid(self.t_conv4(x))
+        x = F.relu(self.t_conv4(x))
+        x = F.sigmoid(self.t_conv5(x))
 
         return x
 '''
