@@ -378,7 +378,6 @@ class simple_autoencoder(nn.Module):
         x = F.relu(self.t_conv4(x))
         x = F.sigmoid(self.t_conv5(x))
 
-        x = torch.unsqueeze(torch.sum(x, axis=1), dim=1) / 4.
         return x
 '''
 class simple_autoencoder(nn.Module):
