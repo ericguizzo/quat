@@ -324,14 +324,14 @@ class simple_autoencoder(nn.Module):
         x = self.pool(x)
         #x = F.relu(self.conv3(x))
         #x = self.pool(x)
-        print ('cazzo', x.shape)
+        #print ('cazzo', x.shape)
         #hidden dim
         x = torch.flatten(x, start_dim=1)
-        print (x.shape)
+        #print (x.shape)
         x = F.sigmoid(self.hidden(x))
-        print (x.shape)
+        #print (x.shape)
         x = F.relu(self.decoder_input(x))
-        print (x.shape)
+        #print (x.shape)
         x = x.view(-1, 4, 128, 32)
         ## decode ##
         x = F.relu(self.t_conv2(x))
