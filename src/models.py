@@ -306,8 +306,8 @@ class simple_autoencoder(nn.Module):
         #self.conv3 = nn.Conv2d(32, 32, 3, padding=1)
 
         self.pool = nn.MaxPool2d(2, 2)
-        self.hidden = nn.Linear(flatten_dim, hidden_size*4)
-        self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
+        #self.hidden = nn.Linear(flatten_dim, hidden_size*4)
+        #self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
         ## decoder layers ##
         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
         #self.t_conv1 = nn.ConvTranspose2d(32, 32, 2, stride=2)
