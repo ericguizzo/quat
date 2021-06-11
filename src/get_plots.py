@@ -98,8 +98,8 @@ def gen_plot(sounds, pred, sound_id, args):
 
     print ('max: ', np.max(recon), np.max(r),np.max(v),np.max(a),np.max(d))
     print ('mean: ', np.mean(recon), np.mean(r),np.mean(v),np.mean(a),np.mean(d))
-    exponent = 2/3
-    #exponent = 1.
+    #exponent = 2/3
+    exponent = 1.
     '''
     r = (np.flip(r.T,-1)/np.max(r))**exponent
     v = (np.flip(v.T,-1)/np.max(v))**exponent
