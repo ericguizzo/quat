@@ -332,7 +332,7 @@ class simple_autoencoder(nn.Module):
         #x = x.view(-1, 32, 64, 16)
         ## decode ##
         x = F.relu(self.t_conv2(x))
-        x = F.relu(self.t_conv3(x))
+        x = self.t_conv3(x)
         #x = self.t_conv3(x)
 
         return F.sigmoid(x)
