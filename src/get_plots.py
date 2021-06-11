@@ -100,13 +100,13 @@ def gen_plot(sounds, pred, sound_id, args):
     print ('mean: ', np.mean(recon), np.mean(r),np.mean(v),np.mean(a),np.mean(d))
     exponent = 2/3
     #exponent = 1.
-
+    '''
     r = (np.flip(r.T,-1)/np.max(r))**exponent
     v = (np.flip(v.T,-1)/np.max(v))**exponent
     a = (np.flip(a.T,-1)/np.max(a))**exponent
     d = (np.flip(d.T,-1)/np.max(d))**exponent
     sounds = (np.flip(sounds.T,-1)/np.max(sounds))**exponent
-
+    '''
 
     plt.figure(1)
     plt.suptitle('AUTOENCODER OUTPUT MATRICES')
