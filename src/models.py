@@ -337,15 +337,15 @@ class simple_autoencoder(nn.Module):
         '''
         for m in self.modules():
             if isinstance(m, nn.Linear):
-                init.xavier_normal(m.weight.data)
+                nn.init.xavier_normal(m.weight.data)
                 if m.bias is not None:
                     m.bias.data.zero_()
             elif isinstance(m, nn.Conv2d):
-                init.xavier_normal(m.weight.data)
+                nn.init.xavier_normal(m.weight.data)
                 if m.bias is not None:
                     m.bias.data.zero_()
             elif isinstance(m, nn.ConvTranspose2d):
-                init.xavier_normal(m.weight.data)
+                nn.init.xavier_normal(m.weight.data)
                 if m.bias is not None:
                     m.bias.data.zero_()
 
