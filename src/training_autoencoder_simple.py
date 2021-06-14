@@ -138,12 +138,16 @@ def evaluate(model, device, loss_function, dataloader):
             recon, pred = model(sounds)
             recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
 
-            loss = loss_function(recon, sounds)
+            #loss = loss_function(recon, sounds)
             loss = loss_function(recon, sounds, pred, args.loss_beta)
             loss = loss.cpu().numpy()
 
-            temp_loss.append({'total':loss, 'emo':0, 'recon':0,
-                          'valence':0, 'arousal':0, 'dominance':0})
+            #temp_loss.append({'total':loss, 'emo':0, 'recon':0,
+            #              'valence':0, 'arousal':0, 'dominance':0})
+            temp_loss.append({'total':loss['total'].detach().cpu().numpy(),
+                                       'emo': loss['emo'].detach().cpu().numpy(),
+                                       'recon':loss['recon'].detach().cpu().numpy(),
+                                       'valence':0, 'arousal':0, 'dominance':0})
             pbar.update(1)
     return temp_loss
 
@@ -177,13 +181,16 @@ for epoch in range(args.num_epochs):
             recon, pred = model(sounds)
             recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
 
-            loss = loss_function(recon, sounds)
-            loss.backward()
+            #loss = loss_function(recon, sounds)
+            loss = loss_function(recon, sounds, pred, args.loss_beta)
+            loss['total'].backward()
             optimizer.step()
 
             #loss = loss.detach().cpu().item()
-            train_batch_losses.append({'total':loss.detach().cpu().numpy(), 'emo':0, 'recon':0,
-                          'valence':0, 'arousal':0, 'dominance':0})
+            train_batch_losses.append({'total':loss['total'].detach().cpu().numpy(),
+                                       'emo': loss['emo'].detach().cpu().numpy(),
+                                       'recon':loss['recon'].detach().cpu().numpy(),
+                                       'valence':0, 'arousal':0, 'dominance':0})
             pbar.update(1)
             #del loss
 
