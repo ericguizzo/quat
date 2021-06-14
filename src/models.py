@@ -388,10 +388,10 @@ class simple_autoencoder(nn.Module):
         x1 = F.relu(self.t_conv2(x1))
         x1 = F.relu(self.t_conv3(x1))
         x1 = F.relu(self.t_conv4(x1))
-        x1 = F.sigmoid(self.t_conv5(x1))
+        x1 = torch.sigmoid(self.t_conv5(x1))
 
         #classifiers
-        pred = F.sigmoid(self.classifier(x))
+        pred = torch.sigmoid(self.classifier(x))
         #print (pred.shape)
 
         return x1, pred
