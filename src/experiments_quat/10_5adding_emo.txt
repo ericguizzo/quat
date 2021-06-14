@@ -16,7 +16,7 @@
       },
 
   "1":{"comment_1": "beta_0", "comment_2": "loading_pretrained",
-       "loss_beta": 0, "save_model_metric": "total_loss", "early_stopping": "True",
+       "loss_beta": 1., "save_model_metric": "total_loss", "early_stopping": "True",
        "model_architecture":"VGG16", "time_dim":512, "model_quat": "True"
         }
 
