@@ -145,7 +145,7 @@ def evaluate(model, device, loss_function, dataloader):
 
             #loss = loss_function(recon, sounds)
             loss = loss_function(recon, sounds, truth, pred, args.loss_beta)
-            loss = loss.cpu().numpy()
+            loss = loss['total'].cpu().numpy()
 
             #temp_loss.append({'total':loss, 'emo':0, 'recon':0,
             #              'valence':0, 'arousal':0, 'dominance':0})
