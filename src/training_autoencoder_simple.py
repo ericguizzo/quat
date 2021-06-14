@@ -149,9 +149,9 @@ def evaluate(model, device, loss_function, dataloader):
 
             #temp_loss.append({'total':loss, 'emo':0, 'recon':0,
             #              'valence':0, 'arousal':0, 'dominance':0})
-            temp_loss.append({'total':loss['total'].detach().cpu().numpy(),
-                                       'emo': loss['emo'].detach().cpu().numpy(),
-                                       'recon':loss['recon'].detach().cpu().numpy(),
+            temp_loss.append({'total':loss['total'].cpu().numpy(),
+                                       'emo': loss['emo'].cpu().numpy(),
+                                       'recon':loss['recon'].cpu().numpy(),
                                        'valence':0, 'arousal':0, 'dominance':0})
             pbar.update(1)
     return temp_loss
