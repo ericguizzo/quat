@@ -150,8 +150,8 @@ def evaluate(model, device, loss_function, dataloader):
             #temp_loss.append({'total':loss, 'emo':0, 'recon':0,
             #              'valence':0, 'arousal':0, 'dominance':0})
             temp_loss.append({'total':loss['total'].cpu().numpy(),
-                                       'emo': loss['emo'].cpu().numpy(),
-                                       'recon':loss['recon'].cpu().numpy(),
+                                       'emo': loss['emo'],
+                                       'recon':loss['recon'],
                                        'valence':0, 'arousal':0, 'dominance':0})
             pbar.update(1)
     return temp_loss
@@ -193,8 +193,8 @@ for epoch in range(args.num_epochs):
 
             #loss = loss.detach().cpu().item()
             train_batch_losses.append({'total':loss['total'].detach().cpu().numpy(),
-                                       'emo': loss['emo'].numpy(),
-                                       'recon':loss['recon'].numpy(),
+                                       'emo': loss['emo'],
+                                       'recon':loss['recon'],
                                        'valence':0, 'arousal':0, 'dominance':0})
             pbar.update(1)
             #del loss
