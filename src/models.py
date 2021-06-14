@@ -392,7 +392,7 @@ class simple_autoencoder(nn.Module):
 
         #classifiers
         pred = F.sigmoid(self.classifier(x))
-        print (pred.shape)
+        #print (pred.shape)
 
         return x1, pred
 '''
