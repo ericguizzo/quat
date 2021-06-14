@@ -119,7 +119,8 @@ if args.load_pretrained is not None:
 optimizer = optim.Adam(model.parameters(), lr=args.learning_rate,
                               weight_decay=args.regularization_lambda)
 
-loss_function = nn.BCELoss()
+#loss_function = nn.BCELoss()
+loss_function = locals()[args.loss_function]
 
 #init history
 train_loss_hist = []
