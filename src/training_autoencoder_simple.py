@@ -113,7 +113,7 @@ print ('Total paramters: ' + str(model_params))
 #load pretrained model if desired
 
 
-args.load_pretrained = '../new_experiments/experiment_9_5samples.txt/models/model_xval_iemocap_exp9_5samples.txt_run1_fold0'
+#args.load_pretrained = '../new_experiments/experiment_9_5samples.txt/models/model_xval_iemocap_exp9_5samples.txt_run1_fold0'
 if args.load_pretrained is not None:
     print ('Loading pretrained model: ' + args.load_pretrained)
     model.load_state_dict(torch.load(args.load_pretrained), strict=False)  #load best model
