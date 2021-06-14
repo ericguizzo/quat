@@ -295,7 +295,7 @@ class simple_autoencoder(nn.Module):
 #"VGG16": [64,64,"M",128,128,"M",256,256,256,"M",512,512,512,"M",512,512,512,"M",],
 
 class simple_autoencoder(nn.Module):
-    def __init__(self, quat=True, hidden_size=4000 ,flatten_dim=16384,
+    def __init__(self, quat=True, hidden_size=4096 ,flatten_dim=16384,
                  classifier_dropout=0.3):
         super(simple_autoencoder, self).__init__()
         ## encoder layers ##
@@ -317,32 +317,34 @@ class simple_autoencoder(nn.Module):
         ## decoder layers ##
         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
         if quat:
-            self.t_conv0 = QuaternionTransposeConv(4, 256, kernel_size=3, stride=1, padding=1, output_padding=0)
+            #self.t_conv0 = QuaternionTransposeConv(4, 256, kernel_size=3, stride=1, padding=1, output_padding=0)
             self.t_conv1 = QuaternionTransposeConv(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1)
             self.t_conv2 = QuaternionTransposeConv(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1)
             self.t_conv3 = QuaternionTransposeConv(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1)
             self.t_conv4 = QuaternionTransposeConv(32, 16, kernel_size=3, stride=2, padding=1, output_padding=1)
             self.t_conv5 = QuaternionTransposeConv(16, 4, kernel_size=3, stride=2, padding=1, output_padding=1)
         else:
-            self.t_conv0 = nn.ConvTranspose2d(4, 256, 3, stride=1, padding=1,output_padding=0)
+            #self.t_conv0 = nn.ConvTranspose2d(4, 256, 3, stride=1, padding=1,output_padding=0)
             self.t_conv1 = nn.ConvTranspose2d(256, 128, 3, stride=2, padding=1,output_padding=1)
             self.t_conv2 = nn.ConvTranspose2d(128, 64, 3, stride=2, padding=1,output_padding=1)
             self.t_conv3 = nn.ConvTranspose2d(64, 32, 3, stride=2, padding=1,output_padding=1)
             self.t_conv4 = nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1,output_padding=1)
             self.t_conv5 = nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1,output_padding=1)
-        '''
-        classifier_layers = [nn.Linear(self.latent_dim, 256),
+
+        classifier_layers = [nn.Linear(self.latent_dim, 4096),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
-                             nn.Linear(256, 128),
+                             nn.Linear(4096, 1000),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
-                             nn.Linear(128, 3),
+                             nn.Linear(1000, 3),
                              #nn.Sigmoid()
-        self.classifier_valence = nn.Sequential(*classifier_layers)
-        self.classifier_arousal = nn.Sequential(*classifier_layers)
-        self.classifier_dominance = nn.Sequential(*classifier_layers)     ]
-        '''
+        #self.classifier_valence = nn.Sequential(*classifier_layers)
+        #self.classifier_arousal = nn.Sequential(*classifier_layers)
+        #self.classifier_dominance = nn.Sequential(*classifier_layers)
+
+        self.classifier = nn.Sequential(*classifier_layers)   ]
+
         for m in self.modules():
             if isinstance(m, nn.Linear):
                 nn.init.xavier_normal(m.weight.data)
@@ -389,8 +391,8 @@ class simple_autoencoder(nn.Module):
         x1 = F.sigmoid(self.t_conv5(x1))
 
         #classifiers
-        #self.classifier_valence = nn.Sequential(*classifier_layers)
-
+        pred = self.classifier(x)
+        print (pred.shape)
 
         return x1
 '''
