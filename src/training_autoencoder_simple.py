@@ -140,7 +140,7 @@ def evaluate(model, device, loss_function, dataloader):
             recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
 
             #loss = loss_function(recon, sounds)
-            loss = loss_function(recon, sounds, pred, args.loss_beta)
+            loss = loss_function(recon, sounds, truth, pred, args.loss_beta)
             loss = loss.cpu().numpy()
 
             #temp_loss.append({'total':loss, 'emo':0, 'recon':0,
@@ -183,7 +183,7 @@ for epoch in range(args.num_epochs):
             recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
 
             #loss = loss_function(recon, sounds)
-            loss = loss_function(recon, sounds, pred, args.loss_beta)
+            loss = loss_function(recon, sounds, truth, pred, args.loss_beta)
             loss['total'].backward()
             optimizer.step()
 
