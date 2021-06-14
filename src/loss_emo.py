@@ -21,8 +21,10 @@ def emo_loss(input, recon, truth, pred, beta):
     emo_loss = beta * F.mse_loss(truth, pred)
     total_loss = recon_loss + emo_loss
 
+    #return {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),
+    #    'valence':valence_loss.detach().item(),'arousal':arousal_loss.detach().item(), 'dominance':dominance_loss.detach().item()}
     return {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),
-        'valence':valence_loss.detach().item(),'arousal':arousal_loss.detach().item(), 'dominance':dominance_loss.detach().item()}
+        'valence':0,'arousal':0, 'dominance':0}
 
     #return {'total':recon_loss}
 
