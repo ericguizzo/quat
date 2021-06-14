@@ -5,19 +5,20 @@ import numpy as np
 
 
 
-def emo_loss(input, recon, truth, v, a, d, beta):
+def emo_loss(input, recon, truth, pred, beta):
     #split activation (sum quat channels)
 
     #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
-    recon = recon[:,0,:,:]
+    #recon = recon[:,0,:,:]
 
-    recon_loss = F.binary_cross_entropy(recon.squeeze(), input.squeeze())
+    #recon_loss = F.binary_cross_entropy(recon.squeeze(), input.squeeze())
 
-    valence_loss = F.mse_loss(v.squeeze(), truth[:,0].squeeze())
-    arousal_loss = F.mse_loss(a.squeeze(), truth[:,1].squeeze())
-    dominance_loss = F.mse_loss(d.squeeze(), truth[:,2].squeeze())
+    #valence_loss = F.mse_loss(v[:,0].squeeze(), truth[:,0].squeeze())
+    #arousal_loss = F.mse_loss(a[:,1].squeeze(), truth[:,1].squeeze())
+    #dominance_loss = F.mse_loss(d[:,2].squeeze(), truth[:,2].squeeze())
 
-    emo_loss = beta * (valence_loss + arousal_loss + dominance_loss)
+    #emo_loss = beta * (valence_loss + arousal_loss + dominance_loss)
+    emo_loss = beta * F.mse_loss(truth, pred)
     total_loss = recon_loss + emo_loss
 
     return {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),

@@ -189,7 +189,7 @@ if __name__ == '__main__':
         for i, (sounds, truth) in enumerate(dataloader):
             if i in args.datapoints_list:
                 sounds = sounds.to(device)
-                pred = model(sounds)
+                pred, _ = model(sounds)
 
                 gen_plot(sounds, pred, i, args)
                 pbar.update(1)
