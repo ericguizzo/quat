@@ -331,19 +331,19 @@ class simple_autoencoder(nn.Module):
             self.t_conv4 = nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1,output_padding=1)
             self.t_conv5 = nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1,output_padding=1)
 
-        classifier_layers = [nn.Linear(self.latent_dim, 4096),
+        classifier_layers = [nn.Linear(flatten_dim, 4096),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(4096, 1000),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
-                             nn.Linear(1000, 3),
-                             #nn.Sigmoid()
+                             nn.Linear(1000, 3),]
+                             #nn.Sigmoid()]
         #self.classifier_valence = nn.Sequential(*classifier_layers)
         #self.classifier_arousal = nn.Sequential(*classifier_layers)
         #self.classifier_dominance = nn.Sequential(*classifier_layers)
 
-        self.classifier = nn.Sequential(*classifier_layers)   ]
+        self.classifier = nn.Sequential(*classifier_layers)
 
         for m in self.modules():
             if isinstance(m, nn.Linear):
@@ -391,10 +391,10 @@ class simple_autoencoder(nn.Module):
         x1 = F.sigmoid(self.t_conv5(x1))
 
         #classifiers
-        pred = self.classifier(x)
+        pred = F.sigmoid(self.classifier(x))
         print (pred.shape)
 
-        return x1
+        return x1, pred
 '''
 class simple_autoencoder(nn.Module):
     def __init__(self):
