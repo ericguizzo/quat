@@ -295,7 +295,7 @@ class simple_autoencoder(nn.Module):
 #"VGG16": [64,64,"M",128,128,"M",256,256,256,"M",512,512,512,"M",512,512,512,"M",],
 
 class simple_autoencoder(nn.Module):
-    def __init__(self, quat=True, hidden_size=500 ,flatten_dim=16384,
+    def __init__(self, quat=True, hidden_size=2000 ,flatten_dim=16384,
                  classifier_dropout=0.3):
         super(simple_autoencoder, self).__init__()
         ## encoder layers ##
@@ -310,8 +310,8 @@ class simple_autoencoder(nn.Module):
         self.conv6 = nn.Conv2d(256, 4, 3, padding=1)
 
         self.pool = nn.MaxPool2d(2, 2)
-        #self.hidden = nn.Linear(flatten_dim, hidden_size*4)
-        #self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
+        self.hidden = nn.Linear(flatten_dim, hidden_size*4)
+        self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
         ## decoder layers ##
         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
         if quat:
@@ -368,18 +368,18 @@ class simple_autoencoder(nn.Module):
         x = self.pool(x)
         x = F.relu(self.conv5(x))
         x = self.pool(x)
-        x = F.relu(self.conv6(x))
+        #x = F.relu(self.conv6(x))
         #print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
-        #x = torch.flatten(x, start_dim=1)
+        x = torch.flatten(x, start_dim=1)
         #print (x.shape)
-        #x = F.sigmoid(self.hidden(x))
+        x = F.sigmoid(self.hidden(x))
         #print (x.shape)
-        #x = F.relu(self.decoder_input(x))
+        x = F.relu(self.decoder_input(x))
         #print (x.shape)
-        #x = x.view(-1, 256, 16, 4)
+        x1 = x.view(-1, 256, 16, 4)
         ## decode ##
-        x1 = F.relu(self.t_conv0(x))
+        #x1 = F.relu(self.t_conv0(x))
         x1 = F.relu(self.t_conv1(x1))
         x1 = F.relu(self.t_conv2(x1))
         x1 = F.relu(self.t_conv3(x1))
