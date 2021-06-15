@@ -81,6 +81,35 @@ def get_label_IEMOCAP(wavname):
 
     return str_label
 
+def get_label_IEMOCAP_classification(wavname):
+    '''
+    compute one hot label starting from wav filename
+    '''
+    wavname = wavname.split('/')[-1]
+    session = int(wavname.split('_')[0][3:5])
+    trans_file = '_'.join(wavname.split('_')[:-1]) + '.txt'
+    ID = wavname.split('.')[0]
+    trans_path = os.path.join(INPUT_IEMOCAP_FOLDER, 'Session' + str(session),
+                            'dialog/EmoEvaluation', trans_file)
+    #trans_path = '/home/eric/Desktop/Ses01F_impro01.txt'
+    with open(trans_path) as f:
+        contents = f.readlines()
+
+    str_label = list(filter(lambda x: ID in x, contents))[0].split('\t')[2]
+
+    #change this to have only 4 labels!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    #int_label = label_to_int[str_label]
+    int_label = label_to_int[str_label]
+
+    if int_label != None:
+        output = uf.onehot(int_label, num_classes_IEMOCAP)
+    else:
+        output = None
+
+
+    return output
+
 def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
     '''
     get list of all sound paths in the dataset
@@ -140,7 +169,7 @@ def main():
     sounds_list = get_sounds_list(INPUT_IEMOCAP_FOLDER)  #get list of all soundfile paths
 
     #change this to have only 4 labels
-    #sounds_list = filter_labels(sounds_list)  #filter only sounds of certain labels
+    sounds_list = filter_labels(sounds_list)  #filter only sounds of certain labels
 
     #filter non-wav files
     sounds_list = list(filter(lambda x: x[-3:] == "wav", sounds_list))  #get only wav
@@ -169,8 +198,8 @@ def main():
 
         print ('\nPreprocessing files')
         curr_list = [i]
-        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP)
-
+        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP_classification)
+        print (curr_target.shape)
         #append preprocessed predictors and target to the dict
         if curr_predictors.shape[0] != 0:
             predictors[i] = curr_predictors
