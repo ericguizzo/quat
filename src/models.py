@@ -338,8 +338,8 @@ class simple_autoencoder(nn.Module):
                              nn.Linear(4096, 1000),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
-                             nn.Linear(1000, 3),]
-                             #nn.Sigmoid()]
+                             nn.Linear(1000, num_classes)]
+
         #self.classifier_valence = nn.Sequential(*classifier_layers)
         #self.classifier_arousal = nn.Sequential(*classifier_layers)
         #self.classifier_dominance = nn.Sequential(*classifier_layers)
