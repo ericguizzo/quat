@@ -139,7 +139,7 @@ def filter_labels(sounds_list):
     '''
     filtered_list = []
     for sound in sounds_list:
-        label = get_label_IEMOCAP(sound)
+        label = get_label_IEMOCAP_classification(sound)
         if type(label) == np.ndarray:  #if not none
             filtered_list.append(sound)
 
