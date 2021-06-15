@@ -18,7 +18,9 @@ def emo_loss(input, recon, truth, pred, beta):
     #dominance_loss = F.mse_loss(d[:,2].squeeze(), truth[:,2].squeeze())
 
     #emo_loss = beta * (valence_loss + arousal_loss + dominance_loss)
-    emo_loss = beta * F.mse_loss(truth, pred)
+    #emo_loss = beta * F.mse_loss(truth, pred)
+    print ('IMBECILLE', truth.shape, pred.shape)
+    emo_loss = beta * F.cross_entropy(truth, pred)
     total_loss = recon_loss + emo_loss
 
     #return {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),

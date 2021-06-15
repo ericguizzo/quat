@@ -47,7 +47,19 @@ label_to_int = {'neu':0,
                 'dis':None,
                 'oth':None,
                 'xxx':None}
-
+'''
+label_to_int = {'neu':0,
+                'ang':1,
+                'hap':2,
+                'exc':3,
+                'sad':4,
+                'fru':5,
+                'fea':6,
+                'sur':7,
+                'dis':8,
+                'oth':None,
+                'xxx':None}
+'''
 wavname = 'Ses01F_impro01_F001.wav'
 #wavname = 'Ses01M_script01_2_F003.wav'
 

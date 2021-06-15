@@ -391,7 +391,7 @@ class simple_autoencoder(nn.Module):
         x1 = torch.sigmoid(self.t_conv5(x1))
 
         #classifiers
-        pred = torch.sigmoid(self.classifier(x))
+        pred = torch.softmax(self.classifier(x))
         #print (pred.shape)
 
         return x1, pred
