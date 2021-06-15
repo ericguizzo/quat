@@ -33,7 +33,7 @@ print ('Features type: ' + str(FEATURES_TYPE))
 
 #put NONE in one key to not preprocess that label
 #and change num_classes_IEMOCAP
-num_classes_IEMOCAP = 4
+num_classes_IEMOCAP = 9
 
 '''
 label_to_int = {'neu':0,
