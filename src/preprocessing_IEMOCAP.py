@@ -35,7 +35,7 @@ print ('Features type: ' + str(FEATURES_TYPE))
 #and change num_classes_IEMOCAP
 num_classes_IEMOCAP = 4
 
-
+'''
 label_to_int = {'neu':0,
                 'ang':1,
                 'hap':2,
@@ -59,7 +59,7 @@ label_to_int = {'neu':0,
                 'dis':8,
                 'oth':None,
                 'xxx':None}
-'''
+
 wavname = 'Ses01F_impro01_F001.wav'
 #wavname = 'Ses01M_script01_2_F003.wav'
 
