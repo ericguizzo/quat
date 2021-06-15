@@ -198,7 +198,7 @@ def main():
 
         print ('\nPreprocessing files')
         curr_list = [i]
-        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP_classification)
+        #curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP_classification)
         print ('MERDA', curr_target.shape)
         #append preprocessed predictors and target to the dict
         if curr_predictors.shape[0] != 0:
