@@ -296,7 +296,7 @@ class simple_autoencoder(nn.Module):
 
 class simple_autoencoder(nn.Module):
     def __init__(self, quat=True, hidden_size=4096 ,flatten_dim=16384,
-                 classifier_dropout=0.3, num_classes=4):
+                 classifier_dropout=0.5, num_classes=4):
         super(simple_autoencoder, self).__init__()
         ## encoder layers ##
         # conv layer (depth from 3 --> 16), 3x3 kernels
