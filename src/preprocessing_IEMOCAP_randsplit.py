@@ -107,7 +107,7 @@ def get_label_IEMOCAP_classification(wavname):
     else:
         output = None
 
-
+    print ('COGLIONE')
     return output
 
 def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
