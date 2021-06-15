@@ -107,7 +107,6 @@ def get_label_IEMOCAP_classification(wavname):
     else:
         output = None
 
-    print ('COGLIONE')
     return output
 
 def get_sounds_list(input_folder=INPUT_IEMOCAP_FOLDER):
@@ -170,8 +169,7 @@ def main():
 
     #change this to have only 4 labels
     sounds_list = filter_labels(sounds_list)  #filter only sounds of certain labels
-    print ('IMBECILLE')
-    sys.exit(0)
+
     #filter non-wav files
     sounds_list = list(filter(lambda x: x[-3:] == "wav", sounds_list))  #get only wav
     random.shuffle(sounds_list)
@@ -199,7 +197,7 @@ def main():
 
         print ('\nPreprocessing files')
         curr_list = [i]
-        #curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP_classification)
+        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_IEMOCAP_classification)
         print ('MERDA', curr_target.shape)
         #append preprocessed predictors and target to the dict
         if curr_predictors.shape[0] != 0:
