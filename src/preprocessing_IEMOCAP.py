@@ -8,6 +8,8 @@ import configparser
 Preprocessing script.
 Outputs numpy dicts containing preprocessed predictors and target
 '''
+print ('IMBECILLE')
+sys.exit(0)
 
 cfg = configparser.ConfigParser()
 cfg.read('preprocessing_config.ini')
