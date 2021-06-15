@@ -22,7 +22,9 @@ def emo_loss(input, recon, truth, pred, beta):
     #print ('IMBECILLE', truth.shape, pred.shape)
     #emo_loss = beta * F.cross_entropy(pred, torch.argmax(truth.long()))
     #total_loss = recon_loss + emo_loss
-    total_loss = recon_loss.copy()
+    total_loss = recon_loss
+    recon_loss = torch.tensor(0)
+    emo_loss = torch.tensor(0)
     #return {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),
     #    'valence':valence_loss.detach().item(),'arousal':arousal_loss.detach().item(), 'dominance':dominance_loss.detach().item()}
     return {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),
