@@ -8,8 +8,6 @@ import configparser
 Preprocessing script.
 Outputs numpy dicts containing preprocessed predictors and target
 '''
-print ('IMBECILLE')
-sys.exit(0)
 
 cfg = configparser.ConfigParser()
 cfg.read('preprocessing_config.ini')
@@ -195,7 +193,8 @@ def main():
         predictors_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap_randsplit' + appendix + '_predictors.npy')
         target_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap_randsplit' + appendix + '_target.npy')
     index = 1  #index for progress bar
-
+    print ('IMBECILLE')
+    sys.exit(0)
     for i in sounds_list:
 
         print ('\nPreprocessing files')
