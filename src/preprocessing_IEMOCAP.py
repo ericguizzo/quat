@@ -170,7 +170,8 @@ def main():
 
     #change this to have only 4 labels
     sounds_list = filter_labels(sounds_list)  #filter only sounds of certain labels
-
+    print ('IMBECILLE')
+    sys.exit(0)
     #filter non-wav files
     sounds_list = list(filter(lambda x: x[-3:] == "wav", sounds_list))  #get only wav
     random.shuffle(sounds_list)
@@ -193,8 +194,7 @@ def main():
         predictors_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap_randsplit' + appendix + '_predictors.npy')
         target_save_path = os.path.join(OUTPUT_FOLDER, 'iemocap_randsplit' + appendix + '_target.npy')
     index = 1  #index for progress bar
-    print ('IMBECILLE')
-    sys.exit(0)
+
     for i in sounds_list:
 
         print ('\nPreprocessing files')
