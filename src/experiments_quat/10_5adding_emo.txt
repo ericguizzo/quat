@@ -7,7 +7,7 @@
         "num_experiment": 10,
         "num_folds": 1,
         "num_epochs": 200000,
-        "learning_rate": 0.00005,
+        "learning_rate": 0.00001,
         "batch_size": 30,
         "model_name": "simple_autoencoder",
         "fast_test": "False",
