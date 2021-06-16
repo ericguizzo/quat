@@ -141,7 +141,6 @@ def evaluate(model, device, loss_function, dataloader):
             truth = truth.to(device)
 
             recon, pred = model(sounds)
-            recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
 
             #loss = loss_function(recon, sounds)
             loss = loss_function(recon, sounds, truth, pred, args.loss_beta)
@@ -184,7 +183,6 @@ for epoch in range(args.num_epochs):
             truth = truth.to(device)
 
             recon, pred = model(sounds)
-            recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
 
             #loss = loss_function(recon, sounds)
             loss = loss_function(recon, sounds, truth, pred, args.loss_beta)
