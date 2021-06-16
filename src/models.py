@@ -295,7 +295,7 @@ class simple_autoencoder(nn.Module):
 #"VGG16": [64,64,"M",128,128,"M",256,256,256,"M",512,512,512,"M",512,512,512,"M",],
 
 class simple_autoencoder(nn.Module):
-    def __init__(self, quat=True, hidden_size=4096 ,flatten_dim=16384,
+    def __init__(self, quat=True, hidden_size=4096 ,flatten_dim=131072,
                  classifier_dropout=0.5, num_classes=4):
         super(simple_autoencoder, self).__init__()
         ## encoder layers ##
@@ -332,10 +332,10 @@ class simple_autoencoder(nn.Module):
             self.t_conv4 = nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1,output_padding=1)
             self.t_conv5 = nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1,output_padding=1)
 
-        classifier_layers = [nn.Linear(flatten_dim, 4096),
+        classifier_layers = [nn.Linear(flatten_dim, 1000),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
-                             nn.Linear(4096, 1000),
+                             nn.Linear(1000, 1000),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(1000, num_classes)]
@@ -367,7 +367,7 @@ class simple_autoencoder(nn.Module):
         x = self.pool(x)
         x = F.relu(self.conv2(x))
         x = self.pool(x)
-
+        '''
         x = F.relu(self.conv3(x))
         x = self.pool(x)
         x = F.relu(self.conv4(x))
@@ -376,23 +376,23 @@ class simple_autoencoder(nn.Module):
         x = self.pool(x)
         #x = F.relu(self.conv6(x))
         #x = self.pool(x)
-
-        #print ('CAZZOOOOOOOOOO', x.shape)
+        '''
+        print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
         x = torch.flatten(x, start_dim=1)
-        #print (x.shape)
+        print (x.shape)
         #x = F.sigmoid(self.hidden(x))
         #print (x.shape)
         #x = F.relu(self.decoder_input(x))
         #print (x.shape)
-        x1 = x.view(-1, 256, 16, 4)
+        x1 = x.view(-1, 32, 128, 32)
         ## decode ##
-
+        '''
         #x1 = F.relu(self.t_conv0(x1))
         x1 = F.relu(self.t_conv1(x1))
         x1 = F.relu(self.t_conv2(x1))
         x1 = F.relu(self.t_conv3(x1))
-
+        '''
         x1 = F.relu(self.t_conv4(x1))
         x1 = torch.sigmoid(self.t_conv5(x1))
 
