@@ -10,9 +10,9 @@ def emo_loss(input, recon, truth, pred, beta):
 
     #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
     #recon = recon[:,0,:,:]
-    #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
+    recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
 
-    recon = torch.sigmoid(torch.sqrt(torch.sum(recon**2, axis=1)))  #modulo
+    #recon = torch.sigmoid(torch.sqrt(torch.sum(recon**2, axis=1)))  #modulo
     #print ('CAZZOOOOOO', torch.max(input), torch.max(recon))
     input = torch.sigmoid(input)
     recon_loss = F.binary_cross_entropy(recon.squeeze(), input.squeeze())
