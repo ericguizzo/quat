@@ -374,8 +374,8 @@ class simple_autoencoder(nn.Module):
         x = self.pool(x)
         x = F.relu(self.conv5(x))
         x = self.pool(x)
-        x = F.relu(self.conv6(x))
-        x = self.pool(x)
+        #x = F.relu(self.conv6(x))
+        #x = self.pool(x)
 
         #print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
@@ -385,10 +385,10 @@ class simple_autoencoder(nn.Module):
         #print (x.shape)
         #x = F.relu(self.decoder_input(x))
         #print (x.shape)
-        x1 = x.view(-1, 512, 8, 2)
+        x1 = x.view(-1, 256, 16, 4)
         ## decode ##
 
-        x1 = F.relu(self.t_conv0(x1))
+        #x1 = F.relu(self.t_conv0(x1))
         x1 = F.relu(self.t_conv1(x1))
         x1 = F.relu(self.t_conv2(x1))
         x1 = F.relu(self.t_conv3(x1))

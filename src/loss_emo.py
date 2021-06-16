@@ -21,7 +21,7 @@ def emo_loss(input, recon, truth, pred, beta):
     #emo_loss = beta * F.mse_loss(truth, pred)
     #print ('IMBECILLE', truth.shape, pred.shape)
     emo_loss = beta * F.cross_entropy(pred, torch.argmax(truth, axis=1).long())
-    total_loss = (0 * recon_loss) + emo_loss
+    total_loss = (recon_loss) + emo_loss
 
     acc = torch.sum(torch.argmax(pred, axis=1) == torch.argmax(truth, axis=1)) / pred.shape[0]
     #total_loss = recon_loss
