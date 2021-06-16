@@ -14,7 +14,7 @@ def emo_loss(input, recon, truth, pred, beta):
 
     recon = torch.unsqueeze(torch.sqrt(torch.sum(recon**2, axis=1)), dim=1)  #modulo
     #print ('CAZZOOOOOO', input.shape, recon.shape)
-    recon_loss = F.binary_cross_entropy(input.squeeze(), recon.squeeze())
+    recon_loss = F.binary_cross_entropy(recon.squeeze(), input.squeeze())
 
     #valence_loss = F.mse_loss(v[:,0].squeeze(), truth[:,0].squeeze())
     #arousal_loss = F.mse_loss(a[:,1].squeeze(), truth[:,1].squeeze())
