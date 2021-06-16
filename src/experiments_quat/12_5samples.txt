@@ -11,7 +11,6 @@
         "batch_size": 20,
         "model_name": "simple_autoencoder",
         "fast_test": "False",
-        "load_pretrained": "'../new_experiments/experiment_12_5samples.txt/models/model_xval_iemocap_exp12_5samples.txt_run1_fold0'",
         "patience": 30
       },
 
