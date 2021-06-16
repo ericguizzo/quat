@@ -377,10 +377,10 @@ class simple_autoencoder(nn.Module):
         x = F.relu(self.conv6(x))
         x = self.pool(x)
         '''
-        print ('CAZZOOOOOOOOOO', x.shape)
+        #print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
         x = torch.flatten(x, start_dim=1)
-        print (x.shape)
+        #print (x.shape)
         #x = F.sigmoid(self.hidden(x))
         #print (x.shape)
         #x = F.relu(self.decoder_input(x))
