@@ -11,8 +11,8 @@ def emo_loss(recon, sounds, truth, pred, beta):
     #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
     #recon = recon[:,0,:,:]
     #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
-    recon = torch.sigmoid(torch.unsqueeze(torch.sqrt(torch.sum(recon**2, axis=1)), dim=1))
-    recon_loss = F.binary_cross_entropy(recon.squeeze(), sounds.squeeze())
+    recon = torch.sqrt(torch.sum(recon**2, axis=1))
+    recon_loss = F.binary_cross_entropy_with_logits(recon, sounds.squeeze())
 
     #valence_loss = F.mse_loss(v[:,0].squeeze(), truth[:,0].squeeze())
     #arousal_loss = F.mse_loss(a[:,1].squeeze(), truth[:,1].squeeze())
