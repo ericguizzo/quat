@@ -39,7 +39,8 @@ parser.add_argument('--sample_rate', type=int, default=16000)
 #'../new_experiments/experiment_7_beta0.txt/models/model_xval_iemocap_exp7_beta0.txt_run1_fold0'
 '../new_experiments/experiment_8_beta0_simple.txt/models/model_xval_iemocap_exp8_beta0_simple.txt_run1_fold0'
 '../new_experiments/experiment_9_5samples.txt/models/model_xval_iemocap_exp9_5samples.txt_run1_fold0'
-M_PATH= '../new_experiments/experiment_11_5adding_emo_noload.txt/models/model_xval_iemocap_exp11_5adding_emo_noload.txt_run1_fold0'
+'../new_experiments/experiment_11_5adding_emo_noload.txt/models/model_xval_iemocap_exp11_5adding_emo_noload.txt_run1_fold0'
+M_PATH='../new_experiments/experiment_10_5adding_emo.txt/models/model_xval_iemocap_exp10_5adding_emo.txt_run1_fold0'
 parser.add_argument('--model_path', type=str, default=M_PATH)
 parser.add_argument('--model_name', type=str, default='simple_autoencoder')
 parser.add_argument('--model_quat', type=str, default='True')
