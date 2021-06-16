@@ -11,7 +11,7 @@
         "batch_size": 60,
         "model_name": "simple_autoencoder",
         "fast_test": "False",
-        "patience": 100,
+        "patience": 30,
         "regularization_lambda": 0.001
       },
 
