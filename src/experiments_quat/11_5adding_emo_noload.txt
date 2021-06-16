@@ -8,7 +8,7 @@
         "num_folds": 1,
         "num_epochs": 200000,
         "learning_rate": 0.0005,
-        "batch_size": 30,
+        "batch_size": 60,
         "model_name": "simple_autoencoder",
         "fast_test": "False",
         "patience": 100,
