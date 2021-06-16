@@ -5,7 +5,7 @@ import numpy as np
 
 
 
-def emo_loss(recon, sounds, truth, pred, beta):
+def emo_loss(recon, input, truth, pred, beta):
     #split activation (sum quat channels)
 
     #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
