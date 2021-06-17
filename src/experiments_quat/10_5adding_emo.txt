@@ -12,7 +12,6 @@
         "model_name": "simple_autoencoder",
         "fast_test": "False",
         "patience": 100,
-        "load_pretrained": "'../new_experiments/experiment_9_5samples.txt/models/model_xval_iemocap_exp9_5samples.txt_run1_fold0'",
         "regularization_lambda": 0.00
       },
 
