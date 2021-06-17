@@ -312,7 +312,10 @@ class simple_autoencoder(nn.Module):
 
         self.pool = nn.MaxPool2d(2, 2)
 
-
+        self.conv1_bn = nn.BatchNorm2d(16)
+        self.conv2_bn = nn.BatchNorm2d(32)
+        self.tconv1_bn = QuaternionBatchNorm2d(32)
+        self.tconv2_bn = QuaternionBatchNorm2d(16)
         #self.hidden = nn.Linear(flatten_dim, hidden_size*4)
         #self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
         ## decoder layers ##
@@ -363,8 +366,10 @@ class simple_autoencoder(nn.Module):
     def encode(self, x):
         x = F.relu(self.conv1(x))
         x = self.pool(x)
+        x = self.conv1_bn(x)
         x = F.relu(self.conv2(x))
         x = self.pool(x)
+        x = self.conv2_bn(x)
         '''
         x = F.relu(self.conv3(x))
         x = self.pool(x)
@@ -393,6 +398,7 @@ class simple_autoencoder(nn.Module):
         #x = F.relu(self.t_conv3(x))
 
         x = F.relu(self.t_conv4(x))
+        x = self.tconv2_bn(x)
         x = torch.sigmoid(self.t_conv5(x))
 
         return x
