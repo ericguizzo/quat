@@ -313,8 +313,8 @@ class simple_autoencoder(nn.Module):
         self.pool = nn.MaxPool2d(2, 2)
 
 
-        self.hidden = nn.Linear(flatten_dim, hidden_size*4)
-        self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
+        #self.hidden = nn.Linear(flatten_dim, hidden_size*4)
+        #self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
         ## decoder layers ##
         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
         if quat:
@@ -332,7 +332,7 @@ class simple_autoencoder(nn.Module):
             self.t_conv4 = nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1,output_padding=1)
             self.t_conv5 = nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1,output_padding=1)
 
-        classifier_layers = [nn.Linear(hidden_size*4, 4096),
+        classifier_layers = [nn.Linear(flatten_dim, 4096),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(4096, 1000),
@@ -369,7 +369,7 @@ class simple_autoencoder(nn.Module):
         x = self.pool(x)
         x = F.relu(self.conv4(x))
         x = self.pool(x)
-        x = F.relu(self.conv5(x))
+        x = torch.sigmoid(self.conv5(x))
         x = self.pool(x)
         #x = F.relu(self.conv6(x))
         #x = self.pool(x)
@@ -377,12 +377,12 @@ class simple_autoencoder(nn.Module):
         #print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
         x = torch.flatten(x, start_dim=1)
-        x = torch.sigmoid(self.hidden(x))
+        #x = torch.sigmoid(self.hidden(x))
 
         return x
 
     def decode(self, x):
-        x = F.relu(self.decoder_input(x))
+        #x = F.relu(self.decoder_input(x))
 
         x = x.view(-1, 256, 16, 4)
         #x1 = F.relu(self.t_conv0(x1))
