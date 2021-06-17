@@ -12,7 +12,7 @@ def emo_loss(recon, sounds, truth, pred, beta):
     #recon = recon[:,0,:,:]
     #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
     #recon = torch.sum(recon**2, axis=1)
-    recon = torch.sum(recon, axis=1)
+    recon = torch.sum(recon, axis=1) / 4.
 
     #recon_loss = F.binary_cross_entropy_with_logits(recon, sounds.squeeze())
     recon_loss = F.binary_cross_entropy(recon, sounds.squeeze())
