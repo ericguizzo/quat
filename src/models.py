@@ -332,10 +332,10 @@ class simple_autoencoder(nn.Module):
             self.t_conv4 = nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1,output_padding=1)
             self.t_conv5 = nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1,output_padding=1)
 
-        classifier_layers = [nn.Linear(flatten_dim, 4096),
+        classifier_layers = [nn.Linear(flatten_dim, 1000),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
-                             nn.Linear(4096, 1000),
+                             nn.Linear(1000, 1000),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(1000, num_classes)]
@@ -378,7 +378,7 @@ class simple_autoencoder(nn.Module):
 
         #print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
-        #x = torch.flatten(x, start_dim=1)
+        x = torch.flatten(x, start_dim=1)
         #x = torch.sigmoid(self.hidden(x))
 
         return x
@@ -386,7 +386,7 @@ class simple_autoencoder(nn.Module):
     def decode(self, x):
         #x = F.relu(self.decoder_input(x))
 
-        #x = x.view(-1, 32, 128, 32)
+        x = x.view(-1, 32, 128, 32)
         #x1 = F.relu(self.t_conv0(x1))
         #x = F.relu(self.t_conv1(x))
         #x = F.relu(self.t_conv2(x))
