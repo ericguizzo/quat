@@ -93,7 +93,8 @@ def gen_plot(sounds, pred, sound_id, args):
     #a = pred
     #d = pred
     print ('ajajajajaj', sounds.shape, pred.shape)
-    recon = np.sum(pred, axis=0)
+    #recon = np.sum(pred, axis=0)
+    recon = np.sum(recon**2, axis=0)
     #r = np.flip(r.T,-1)
     #v = np.flip(v.T,-1)
     #a = np.flip(a.T,-1)
