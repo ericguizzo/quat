@@ -360,14 +360,11 @@ class simple_autoencoder(nn.Module):
                 if m.bias is not None:
                     m.bias.data.zero_()
 
-
-    def forward(self, x):
-        ## encode ##
+    def encode(self, x):
         x = F.relu(self.conv1(x))
         x = self.pool(x)
         x = F.relu(self.conv2(x))
         x = self.pool(x)
-
         x = F.relu(self.conv3(x))
         x = self.pool(x)
         x = F.relu(self.conv4(x))
@@ -377,31 +374,38 @@ class simple_autoencoder(nn.Module):
         #x = F.relu(self.conv6(x))
         #x = self.pool(x)
 
-        #print ('CAZZOOOOOOOOOO', x.shape)
+        print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
-        x = torch.flatten(x, start_dim=1)
-        #print (x.shape)
-        #x = F.sigmoid(self.hidden(x))
-        #print (x.shape)
-        #x = F.relu(self.decoder_input(x))
-        #print (x.shape)
-        x1 = x.view(-1, 256, 16, 4)
-        ## decode ##
+        x = torch.sigmoid(torch.flatten(x, start_dim=1))
 
+        return x
+
+    def decode(self, x):
+        x = x.view(-1, 256, 16, 4)
         #x1 = F.relu(self.t_conv0(x1))
-        x1 = F.relu(self.t_conv1(x1))
-        x1 = F.relu(self.t_conv2(x1))
-        x1 = F.relu(self.t_conv3(x1))
+        x = F.relu(self.t_conv1(x))
+        x = F.relu(self.t_conv2(x))
+        x = F.relu(self.t_conv3(x))
 
-        x1 = F.relu(self.t_conv4(x1))
-        x1 = torch.sigmoid(self.t_conv5(x1))
+        x = F.relu(self.t_conv4(x))
+        x = torch.sigmoid(self.t_conv5(x))
 
-        #classifiers
-        #pred = F.softmax(self.classifier(x))
+        return x
+
+    def get_embeddings(self, x):
+        x = self.encode(x)
+        x = x.view(-1, 4, self.flatten_dim//4)
+        print ('h', x.shape)
+        return x
+
+
+    def forward(self, x):
+        a = self.get_embeddings(x)
+        x = self.encode(x)
         pred = self.classifier(x)
-        #print (pred.shape)
+        x = self.decode(x)
 
-        return x1, pred
+        return x, pred
 '''
 class simple_autoencoder(nn.Module):
     def __init__(self):
