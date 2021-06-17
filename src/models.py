@@ -378,7 +378,7 @@ class simple_autoencoder(nn.Module):
 
         #print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
-        x = torch.flatten(x, start_dim=1)
+        #x = torch.flatten(x, start_dim=1)
         #x = torch.sigmoid(self.hidden(x))
 
         return x
@@ -386,7 +386,7 @@ class simple_autoencoder(nn.Module):
     def decode(self, x):
         #x = F.relu(self.decoder_input(x))
 
-        x = x.view(-1, 32, 128, 32)
+        #x = x.view(-1, 32, 128, 32)
         #x1 = F.relu(self.t_conv0(x1))
         #x = F.relu(self.t_conv1(x))
         #x = F.relu(self.t_conv2(x))
