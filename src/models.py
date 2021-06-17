@@ -415,11 +415,11 @@ class simple_autoencoder(nn.Module):
 
     def forward(self, x):
         #a = self.get_embeddings(x)
-        residual = x
+        #residual = x
         x = self.encode(x)
         pred = self.classifier(x)
         x = self.decode(x)
-        x = torch.sigmoid(torch.add(x,residual))
+        #x = torch.sigmoid(torch.add(x,residual))
 
         return x, pred
 '''
