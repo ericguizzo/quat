@@ -295,7 +295,7 @@ class simple_autoencoder(nn.Module):
 #"VGG16": [64,64,"M",128,128,"M",256,256,256,"M",512,512,512,"M",512,512,512,"M",],
 
 class simple_autoencoder(nn.Module):
-    def __init__(self, quat=True, hidden_size=2048 ,flatten_dim=131072,
+    def __init__(self, quat=True, hidden_size=2048 ,flatten_dim=16384,
                  classifier_dropout=0.5, num_classes=5):
         super(simple_autoencoder, self).__init__()
         ## encoder layers ##
@@ -305,8 +305,8 @@ class simple_autoencoder(nn.Module):
         self.num_classes = num_classes
         self.conv1 = nn.Conv2d(1, 16, 3, padding=1)
         self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
-        self.conv3 = nn.Conv2d(32, 32, 3, padding=1)
-        self.conv4 = nn.Conv2d(32, 64, 3, padding=1)
+        self.conv3 = nn.Conv2d(32, 64, 3, padding=1)
+        self.conv4 = nn.Conv2d(64, 128, 3, padding=1)
         self.conv5 = nn.Conv2d(128, 256, 3, padding=1)
         self.conv6 = nn.Conv2d(256, 512, 3, padding=1)
 
@@ -323,8 +323,8 @@ class simple_autoencoder(nn.Module):
         if quat:
             self.t_conv0 = QuaternionTransposeConv(512, 256, kernel_size=3, stride=2, padding=1, output_padding=1)
             self.t_conv1 = QuaternionTransposeConv(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1)
-            self.t_conv2 = QuaternionTransposeConv(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1)
-            self.t_conv3 = QuaternionTransposeConv(32, 32, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.t_conv2 = QuaternionTransposeConv(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.t_conv3 = QuaternionTransposeConv(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1)
             self.t_conv4 = QuaternionTransposeConv(32, 16, kernel_size=3, stride=2, padding=1, output_padding=1)
             self.t_conv5 = QuaternionTransposeConv(16, 4, kernel_size=3, stride=2, padding=1, output_padding=1)
         else:
@@ -366,23 +366,20 @@ class simple_autoencoder(nn.Module):
     def encode(self, x):
         x = F.relu(self.conv1(x))
         x = self.pool(x)
-        #x = self.conv1_bn(x)
+        x = self.conv1_bn(x)
         x = F.relu(self.conv2(x))
         x = self.pool(x)
-        #x = self.conv2_bn(x)
-        '''
+        x = self.conv2_bn(x)
+
         x = F.relu(self.conv3(x))
         x = self.pool(x)
-
         x = F.relu(self.conv4(x))
         x = self.pool(x)
-        '''
-        '''
-        x = F.sigmoid(self.conv5(x))
+        x = F.relu(self.conv5(x))
         x = self.pool(x)
         #x = F.relu(self.conv6(x))
         #x = self.pool(x)
-        '''
+
 
         #print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
@@ -394,14 +391,14 @@ class simple_autoencoder(nn.Module):
     def decode(self, x):
         #x = F.relu(self.decoder_input(x))
 
-        x = x.view(-1, 32, 128, 32)
+        x = x.view(-1, 256, 16, 4)
         #x1 = F.relu(self.t_conv0(x1))
-        #x = F.relu(self.t_conv1(x))
-        #x = F.relu(self.t_conv2(x))
-        #x = F.relu(self.t_conv3(x))
+        x = F.relu(self.t_conv1(x))
+        x = F.relu(self.t_conv2(x))
+        x = F.relu(self.t_conv3(x))
 
         x = F.relu(self.t_conv4(x))
-        #x = self.tconv2_bn(x)
+        x = self.tconv2_bn(x)
         x = torch.sigmoid(self.t_conv5(x))
 
         return x
@@ -415,11 +412,9 @@ class simple_autoencoder(nn.Module):
 
     def forward(self, x):
         #a = self.get_embeddings(x)
-        #residual = x
         x = self.encode(x)
         pred = self.classifier(x)
         x = self.decode(x)
-        #x = torch.sigmoid(torch.add(x,residual))
 
         return x, pred
 '''
