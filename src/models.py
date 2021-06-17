@@ -369,7 +369,7 @@ class simple_autoencoder(nn.Module):
         x = self.pool(x)
         x = F.relu(self.conv4(x))
         x = self.pool(x)
-        x = torch.sigmoid(self.conv5(x))
+        x = F.relu(self.conv5(x))
         x = self.pool(x)
         #x = F.relu(self.conv6(x))
         #x = self.pool(x)
