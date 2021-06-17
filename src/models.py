@@ -374,7 +374,7 @@ class simple_autoencoder(nn.Module):
         #x = F.relu(self.conv6(x))
         #x = self.pool(x)
 
-        print ('CAZZOOOOOOOOOO', x.shape)
+        #print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
         x = torch.sigmoid(torch.flatten(x, start_dim=1))
 
@@ -400,7 +400,7 @@ class simple_autoencoder(nn.Module):
 
 
     def forward(self, x):
-        a = self.get_embeddings(x)
+        #a = self.get_embeddings(x)
         x = self.encode(x)
         pred = self.classifier(x)
         x = self.decode(x)
