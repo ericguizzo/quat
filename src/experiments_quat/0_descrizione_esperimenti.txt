@@ -2,3 +2,8 @@
     sembra merda; loss resta a 0.69
 - exp 2 nell'emo_loss uso mse al posto di binary cross entropy
   schifo
+
+
+
+9  bce
+10  mse
