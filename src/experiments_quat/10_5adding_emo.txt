@@ -12,7 +12,7 @@
         "model_name": "simple_autoencoder",
         "fast_test": "False",
         "patience": 30,
-        "regularization_lambda": 0.
+        "regularization_lambda": 0
       },
 
   "1":{"comment_1": "beta_0", "comment_2": "loading_pretrained",
