@@ -295,7 +295,7 @@ class simple_autoencoder(nn.Module):
 #"VGG16": [64,64,"M",128,128,"M",256,256,256,"M",512,512,512,"M",512,512,512,"M",],
 
 class simple_autoencoder(nn.Module):
-    def __init__(self, quat=True, hidden_size=4096 ,flatten_dim=16384,
+    def __init__(self, quat=True, hidden_size=2048 ,flatten_dim=16384,
                  classifier_dropout=0.5, num_classes=5):
         super(simple_autoencoder, self).__init__()
         ## encoder layers ##
@@ -313,8 +313,8 @@ class simple_autoencoder(nn.Module):
         self.pool = nn.MaxPool2d(2, 2)
 
 
-        #self.hidden = nn.Linear(flatten_dim, hidden_size*4)
-        #self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
+        self.hidden = nn.Linear(flatten_dim, hidden_size*4)
+        self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
         ## decoder layers ##
         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
         if quat:
@@ -332,7 +332,7 @@ class simple_autoencoder(nn.Module):
             self.t_conv4 = nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1,output_padding=1)
             self.t_conv5 = nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1,output_padding=1)
 
-        classifier_layers = [nn.Linear(flatten_dim, 4096),
+        classifier_layers = [nn.Linear(hidden_size*4, 4096),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(4096, 1000),
@@ -376,11 +376,14 @@ class simple_autoencoder(nn.Module):
 
         #print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
-        x = torch.sigmoid(torch.flatten(x, start_dim=1))
+        x = torch.flatten(x, start_dim=1)
+        x = torch.sigmoid(self.hidden(x))
 
         return x
 
     def decode(self, x):
+        x = F.relu(self.decoder_input(x))
+
         x = x.view(-1, 256, 16, 4)
         #x1 = F.relu(self.t_conv0(x1))
         x = F.relu(self.t_conv1(x))
