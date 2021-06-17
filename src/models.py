@@ -295,7 +295,7 @@ class simple_autoencoder(nn.Module):
 #"VGG16": [64,64,"M",128,128,"M",256,256,256,"M",512,512,512,"M",512,512,512,"M",],
 
 class simple_autoencoder(nn.Module):
-    def __init__(self, quat=True, hidden_size=2048 ,flatten_dim=16384,
+    def __init__(self, quat=True, hidden_size=2048 ,flatten_dim=131072,
                  classifier_dropout=0.5, num_classes=5):
         super(simple_autoencoder, self).__init__()
         ## encoder layers ##
@@ -365,14 +365,16 @@ class simple_autoencoder(nn.Module):
         x = self.pool(x)
         x = F.relu(self.conv2(x))
         x = self.pool(x)
+        '''
         x = F.relu(self.conv3(x))
         x = self.pool(x)
         x = F.relu(self.conv4(x))
         x = self.pool(x)
-        x = F.relu(self.conv5(x))
+        x = F.sigmoid(self.conv5(x))
         x = self.pool(x)
         #x = F.relu(self.conv6(x))
         #x = self.pool(x)
+        '''
 
         #print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
@@ -386,9 +388,9 @@ class simple_autoencoder(nn.Module):
 
         x = x.view(-1, 256, 16, 4)
         #x1 = F.relu(self.t_conv0(x1))
-        x = F.relu(self.t_conv1(x))
-        x = F.relu(self.t_conv2(x))
-        x = F.relu(self.t_conv3(x))
+        #x = F.relu(self.t_conv1(x))
+        #x = F.relu(self.t_conv2(x))
+        #x = F.relu(self.t_conv3(x))
 
         x = F.relu(self.t_conv4(x))
         x = torch.sigmoid(self.t_conv5(x))
