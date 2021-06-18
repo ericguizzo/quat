@@ -116,7 +116,15 @@ print ('Total paramters: ' + str(model_params))
 #args.load_pretrained = '../new_experiments/experiment_9_5samples.txt/models/model_xval_iemocap_exp9_5samples.txt_run1_fold0'
 if args.load_pretrained is not None:
     print ('Loading pretrained model: ' + args.load_pretrained)
-    model.load_state_dict(torch.load(args.load_pretrained), strict=False)  #load best model
+    pretrained_dict = torch.load(args.load_pretrained)
+    model_dict = model.state_dict()
+
+    # 1. filter out unnecessary keys
+    pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
+    # 2. overwrite entries in the existing state dict
+    model_dict.update(pretrained_dict)
+
+    model.load_state_dict(pretrained_dict, strict=False)  #load best model
 
 
 #define optimizer and loss

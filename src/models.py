@@ -335,13 +335,13 @@ class simple_autoencoder(nn.Module):
             self.t_conv4 = nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1,output_padding=1)
             self.t_conv5 = nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1,output_padding=1)
 
-        classifier_layers = [nn.Linear(flatten_dim, 1000),
+        classifier_layers = [nn.Linear(flatten_dim, 4096),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
-                             nn.Linear(1000, 1000),
+                             nn.Linear(4096, 4096),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
-                             nn.Linear(1000, num_classes)]
+                             nn.Linear(4096, num_classes)]
 
         #self.classifier_valence = nn.Sequential(*classifier_layers)
         #self.classifier_arousal = nn.Sequential(*classifier_layers)
