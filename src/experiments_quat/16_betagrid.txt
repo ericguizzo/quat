@@ -18,7 +18,8 @@
         "early_stopping": "True",
         "model_quat": "True",
         "time_dim":512,
-        "model_architecture":"VGG16"
+        "model_architecture":"VGG16",
+        "regularization_lambda":0.0001
       },
 
   "1":{"comment_1": "beta_0.01", "comment_2": "-",
