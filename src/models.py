@@ -381,11 +381,11 @@ class simple_autoencoder(nn.Module):
         #x = self.pool(x)
 
 
-        print ('CAZZOOOOOOOOOO', x.shape)
+        #print ('CAZZOOOOOOOOOO', x.shape)
         #hidden dim
         x = torch.flatten(x, start_dim=1)
         #x = torch.sigmoid(self.hidden(x))
-        print (x.shape)
+        #print (x.shape)
 
         return x
 
