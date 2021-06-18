@@ -22,10 +22,10 @@
       },
 
   "1":{"comment_1": "beta_0.01", "comment_2": "-",
-       "loss_beta": 0.1
+       "loss_beta": 0.01
         },
   "2":{"comment_1": "beta_0.05", "comment_2": "-",
-       "loss_beta": 0.1
+       "loss_beta": 0.05
         },
   "3":{"comment_1": "beta_0.1", "comment_2": "-",
        "loss_beta": 0.1
