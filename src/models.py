@@ -305,27 +305,26 @@ class simple_autoencoder(nn.Module):
         self.conv3 = nn.Conv2d(32, 64, 3, padding=1)
         self.conv4 = nn.Conv2d(64, 128, 3, padding=1)
         self.conv5 = nn.Conv2d(128, 256, 3, padding=1)
-        self.conv6 = nn.Conv2d(256, 512, 3, padding=1)
+        #self.conv6 = nn.Conv2d(256, 512, 3, padding=1)
 
         self.pool = nn.MaxPool2d(2, 2)
 
-        self.conv1_bn = nn.BatchNorm2d(16)
-        self.conv2_bn = nn.BatchNorm2d(32)
-        self.tconv1_bn = QuaternionBatchNorm2d(32)
-        self.tconv2_bn = QuaternionBatchNorm2d(16)
+        #self.conv1_bn = nn.BatchNorm2d(16)
+        #self.conv2_bn = nn.BatchNorm2d(32)
+        #self.tconv2_bn = QuaternionBatchNorm2d(16)
         #self.hidden = nn.Linear(flatten_dim, hidden_size*4)
         #self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
         ## decoder layers ##
         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
         if quat:
-            self.t_conv0 = QuaternionTransposeConv(512, 256, kernel_size=3, stride=2, padding=1, output_padding=1)
+            #self.t_conv0 = QuaternionTransposeConv(512, 256, kernel_size=3, stride=2, padding=1, output_padding=1)
             self.t_conv1 = QuaternionTransposeConv(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1)
             self.t_conv2 = QuaternionTransposeConv(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1)
             self.t_conv3 = QuaternionTransposeConv(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1)
             self.t_conv4 = QuaternionTransposeConv(32, 16, kernel_size=3, stride=2, padding=1, output_padding=1)
             self.t_conv5 = QuaternionTransposeConv(16, 4, kernel_size=3, stride=2, padding=1, output_padding=1)
         else:
-            self.t_conv0 = nn.ConvTranspose2d(512, 256, 3, stride=2, padding=1,output_padding=1)
+            #self.t_conv0 = nn.ConvTranspose2d(512, 256, 3, stride=2, padding=1,output_padding=1)
             self.t_conv1 = nn.ConvTranspose2d(256, 128, 3, stride=2, padding=1,output_padding=1)
             self.t_conv2 = nn.ConvTranspose2d(128, 64, 3, stride=2, padding=1,output_padding=1)
             self.t_conv3 = nn.ConvTranspose2d(64, 32, 3, stride=2, padding=1,output_padding=1)
