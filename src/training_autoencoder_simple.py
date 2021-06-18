@@ -120,11 +120,15 @@ if args.load_pretrained is not None:
     model_dict = model.state_dict()
 
     # 1. filter out unnecessary keys
-    pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
+    #pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
     # 2. overwrite entries in the existing state dict
-    model_dict.update(pretrained_dict)
+    #model_dict.update(pretrained_dict)
 
     model.load_state_dict(pretrained_dict, strict=False)  #load best model
+
+    #with torch.no_grad():
+    #    model.fc1.weight.copy_(state_dict['fc1.weight'])
+    #    model.fc1.bias.copy_(state_dict['fc1.bias'])
 
 
 #define optimizer and loss
