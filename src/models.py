@@ -21,7 +21,8 @@ class r2he(nn.Module):
                 classifier_dropout=0.5,
                 flattened_dim=32768,
                 verbose=False,
-                quat=True
+                quat=True,
+                classifier_quat=True
                 ):
         super(r2he, self).__init__()
 
@@ -69,13 +70,9 @@ class r2he(nn.Module):
                              nn.Linear(4096, 4096),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
-                             nn.Linear(4096, 1),
-                             #nn.Sigmoid()
+                             nn.Linear(4096, 1)
                              ]
 
-        self.classifier_valence = nn.Sequential(*classifier_layers)
-        self.classifier_arousal = nn.Sequential(*classifier_layers)
-        self.classifier_dominance = nn.Sequential(*classifier_layers)
 
 
     def create_conv_layers_encoder(self, architecture):
@@ -295,7 +292,7 @@ class simple_autoencoder(nn.Module):
 #"VGG16": [64,64,"M",128,128,"M",256,256,256,"M",512,512,512,"M",512,512,512,"M",],
 
 class simple_autoencoder(nn.Module):
-    def __init__(self, quat=True, hidden_size=2048 ,flatten_dim=16384,
+    def __init__(self, quat=True, classifier_quat=True, hidden_size=2048 ,flatten_dim=16384,
                  classifier_dropout=0.5, num_classes=5):
         super(simple_autoencoder, self).__init__()
         ## encoder layers ##
@@ -342,12 +339,22 @@ class simple_autoencoder(nn.Module):
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(4096, num_classes)]
+        classifier_layers_quat = [QuaternionLinear(flatten_dim, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             QuaternionLinear(4096, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             nn.Linear(4096, num_classes)]
 
         #self.classifier_valence = nn.Sequential(*classifier_layers)
         #self.classifier_arousal = nn.Sequential(*classifier_layers)
         #self.classifier_dominance = nn.Sequential(*classifier_layers)
 
-        self.classifier = nn.Sequential(*classifier_layers)
+        if classifier_quat:
+            self.classifier = nn.Sequential(*classifier_layers_quat)
+        else:
+            self.classifier = nn.Sequential(*classifier_layers)
 
         for m in self.modules():
             if isinstance(m, nn.Linear):
