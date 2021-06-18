@@ -6,10 +6,15 @@ from torchsummary import summary
 
 
 x = torch.rand(4,1,512, 128)
-model = simple_autoencoder(quat=True)
+model = simple_autoencoder(quat=False)
 print ('input_dim', x.shape)
 x, pred = model(x)
 print ('output_dim', x.shape)
+
+#compute number of parameters
+model_params = sum([np.prod(p.size()) for p in model.parameters()])
+print ('Total paramters: ' + str(model_params))
+
 '''
 model = r2he(verbose=True,
              latent_dim=100,
