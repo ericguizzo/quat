@@ -236,7 +236,7 @@ for epoch in range(args.num_epochs):
             #del loss
 
     #validation data
-    val_batch_losses = evaluate(model, device, loss_function, val_data)
+    val_batch_losses = evaluate(model, device, loss_function, val_data, emo_weight)
 
     train_epoch_loss = mean_batch_loss(train_batch_losses)
     val_epoch_loss = mean_batch_loss(val_batch_losses)
@@ -304,9 +304,9 @@ print ('\nComputing metrics with best saved model')
 
 model.load_state_dict(torch.load(args.model_path), strict=False)  #load best model
 
-train_batch_losses = evaluate(model, device, loss_function, tr_data)
-val_batch_losses = evaluate(model, device, loss_function, val_data)
-test_batch_losses = evaluate(model, device, loss_function, test_data)
+train_batch_losses = evaluate(model, device, loss_function, tr_data, 1)
+val_batch_losses = evaluate(model, device, loss_function, val_data, 1)
+test_batch_losses = evaluate(model, device, loss_function, test_data, 1)
 
 train_loss = mean_batch_loss(train_batch_losses)
 val_loss = mean_batch_loss(val_batch_losses)
