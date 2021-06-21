@@ -56,4 +56,9 @@
        "emo_loss_warmup_epochs": 20, "regularization_lambda":0.00001,
        "learning_rate": 0.00001
         }
+  "8":{"comment_1": "reg_0.001_beta1", "comment_2": "warm_10_holes_2",
+       "loss_beta": 1, "emo_loss_holes": 2,
+       "emo_loss_warmup_epochs": 20, "regularization_lambda":0.00001,
+       "learning_rate": 0.00005
+        }
 }
