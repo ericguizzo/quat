@@ -22,7 +22,7 @@
         "regularization_lambda":0.0001
       },
 
-  "1":{"comment_1": "beta_0.01", "comment_2": warm_10_holes_2,
+  "1":{"comment_1": "beta_0.01", "comment_2": "warm_10_holes_2",
        "loss_beta": 0.01, "emo_loss_holes": 2,
        "emo_loss_warmup_epochs": 10
         }
