@@ -208,7 +208,7 @@ for epoch in range(args.num_epochs):
             emo_weight = emo_weight * w
     #holesramp
     if args.emo_loss_holes is not None:
-        if epochs % args.emo_loss_holes == 0
+        if epochs % args.emo_loss_holes == 0:
             emo_weight = 0
 
     #train data
