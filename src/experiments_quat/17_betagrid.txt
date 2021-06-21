@@ -39,10 +39,10 @@
         },
   "5":{"comment_1": "beta10", "comment_2": "warm_10_holes_2",
        "loss_beta": 10, "emo_loss_holes": 2,
-       "emo_loss_warmup_epochs": 20, "regularization_lambda":0.00001,
+       "emo_loss_warmup_epochs": 20, "regularization_lambda":0.00001
         },
   "6":{"comment_1": "beta10", "comment_2": "warm_10_holes_3",
        "loss_beta": 10, "emo_loss_holes": 3,
-       "emo_loss_warmup_epochs": 20, "regularization_lambda":0.00001,
+       "emo_loss_warmup_epochs": 20, "regularization_lambda":0.00001
         }
 }
