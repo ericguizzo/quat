@@ -46,9 +46,15 @@ parser.add_argument('--load_pretrained', type=str, default=None)
 parser.add_argument('--num_folds', type=int, default=1)
 parser.add_argument('--num_fold', type=int, default=0)
 parser.add_argument('--fixed_seed', type=str, default='True')
+
+
 #loss parameters
 parser.add_argument('--loss_function', type=str, default='emo_loss')
 parser.add_argument('--loss_beta', type=float, default=1.)
+parser.add_argument('--emo_loss_holes', type=int, default=None)  #emo loss is deactivated every x epochs
+parser.add_argument('--emo_loss_warmup_epochs', type=int, default=None)  #warmup ramp length
+
+
 #model parameters
 parser.add_argument('--model_name', type=str, default='r2he')
 parser.add_argument('--model_quat', type=str, default='True')
@@ -145,7 +151,7 @@ loss_function = locals()[args.loss_function]
 train_loss_hist = []
 val_loss_hist = []
 
-def evaluate(model, device, loss_function, dataloader):
+def evaluate(model, device, loss_function, dataloader, emo_weight):
     #compute loss without backprop
     model.eval()
     temp_loss = []
@@ -159,7 +165,7 @@ def evaluate(model, device, loss_function, dataloader):
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
 
             #loss = loss_function(recon, sounds)
-            loss = loss_function(recon, sounds, truth, pred, args.loss_beta)
+            loss = loss_function(recon, sounds, truth, pred, emo_weight)
             #loss = loss['total'].cpu().numpy()
 
             #temp_loss.append({'total':loss, 'emo':0, 'recon':0,
@@ -191,6 +197,20 @@ for epoch in range(args.num_epochs):
     print ('Epoch: [' + str(epoch+1) + '/' + str(args.num_epochs) + '] ')
     train_batch_losses = []
     model.train()
+
+    #emotional loss warm up and holes
+    emo_weight = args.loss_beta
+    #warm up
+    if args.emo_loss_warmup_epochs is not None:
+        if epoch < args.emo_loss_warmup_epochs:
+            ramp = np.arange(args.emo_loss_warmup_epochs) / args.emo_loss_warmup_epochs
+            w = ramp[epoch]
+            emo_weight = emo_weight * w
+    #holesramp
+    if args.emo_loss_holes is not None:
+        if epochs % args.emo_loss_holes == 0
+            emo_weight = 0
+
     #train data
     with tqdm(total=len(tr_data)) as pbar:
         for i, (sounds, truth) in enumerate(tr_data):
@@ -203,7 +223,7 @@ for epoch in range(args.num_epochs):
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
             #recon = torch.unsqueeze(torch.sqrt(torch.sum(recon**2, axis=1)), dim=1)
             #loss = loss_function(recon, sounds)
-            loss = loss_function(recon, sounds, truth, pred, args.loss_beta)
+            loss = loss_function(recon, sounds, truth, pred, emo_weight)
             loss['total'].backward()
             optimizer.step()
 
@@ -226,6 +246,9 @@ for epoch in range(args.num_epochs):
     print (train_epoch_loss)
     print ('\n Validation:')
     print (val_epoch_loss)
+    print ('Comments:')
+    print (args.comment_1, args.comment_2)
+    print ('EMO weight: ', emo_weight)
 
     train_loss_hist.append(train_epoch_loss)
     val_loss_hist.append(val_epoch_loss)
