@@ -13,7 +13,7 @@
         "fast_test": "False",
         "load_pretrained": "'../new_experiments/experiment_15_pretraining_reconstruction.txt/models/model_xval_iemocap_exp15_pretraining_reconstruction.txt_run1_fold0'"
 ,
-        "patience": 100,
+        "patience": 30,
         "save_model_metric": "total_loss",
         "early_stopping": "True",
         "model_quat": "True",
@@ -45,4 +45,8 @@
        "loss_beta": 10, "emo_loss_holes": 3,
        "emo_loss_warmup_epochs": 20, "regularization_lambda":0.00001
         }
+  "7":{"comment_1": "reg_0.001_beta1", "comment_2": "warm_10_holes_2",
+       "loss_beta": 1, "emo_loss_holes": 2,
+       "emo_loss_warmup_epochs": 20, "regularization_lambda":0.00005
+        },
 }
