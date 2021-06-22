@@ -9,7 +9,6 @@
         "num_epochs": 200000,
         "learning_rate": 0.001,
         "batch_size": 50,
-        "model_name": "r2he",
         "fast_test": "False",
         "patience": 100,
         "regularization_lambda": 0.00,
