@@ -104,7 +104,7 @@ tr_data, val_data, test_data = uf.load_datasets(args)
 print ('\nMoving model to device')
 if args.model_name == 'r2he':
     print ('CAZZOCAZZOCAZZOCAZZOCAZZOCAZZOCAZZOCAZZOCAZZO')
-    model = locals()[args.model_name](batch_normalization=args.model_batchnorm)
+    model = locals()[args.model_name](batch_normalization=args.model_batch_normalization)
 if args.model_name == 'simple_autoencoder':
     print ('AAAAAFJFJFJFJFJFJFJFJFJFJFJFJ')
     model = locals()[args.model_name]()
