@@ -6,7 +6,7 @@ from torchsummary import summary
 
 
 x = torch.rand(5,1,512, 128)
-model = r2he(quat=True, classifier_quat=True)
+model = r2he(quat=True, classifier_quat=True, batch_normalization=False)
 #model = simple_autoencoder(quat=True)
 print (model)
 
