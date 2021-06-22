@@ -1,7 +1,7 @@
 {
   "global_parameters":{
         "gpu_id":1,
-        "experiment_description": "no_beta_no_batchnorm_fasetest",
+        "experiment_description": "coglione",
         "script": "training_autoencoder_simple.py",
         "dataset": "iemocap",
         "num_experiment": 15,
