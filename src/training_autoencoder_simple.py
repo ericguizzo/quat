@@ -101,13 +101,7 @@ tr_data, val_data, test_data = uf.load_datasets(args)
 #load model
 print ('\nMoving model to device')
 if args.model_name == 'r2he':
-    model = locals()[args.model_name](latent_dim=args.model_latent_dim,
-                                      in_channels=args.model_in_channels,
-                                      architecture=args.model_architecture,
-                                      classifier_dropout=args.model_classifier_dropout,
-                                      flattened_dim=args.model_flattened_dim,
-                                      quat=args.model_quat,
-                                      verbose=args.model_verbose)
+    model = locals()[args.model_name]()
 if args.model_name == 'simple_autoencoder':
     print ('AAAAAFJFJFJFJFJFJFJFJFJFJFJFJ')
     model = locals()[args.model_name]()

@@ -252,7 +252,7 @@ class r2he(nn.Module):
                  conv_structure=[16,32,64,128,256], classifier_structure=[4096,4096],
                  batch_normalization=True, time_dim=512, freq_dim=128,
                  classifier_dropout=0.5, num_classes=5,
-                 embeddings_dim=[64,64], verbose=True):
+                 embeddings_dim=[64,64], verbose=False):
         super(r2he, self).__init__()
         self.conv_structure = conv_structure
         self.time_dim = time_dim
