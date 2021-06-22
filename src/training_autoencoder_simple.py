@@ -65,6 +65,7 @@ parser.add_argument('--model_latent_dim', type=int, default=1000)
 parser.add_argument('--model_verbose', type=str, default='False')
 parser.add_argument('--model_architecture', type=str, default='VGG16')
 parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
+parser.add_argument('--model_batch_normalization', type=str, default='True')
 
 #grid search parameters
 #SPECIFY ONLY IF PERFORMING A GRID SEARCH WITH exp_instance.py SCRIPT
@@ -88,6 +89,7 @@ args.fixed_seed = eval(args.fixed_seed)
 args.model_verbose = eval(args.model_verbose)
 args.model_quat = eval(args.model_quat)
 args.model_classifier_quat = eval(args.model_classifier_quat)
+args.model_batch_normalization = eval(args.model_batch_normalization)
 
 
 if args.use_cuda:
