@@ -108,7 +108,7 @@ tr_data, val_data, test_data = uf.load_datasets(args)
 
 print ('\nMoving model to device')
 if args.model_name == 'r2he':
-    '''
+    
     model = locals()[args.model_name](quat = args.model_quat,
                                     classifier_quat = args.model_classifier_quat,
                                     conv_structure = args.model_conv_structure,
@@ -121,7 +121,7 @@ if args.model_name == 'r2he':
                                     embeddings_dim = model.model_embeddings_dim,
                                     verbose = args.model_verbose
                                     )
-    '''
+
     model = locals()[args.model_name]()
 if args.model_name == 'simple_autoencoder':
     model = locals()[args.model_name]()
