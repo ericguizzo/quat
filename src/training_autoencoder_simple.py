@@ -127,7 +127,7 @@ if args.model_name == 'r2he':
     #model = locals()[args.model_name]()
 if args.model_name == 'simple_autoencoder':
     model = locals()[args.model_name](batch_normalization = args.model_batch_normalization,
-                                      model_reduced_batch_normalization = args.model_reduced_batch_normalization)
+                                      reduced_batch_normalization = args.model_reduced_batch_normalization)
 
 
 model = model.to(device)
