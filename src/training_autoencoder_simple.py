@@ -67,7 +67,7 @@ parser.add_argument('--model_num_classes', type=int, default=5)
 parser.add_argument('--model_embeddings_dim', type=str, default='[64,64]')
 parser.add_argument('--model_verbose', type=str, default='False')
 
-parser.add_argument('--use_r2he', type=str, default=True)
+parser.add_argument('--use_r2he', type=str, default='True')
 parser.add_argument('--r2he_model_path', type=str, default=None)
 parser.add_argument('--r2he_model_name', type=str, default='simple_autoencoder')
 parser.add_argument('--r2he_features_type', type=str, default='reconstruction',
