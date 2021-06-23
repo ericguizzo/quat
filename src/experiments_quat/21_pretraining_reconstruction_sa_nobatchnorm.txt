@@ -9,7 +9,6 @@
         "num_epochs": 200000,
         "learning_rate": 0.001,
         "batch_size": 50,
-        "model_name": "simple_autoencoder",
         "fast_test": "False",
         "patience": 100,
         "regularization_lambda": 0.00,
@@ -19,7 +18,11 @@
 
   "1":{"comment_1": "beta_0", "comment_2": "pretraining_reconstruction",
        "loss_beta": 0, "save_model_metric": "total_loss", "early_stopping": "True",
-      "time_dim":512, "model_batch_normalization":"False"
+      "time_dim":512, "model_batch_normalization":"False", "model_name": "simple_autoencoder"
+        }
+  "2":{"comment_1": "beta_0", "comment_2": "pretraining_reconstruction",
+       "loss_beta": 0, "save_model_metric": "total_loss", "early_stopping": "True",
+      "time_dim":512, "model_batch_normalization":"False", "model_name": "r2he"
         }
 
 }
