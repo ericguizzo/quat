@@ -7,7 +7,7 @@
         "num_experiment": 14,
         "num_folds": 1,
         "num_epochs": 200000,
-        "learning_rate": 0.000001,
+        "learning_rate": 0.0000001,
         "batch_size": 20,
         "model_name": "r2he",
         "fast_test": "False",
@@ -22,8 +22,8 @@
 
 
   "1":{"comment_1": "reg_0.001_beta1", "comment_2": "warm_10_holes_2",
-       "loss_beta": 15, "emo_loss_holes": 2,
-       "emo_loss_warmup_epochs": 20, "regularization_lambda":0.00001,
+       "loss_beta": 10, "emo_loss_holes": 2,
+       "emo_loss_warmup_epochs": 20, "regularization_lambda":0.000001,
        "learning_rate": 0.00001
         }
 
