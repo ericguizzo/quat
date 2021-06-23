@@ -487,7 +487,7 @@ class simple_autoencoder(nn.Module):
         if self.batch_normalization:
             x = self.tconv1_bn(x)
 
-        x = F.relu(self.t_conv2(x)
+        x = F.relu(self.t_conv2(x))
         if self.batch_normalization:
             x = self.tconv2_bn(x)
 
