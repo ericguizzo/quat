@@ -7,7 +7,7 @@ import numpy as np
 
 def emo_loss(recon, sounds, truth, pred, beta):
     recon = torch.sum(recon, axis=1) / 4.
-    recon_loss = F.binary_cross_entropy(recon.squeeze(), sounds.squeeze())
+    recon_loss = F.binary_cross_entropy(recon, sounds.squeeze())
     emo_loss = beta * F.cross_entropy(pred, torch.argmax(truth, axis=1).long())
     total_loss = (recon_loss) + emo_loss
     acc = torch.sum(torch.argmax(pred, axis=1) == torch.argmax(truth, axis=1)) / pred.shape[0]

@@ -27,6 +27,7 @@ parser.add_argument('--train_perc', type=float, default=0.7)
 parser.add_argument('--val_perc', type=float, default=0.2)
 parser.add_argument('--test_perc', type=float, default=0.1)
 parser.add_argument('--normalize_predictors', type=str, default='True')
+
 parser.add_argument('--fast_test', type=str, default='True')
 parser.add_argument('--fast_test_bound', type=int, default=5)
 
@@ -67,6 +68,7 @@ parser.add_argument('--model_num_classes', type=int, default=5)
 parser.add_argument('--model_embeddings_dim', type=str, default='[64,64]')
 parser.add_argument('--model_verbose', type=str, default='False')
 
+
 #grid search parameters
 #SPECIFY ONLY IF PERFORMING A GRID SEARCH WITH exp_instance.py SCRIPT
 parser.add_argument('--script', type=str, default='training_autoencoder.py')
@@ -93,7 +95,6 @@ args.model_batch_normalization = eval(args.model_batch_normalization)
 args.model_conv_structure = eval(args.model_conv_structure)
 args.model_classifier_structure = eval(args.model_classifier_structure)
 args.model_embeddings_dim = eval(args.model_embeddings_dim)
-
 
 if args.use_cuda:
     device = 'cuda:' + str(args.gpu_id)
@@ -136,6 +137,7 @@ print ('Total paramters: ' + str(model_params))
 if args.load_pretrained is not None:
     print ('Loading pretrained model: ' + args.load_pretrained)
     pretrained_dict = torch.load(args.load_pretrained)
+    model_dict = model.state_dict()
     model.load_state_dict(pretrained_dict, strict=False)  #load best model
 
 #define optimizer and loss
