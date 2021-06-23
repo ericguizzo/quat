@@ -116,7 +116,7 @@ tr_data, val_data, test_data = uf.load_datasets(args)
 
 print ('\nMoving model to device')
 if args.model_name == 'VGGNet':
-    model = locals()[args.model_name]
+    model = VGGNet()
 
 model = model.to(device)
 
