@@ -227,7 +227,7 @@ for epoch in range(args.num_epochs):
                     else:
                         raise ValueError('wrong r2he features type selected')
 
-            recon, pred = model(sounds)
+            pred = model(sounds)
 
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
             #recon = torch.unsqueeze(torch.sqrt(torch.sum(recon**2, axis=1)), dim=1)
