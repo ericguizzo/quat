@@ -16,7 +16,7 @@ def emo_loss(recon, sounds, truth, pred, beta):
         'valence':acc.detach().item(),'arousal':0, 'dominance':0}
 
 def emotion_recognition_loss(pred, truth):
-    loss = cross_entropy(pred, torch.argmax(truth, axis=1).long())
+    loss = F.cross_entropy(pred, torch.argmax(truth, axis=1).long())
     acc = torch.sum(torch.argmax(pred, axis=1) == torch.argmax(truth, axis=1)) / pred.shape[0]
 
     return {'loss':total_loss, 'acc': recon_loss.detach().item()}
