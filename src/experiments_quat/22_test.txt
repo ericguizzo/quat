@@ -18,7 +18,7 @@
         "early_stopping": "True",
         "model_quat": "True",
         "time_dim":512,
-        "spreadsheet_profile":"profile_emotion_recognition"
+        "spreadsheet_profile":  "profile_emotion_recognition"
       },
 
 
