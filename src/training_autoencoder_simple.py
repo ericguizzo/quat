@@ -61,6 +61,7 @@ parser.add_argument('--model_classifier_quat', type=str, default='True')
 parser.add_argument('--model_conv_structure', type=str, default='[16,32,64,128,256]')
 parser.add_argument('--model_classifier_structure', type=str, default='[4096,4096]')
 parser.add_argument('--model_batch_normalization', type=str, default='True')
+parser.add_argument('--model_reduced_batch_normalization', type=str, default='True')
 parser.add_argument('--time_dim', type=int, default=512)
 parser.add_argument('--freq_dim', type=int, default=128)
 parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
@@ -92,6 +93,7 @@ args.model_verbose = eval(args.model_verbose)
 args.model_quat = eval(args.model_quat)
 args.model_classifier_quat = eval(args.model_classifier_quat)
 args.model_batch_normalization = eval(args.model_batch_normalization)
+args.model_reduced_batch_normalization = eval(args.model_reduced_batch_normalization)
 args.model_conv_structure = eval(args.model_conv_structure)
 args.model_classifier_structure = eval(args.model_classifier_structure)
 args.model_embeddings_dim = eval(args.model_embeddings_dim)
@@ -124,7 +126,8 @@ if args.model_name == 'r2he':
 
     #model = locals()[args.model_name]()
 if args.model_name == 'simple_autoencoder':
-    model = locals()[args.model_name](batch_normalization = args.model_batch_normalization)
+    model = locals()[args.model_name](batch_normalization = args.model_batch_normalization,
+                                      model_reduced_batch_normalization = args.model_reduced_batch_normalization)
 
 
 model = model.to(device)

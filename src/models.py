@@ -461,12 +461,14 @@ class r2he(nn.Module):
 
 class simple_autoencoder(nn.Module):
     def __init__(self, quat=True, classifier_quat=True, hidden_size=2048 ,flatten_dim=16384,
-                 classifier_dropout=0.5, num_classes=5, batch_normalization=False):
+                 classifier_dropout=0.5, num_classes=5, batch_normalization=False,
+                 reduced_batch_normalization=False):
         super(simple_autoencoder, self).__init__()
         self.flatten_dim = flatten_dim
         self.hidden_size = hidden_size
         self.num_classes = num_classes
         self.batch_normalization = batch_normalization
+        self.reduced_batch_normalization = reduced_batch_normalization
 
         ## encoder layers ##
         self.conv1 = nn.Conv2d(1, 16, 3, padding=1)
@@ -534,12 +536,12 @@ class simple_autoencoder(nn.Module):
     def encode(self, x):
         x = F.relu(self.conv1(x))
         x = self.pool(x)
-        if self.batch_normalization:
+        if self.batch_normalization or reduced_batch_normalization:
             x = self.conv1_bn(x)
 
         x = F.relu(self.conv2(x))
         x = self.pool(x)
-        if self.batch_normalization:
+        if self.batch_normalization or reduced_batch_normalization:
             x = self.conv2_bn(x)
 
         x = F.relu(self.conv3(x))
@@ -581,7 +583,7 @@ class simple_autoencoder(nn.Module):
             x = self.tconv3_bn(x)
 
         x = F.relu(self.t_conv4(x))
-        if self.batch_normalization:
+        if self.batch_normalization or reduced_batch_normalization:
             x = self.tconv4_bn(x)
 
         x = torch.sigmoid(self.t_conv5(x))
