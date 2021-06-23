@@ -19,4 +19,4 @@ def emotion_recognition_loss(pred, truth):
     loss = F.cross_entropy(pred, torch.argmax(truth, axis=1).long())
     acc = torch.sum(torch.argmax(pred, axis=1) == torch.argmax(truth, axis=1)) / pred.shape[0]
 
-    return {'loss':total_loss, 'acc': recon_loss.detach().item()}
+    return {'loss':loss, 'acc': acc.detach().item()}
