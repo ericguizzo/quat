@@ -27,7 +27,7 @@ def emo_loss(recon, sounds, truth, pred, beta):
 
     #recon_loss = F.binary_cross_entropy_with_logits(recon, sounds.squeeze())
 
-    recon_loss = F.binary_cross_entropy(recon.squeeze(), sounds.squeeze())
+    recon_loss = F.binary_cross_entropy(recon, sounds)
     #recon_loss = F.mse_loss(recon, sounds.squeeze())
 
     #valence_loss = F.mse_loss(v[:,0].squeeze(), truth[:,0].squeeze())
