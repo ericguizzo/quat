@@ -597,6 +597,142 @@ class simple_autoencoder(nn.Module):
 
         return x, pred
 
+
+class simple_autoencoder_old(nn.Module):
+    def __init__(self, quat=True, classifier_quat=True, hidden_size=2048 ,flatten_dim=16384,
+                 classifier_dropout=0.5, num_classes=5):
+        super(simple_autoencoder, self).__init__()
+        ## encoder layers ##
+        # conv layer (depth from 3 --> 16), 3x3 kernels
+        self.flatten_dim = flatten_dim
+        self.hidden_size = hidden_size
+        self.num_classes = num_classes
+        self.conv1 = nn.Conv2d(1, 16, 3, padding=1)
+        self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
+        self.conv3 = nn.Conv2d(32, 64, 3, padding=1)
+        self.conv4 = nn.Conv2d(64, 128, 3, padding=1)
+        self.conv5 = nn.Conv2d(128, 256, 3, padding=1)
+        self.conv6 = nn.Conv2d(256, 512, 3, padding=1)
+
+        self.pool = nn.MaxPool2d(2, 2)
+
+        self.conv1_bn = nn.BatchNorm2d(16)
+        self.conv2_bn = nn.BatchNorm2d(32)
+        self.tconv1_bn = QuaternionBatchNorm2d(32)
+        self.tconv2_bn = QuaternionBatchNorm2d(16)
+        #self.hidden = nn.Linear(flatten_dim, hidden_size*4)
+        #self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
+        ## decoder layers ##
+        ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
+        if quat:
+            self.t_conv0 = QuaternionTransposeConv(512, 256, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.t_conv1 = QuaternionTransposeConv(256, 128, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.t_conv2 = QuaternionTransposeConv(128, 64, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.t_conv3 = QuaternionTransposeConv(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.t_conv4 = QuaternionTransposeConv(32, 16, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.t_conv5 = QuaternionTransposeConv(16, 4, kernel_size=3, stride=2, padding=1, output_padding=1)
+        else:
+            self.t_conv0 = nn.ConvTranspose2d(512, 256, 3, stride=2, padding=1,output_padding=1)
+            self.t_conv1 = nn.ConvTranspose2d(256, 128, 3, stride=2, padding=1,output_padding=1)
+            self.t_conv2 = nn.ConvTranspose2d(128, 64, 3, stride=2, padding=1,output_padding=1)
+            self.t_conv3 = nn.ConvTranspose2d(64, 32, 3, stride=2, padding=1,output_padding=1)
+            self.t_conv4 = nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1,output_padding=1)
+            self.t_conv5 = nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1,output_padding=1)
+
+        classifier_layers = [nn.Linear(flatten_dim, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             nn.Linear(4096, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             nn.Linear(4096, num_classes)]
+        classifier_layers_quat = [QuaternionLinear(flatten_dim, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             QuaternionLinear(4096, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             nn.Linear(4096, num_classes)]
+
+        #self.classifier_valence = nn.Sequential(*classifier_layers)
+        #self.classifier_arousal = nn.Sequential(*classifier_layers)
+        #self.classifier_dominance = nn.Sequential(*classifier_layers)
+
+        if classifier_quat:
+            self.classifier = nn.Sequential(*classifier_layers_quat)
+        else:
+            self.classifier = nn.Sequential(*classifier_layers)
+
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.xavier_normal_(m.weight.data)
+                if m.bias is not None:
+                    m.bias.data.zero_()
+            elif isinstance(m, nn.Conv2d):
+                nn.init.xavier_normal_(m.weight.data)
+                if m.bias is not None:
+                    m.bias.data.zero_()
+            elif isinstance(m, nn.ConvTranspose2d):
+                nn.init.xavier_normal_(m.weight.data)
+                if m.bias is not None:
+                    m.bias.data.zero_()
+
+    def encode(self, x):
+        x = F.relu(self.conv1(x))
+        x = self.pool(x)
+        x = self.conv1_bn(x)
+        x = F.relu(self.conv2(x))
+        x = self.pool(x)
+        x = self.conv2_bn(x)
+
+        x = F.relu(self.conv3(x))
+        x = self.pool(x)
+        x = F.relu(self.conv4(x))
+        x = self.pool(x)
+        x = F.relu(self.conv5(x))
+        x = self.pool(x)
+        #x = F.relu(self.conv6(x))
+        #x = self.pool(x)
+
+
+        #print ('CAZZOOOOOOOOOO', x.shape)
+        #hidden dim
+        x = torch.flatten(x, start_dim=1)
+        #x = torch.sigmoid(self.hidden(x))
+        #print (x.shape)
+
+        return x
+
+    def decode(self, x):
+        #x = F.relu(self.decoder_input(x))
+
+        x = x.view(-1, 256, 16, 4)
+        #x1 = F.relu(self.t_conv0(x1))
+        x = F.relu(self.t_conv1(x))
+        x = F.relu(self.t_conv2(x))
+        x = F.relu(self.t_conv3(x))
+
+        x = F.relu(self.t_conv4(x))
+        x = self.tconv2_bn(x)
+        x = torch.sigmoid(self.t_conv5(x))
+
+        return x
+
+    def get_embeddings(self, x):
+        x = self.encode(x)
+        x = x.view(-1, 4, self.flatten_dim//4)
+        print ('h', x.shape)
+        return x
+
+
+    def forward(self, x):
+        #a = self.get_embeddings(x)
+        x = self.encode(x)
+        pred = self.classifier(x)
+        x = self.decode(x)
+
+        return x, pred
+
 '''
 
 class simple_autoencoder(nn.Module):
