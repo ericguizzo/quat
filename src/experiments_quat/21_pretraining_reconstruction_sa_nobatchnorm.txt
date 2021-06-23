@@ -7,14 +7,14 @@
         "num_experiment": 15,
         "num_folds": 1,
         "num_epochs": 200000,
-        "learning_rate": 0.001,
+        "learning_rate": 0.000001,
         "batch_size": 50,
         "fast_test": "False",
         "patience": 100,
         "regularization_lambda": 0.00,
         "model_quat": "True",
         "model_classifier_quat": "True",
-        "load_pretrained": "'../new_experiments/experiment_21_pretraining_reconstruction_sa_nobatchnorm.txt/models/model_xval_iemocap_exp21_pretraining_reconstruction_sa_nobatchnorm.txt_run2_fold0'"
+        "load_pretrained": "'../new_experiments/experiment_15_pretraining_reconstruction.txt/models/model_xval_iemocap_exp15_pretraining_reconstruction.txt_run1_fold0'"
 
       },
 
