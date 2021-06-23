@@ -48,7 +48,7 @@ parser.add_argument('--spreadsheet_profile', type=str, default=None)
 
 
 #loss parameters
-parser.add_argument('--loss_function', type=str, default='emo_loss')
+parser.add_argument('--loss_function', type=str, default='emotion_recognition_loss')
 parser.add_argument('--loss_beta', type=float, default=1.)
 parser.add_argument('--emo_loss_holes', type=int, default=None)  #emo loss is deactivated every x epochs
 parser.add_argument('--emo_loss_warmup_epochs', type=int, default=None)  #warmup ramp length
@@ -143,7 +143,7 @@ optimizer = optim.Adam(model.parameters(), lr=args.learning_rate,
                               weight_decay=args.regularization_lambda)
 
 #loss_function = nn.BCELoss()
-loss_function = emotion_recognition_loss()
+loss_function = locals()[args.loss_function]
 
 #init history
 train_loss_hist = []
