@@ -18,7 +18,8 @@
         "early_stopping": "True",
         "model_quat": "True",
         "model_classifier_quat": "True",
-        "time_dim":512
+        "time_dim":512,
+        "model_batch_normalization":"False"
       },
 
 
