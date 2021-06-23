@@ -13,7 +13,7 @@ VGG_types = {
     "VGG19": [64,64,"M",128,128,"M",256,256,256,256,"M",512,512,512,512,"M",512,512,512,512,"M",]
     }
 
-class VGG(nn.Module):
+class VGGNet(nn.Module):
     def __init__(self,
                 architecture='VGG16',
                 classifier_dropout=0.5,
@@ -22,7 +22,7 @@ class VGG(nn.Module):
                 quat=False,
                 num_classes = 5
                 ):
-        super(VGG, self).__init__()
+        super(VGGNet, self).__init__()
         self.quat = quat
         if quat:
             self.in_channels = 4
