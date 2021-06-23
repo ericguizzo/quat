@@ -376,11 +376,12 @@ class r2he(nn.Module):
 
 class simple_autoencoder(nn.Module):
     def __init__(self, quat=True, classifier_quat=True, hidden_size=2048 ,flatten_dim=16384,
-                 classifier_dropout=0.5, num_classes=5):
+                 classifier_dropout=0.5, num_classes=5, batch_normalization=False):
         super(simple_autoencoder, self).__init__()
         self.flatten_dim = flatten_dim
         self.hidden_size = hidden_size
         self.num_classes = num_classes
+        self.batch_normalization = batch_normalization
 
         ## encoder layers ##
         self.conv1 = nn.Conv2d(1, 16, 3, padding=1)
@@ -448,19 +449,23 @@ class simple_autoencoder(nn.Module):
     def encode(self, x):
         x = F.relu(self.conv1(x))
         x = self.pool(x)
-        x = self.conv1_bn(x)
+        if self.batch_normalization:
+            x = self.conv1_bn(x)
 
         x = F.relu(self.conv2(x))
         x = self.pool(x)
-        x = self.conv2_bn(x)
+        if self.batch_normalization:
+            x = self.conv2_bn(x)
 
         x = F.relu(self.conv3(x))
         x = self.pool(x)
-        x = self.conv3_bn(x)
+        if self.batch_normalization:
+            x = self.conv3_bn(x)
 
         x = F.relu(self.conv4(x))
         x = self.pool(x)
-        x = self.conv4_bn(x)
+        if self.batch_normalization:
+            x = self.conv4_bn(x)
 
         x = F.relu(self.conv5(x))
         x = self.pool(x)
@@ -479,16 +484,20 @@ class simple_autoencoder(nn.Module):
         x = x.view(-1, 256, 16, 4)
 
         x = F.relu(self.t_conv1(x))
-        x = self.tconv1_bn(x)
+        if self.batch_normalization:
+            x = self.tconv1_bn(x)
 
-        x = F.relu(self.t_conv2(x))
-        x = self.tconv2_bn(x)
+        x = F.relu(self.t_conv2(x)
+        if self.batch_normalization:
+            x = self.tconv2_bn(x)
 
         x = F.relu(self.t_conv3(x))
-        x = self.tconv3_bn(x)
+        if self.batch_normalization:
+            x = self.tconv3_bn(x)
 
         x = F.relu(self.t_conv4(x))
-        x = self.tconv4_bn(x)
+        if self.batch_normalization:
+            x = self.tconv4_bn(x)
 
         x = torch.sigmoid(self.t_conv5(x))
 
