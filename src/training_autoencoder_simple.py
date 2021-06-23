@@ -27,7 +27,8 @@ parser.add_argument('--train_perc', type=float, default=0.7)
 parser.add_argument('--val_perc', type=float, default=0.2)
 parser.add_argument('--test_perc', type=float, default=0.1)
 parser.add_argument('--normalize_predictors', type=str, default='True')
-
+parser.add_argument('--time_dim', type=int, default=512)
+parser.add_argument('--freq_dim', type=int, default=128)
 parser.add_argument('--fast_test', type=str, default='True')
 parser.add_argument('--fast_test_bound', type=int, default=5)
 
@@ -58,17 +59,12 @@ parser.add_argument('--emo_loss_warmup_epochs', type=int, default=None)  #warmup
 parser.add_argument('--model_name', type=str, default='r2he')
 parser.add_argument('--model_quat', type=str, default='True')
 parser.add_argument('--model_classifier_quat', type=str, default='True')
-parser.add_argument('--model_conv_structure', type=str, default='[16,32,64,128,256]')
-parser.add_argument('--model_classifier_structure', type=str, default='[4096,4096]')
-parser.add_argument('--model_batch_normalization', type=str, default='True')
-parser.add_argument('--model_reduced_batch_normalization', type=str, default='True')
-parser.add_argument('--time_dim', type=int, default=512)
-parser.add_argument('--freq_dim', type=int, default=128)
-parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
-parser.add_argument('--model_num_classes', type=int, default=5)
-parser.add_argument('--model_embeddings_dim', type=str, default='[64,64]')
+parser.add_argument('--model_in_channels', type=int, default=1)
+parser.add_argument('--model_flattened_dim', type=int, default=32768)
+parser.add_argument('--model_latent_dim', type=int, default=1000)
 parser.add_argument('--model_verbose', type=str, default='False')
-
+parser.add_argument('--model_architecture', type=str, default='VGG16')
+parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
 
 #grid search parameters
 #SPECIFY ONLY IF PERFORMING A GRID SEARCH WITH exp_instance.py SCRIPT
@@ -92,11 +88,7 @@ args.fixed_seed = eval(args.fixed_seed)
 args.model_verbose = eval(args.model_verbose)
 args.model_quat = eval(args.model_quat)
 args.model_classifier_quat = eval(args.model_classifier_quat)
-args.model_batch_normalization = eval(args.model_batch_normalization)
-args.model_reduced_batch_normalization = eval(args.model_reduced_batch_normalization)
-args.model_conv_structure = eval(args.model_conv_structure)
-args.model_classifier_structure = eval(args.model_classifier_structure)
-args.model_embeddings_dim = eval(args.model_embeddings_dim)
+
 
 if args.use_cuda:
     device = 'cuda:' + str(args.gpu_id)
@@ -107,27 +99,18 @@ else:
 tr_data, val_data, test_data = uf.load_datasets(args)
 
 #load model
-
 print ('\nMoving model to device')
 if args.model_name == 'r2he':
-
-    model = locals()[args.model_name](quat = args.model_quat,
-                                    classifier_quat = args.model_classifier_quat,
-                                    conv_structure = args.model_conv_structure,
-                                    classifier_structure = args.model_classifier_structure,
-                                    batch_normalization = args.model_batch_normalization,
-                                    time_dim = args.time_dim,
-                                    freq_dim = args.freq_dim,
-                                    classifier_dropout = args.model_classifier_dropout,
-                                    num_classes = args.model_num_classes,
-                                    embeddings_dim = args.model_embeddings_dim,
-                                    verbose = args.model_verbose
-                                    )
-
-    #model = locals()[args.model_name]()
+    model = locals()[args.model_name](latent_dim=args.model_latent_dim,
+                                      in_channels=args.model_in_channels,
+                                      architecture=args.model_architecture,
+                                      classifier_dropout=args.model_classifier_dropout,
+                                      flattened_dim=args.model_flattened_dim,
+                                      quat=args.model_quat,
+                                      verbose=args.model_verbose)
 if args.model_name == 'simple_autoencoder':
-    model = locals()[args.model_name](batch_normalization = args.model_batch_normalization,
-                                      reduced_batch_normalization = args.model_reduced_batch_normalization)
+    print ('AAAAAFJFJFJFJFJFJFJFJFJFJFJFJ')
+    model = locals()[args.model_name]()
 
 
 model = model.to(device)
@@ -137,11 +120,25 @@ model_params = sum([np.prod(p.size()) for p in model.parameters()])
 print ('Total paramters: ' + str(model_params))
 
 #load pretrained model if desired
+
+
+#args.load_pretrained = '../new_experiments/experiment_9_5samples.txt/models/model_xval_iemocap_exp9_5samples.txt_run1_fold0'
 if args.load_pretrained is not None:
     print ('Loading pretrained model: ' + args.load_pretrained)
     pretrained_dict = torch.load(args.load_pretrained)
     model_dict = model.state_dict()
+
+    # 1. filter out unnecessary keys
+    #pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
+    # 2. overwrite entries in the existing state dict
+    #model_dict.update(pretrained_dict)
+
     model.load_state_dict(pretrained_dict, strict=False)  #load best model
+
+    #with torch.no_grad():
+    #    model.fc1.weight.copy_(state_dict['fc1.weight'])
+    #    model.fc1.bias.copy_(state_dict['fc1.bias'])
+
 
 #define optimizer and loss
 optimizer = optim.Adam(model.parameters(), lr=args.learning_rate,
@@ -281,8 +278,17 @@ for epoch in range(args.num_epochs):
                 torch.save(model.state_dict(), args.model_path)
                 print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
                 saved_epoch = epoch + 1
+
+
         else:
             raise ValueError('Wrong metric selected')
+    '''
+    if args.num_experiment != 0:
+        #print info on dataset, experiment and instance if performing a grid search
+        utilstring = 'dataset: ' + str(args.dataset) + ', exp: ' + str(args.num_experiment) + ', run: ' + str(args.num_run) + ', fold: ' + str(args.num_fold)
+        print ('')
+        print (utilstring)
+    '''
 
     if args.early_stopping and epoch >= args.patience+1:
         patience_vec = [i['total'] for i in val_loss_hist[-args.patience+1:]]
@@ -350,6 +356,7 @@ keys.remove('val_loss_hist')
 train_keys = [i for i in keys if 'train' in i]
 val_keys = [i for i in keys if 'val' in i]
 test_keys = [i for i in keys if 'test' in i]
+
 
 print ('\n train:')
 for i in train_keys:

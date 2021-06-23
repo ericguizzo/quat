@@ -26,10 +26,6 @@ profile_autoencoder = ['train_loss_total', 'val_loss_total', 'test_loss_total', 
                        'train_loss_dominance', 'val_loss_dominance', 'test_loss_dominance', '/'
                        ]
 
-profile_emotion_recognition = ['train_loss', 'val_loss', 'test_loss', '/',
-                       'train_acc', 'val_acc', 'test_acc', '/',
-                       ]
-
 
 profile = eval(args.profile)
 

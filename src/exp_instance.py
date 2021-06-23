@@ -161,7 +161,7 @@ def run_experiment(num_experiment=0, num_run=0, num_folds=2,
     #generate results spreadsheet
     spreadsheet_name = dataset + '_exp' + str(num_experiment) + '_results_spreadsheet.xls'
     output_file = os.path.join(output_results_path,spreadsheet_name)
-    spreadsheet_parameters = {'input_folder':output_results_path, 'output_name':output_file, 'profile': parameters['spreadsheet_profile']}
+    spreadsheet_parameters = {'input_folder':output_results_path, 'output_name':output_file}
     gen_xls_string = gen_command(script='results_to_excel.py', d=spreadsheet_parameters)
     gen_spreadsheet = subprocess.Popen(gen_xls_string, shell=True)
     gen_spreadsheet.communicate()
@@ -219,10 +219,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiments_folder', type=str, default='experiments_quat')
     parser.add_argument('--output_folder', type=str, default='../new_experiments')
-    parser.add_argument('--ids', type=str, default='[20]')
-    parser.add_argument('--first', type=int, default=1)
-    parser.add_argument('--last', type=int, default=1)
-    parser.add_argument('--gpu_id', type=int, default=0)
+    parser.add_argument('--ids', type=str, default='[17]')
+    parser.add_argument('--first', type=int, default=9)
+    parser.add_argument('--last', type=int, default=9)
+    parser.add_argument('--gpu_id', type=int, default=1)
     args = parser.parse_args()
 
     grid_search(experiments_folder=args.experiments_folder,
