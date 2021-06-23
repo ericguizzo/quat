@@ -13,7 +13,7 @@
         "patience": 100,
         "regularization_lambda": 0.00,
         "model_quat": "True",
-        "model_classifier_quat": "True"
+        "model_classifier_quat": "True",
         "load_pretrained": "'../new_experiments/experiment_21_pretraining_reconstruction_sa_nobatchnorm.txt/models/model_xval_iemocap_exp21_pretraining_reconstruction_sa_nobatchnorm.txt_run1_fold0'"
 
       },
