@@ -536,12 +536,12 @@ class simple_autoencoder(nn.Module):
     def encode(self, x):
         x = F.relu(self.conv1(x))
         x = self.pool(x)
-        if self.batch_normalization or reduced_batch_normalization:
+        if self.batch_normalization or self.reduced_batch_normalization:
             x = self.conv1_bn(x)
 
         x = F.relu(self.conv2(x))
         x = self.pool(x)
-        if self.batch_normalization or reduced_batch_normalization:
+        if self.batch_normalization or self.reduced_batch_normalization:
             x = self.conv2_bn(x)
 
         x = F.relu(self.conv3(x))
@@ -583,7 +583,7 @@ class simple_autoencoder(nn.Module):
             x = self.tconv3_bn(x)
 
         x = F.relu(self.t_conv4(x))
-        if self.batch_normalization or reduced_batch_normalization:
+        if self.batch_normalization or self.reduced_batch_normalization:
             x = self.tconv4_bn(x)
 
         x = torch.sigmoid(self.t_conv5(x))
