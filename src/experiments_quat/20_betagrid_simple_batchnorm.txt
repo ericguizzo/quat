@@ -17,6 +17,7 @@
         "save_model_metric": "total_loss",
         "early_stopping": "True",
         "model_quat": "True",
+        "model_classifier_quat": "True",
         "time_dim":512
       },
 
