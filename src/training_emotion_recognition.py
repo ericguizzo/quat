@@ -115,25 +115,8 @@ tr_data, val_data, test_data = uf.load_datasets(args)
 #load model
 
 print ('\nMoving model to device')
-if args.model_name == 'r2he':
-
-    model = locals()[args.model_name](quat = args.model_quat,
-                                    classifier_quat = args.model_classifier_quat,
-                                    conv_structure = args.model_conv_structure,
-                                    classifier_structure = args.model_classifier_structure,
-                                    batch_normalization = args.model_batch_normalization,
-                                    time_dim = args.time_dim,
-                                    freq_dim = args.freq_dim,
-                                    classifier_dropout = args.model_classifier_dropout,
-                                    num_classes = args.model_num_classes,
-                                    embeddings_dim = args.model_embeddings_dim,
-                                    verbose = args.model_verbose
-                                    )
-
-    #model = locals()[args.model_name]()
-if args.model_name == 'simple_autoencoder':
-    model = locals()[args.model_name](batch_normalization = args.model_batch_normalization)
-
+if args.model_name == 'VGG':
+    model = locals()[args.model_name]
 
 model = model.to(device)
 
