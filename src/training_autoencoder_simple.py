@@ -174,7 +174,7 @@ def evaluate(model, device, loss_function, dataloader, emo_weight):
         for i, (sounds, truth) in enumerate(dataloader):
             sounds = sounds.to(device)
             truth = truth.to(device)
-            
+
             #generate quaternion emotional embeddings if desired
             if args.use_r2he:
                 if args.r2he_features_type == 'reconstruction':

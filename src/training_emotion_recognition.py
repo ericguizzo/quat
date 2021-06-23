@@ -143,7 +143,7 @@ optimizer = optim.Adam(model.parameters(), lr=args.learning_rate,
                               weight_decay=args.regularization_lambda)
 
 #loss_function = nn.BCELoss()
-loss_function = nn.CrossEntropyLoss()
+loss_function = emotion_recognition_loss()
 
 #init history
 train_loss_hist = []
