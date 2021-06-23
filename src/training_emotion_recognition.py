@@ -27,8 +27,6 @@ parser.add_argument('--train_perc', type=float, default=0.7)
 parser.add_argument('--val_perc', type=float, default=0.2)
 parser.add_argument('--test_perc', type=float, default=0.1)
 parser.add_argument('--normalize_predictors', type=str, default='True')
-parser.add_argument('--time_dim', type=int, default=512)
-parser.add_argument('--freq_dim', type=int, default=128)
 parser.add_argument('--fast_test', type=str, default='True')
 parser.add_argument('--fast_test_bound', type=int, default=5)
 
@@ -46,18 +44,35 @@ parser.add_argument('--load_pretrained', type=str, default=None)
 parser.add_argument('--num_folds', type=int, default=1)
 parser.add_argument('--num_fold', type=int, default=0)
 parser.add_argument('--fixed_seed', type=str, default='True')
+
+
 #loss parameters
 parser.add_argument('--loss_function', type=str, default='emo_loss')
 parser.add_argument('--loss_beta', type=float, default=1.)
+parser.add_argument('--emo_loss_holes', type=int, default=None)  #emo loss is deactivated every x epochs
+parser.add_argument('--emo_loss_warmup_epochs', type=int, default=None)  #warmup ramp length
+
+
 #model parameters
 parser.add_argument('--model_name', type=str, default='r2he')
 parser.add_argument('--model_quat', type=str, default='True')
-parser.add_argument('--model_in_channels', type=int, default=1)
-parser.add_argument('--model_flattened_dim', type=int, default=32768)
-parser.add_argument('--model_latent_dim', type=int, default=1000)
-parser.add_argument('--model_verbose', type=str, default='False')
-parser.add_argument('--model_architecture', type=str, default='VGG16')
+parser.add_argument('--model_classifier_quat', type=str, default='True')
+parser.add_argument('--model_conv_structure', type=str, default='[16,32,64,128,256]')
+parser.add_argument('--model_classifier_structure', type=str, default='[4096,4096]')
+parser.add_argument('--model_batch_normalization', type=str, default='True')
+parser.add_argument('--time_dim', type=int, default=512)
+parser.add_argument('--freq_dim', type=int, default=128)
 parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
+parser.add_argument('--model_num_classes', type=int, default=5)
+parser.add_argument('--model_embeddings_dim', type=str, default='[64,64]')
+parser.add_argument('--model_verbose', type=str, default='False')
+
+parser.add_argument('--use_r2he', type=str, default=True)
+parser.add_argument('--r2he_model_path', type=str, default=None)
+parser.add_argument('--r2he_model_name', type=str, default='simple_autoencoder')
+parser.add_argument('--r2he_features_type', type=str, default='reconstruction',
+                    help='reconstruction or embeddings')
+
 
 #grid search parameters
 #SPECIFY ONLY IF PERFORMING A GRID SEARCH WITH exp_instance.py SCRIPT
@@ -67,6 +82,7 @@ parser.add_argument('--comment_2', type=str, default='none')
 parser.add_argument('--experiment_description', type=str, default='none')
 parser.add_argument('--dataset', type=str, default='none')
 parser.add_argument('--num_experiment', type=int, default=0)
+#        "load_pretrained": "'../new_experiments/experiment_9_5samples.txt/models/model_xval_iemocap_exp9_5samples.txt_run1_fold0'"
 
 #eval string args
 args = parser.parse_args()
@@ -79,6 +95,13 @@ args.early_stopping = eval(args.early_stopping)
 args.fixed_seed = eval(args.fixed_seed)
 args.model_verbose = eval(args.model_verbose)
 args.model_quat = eval(args.model_quat)
+args.model_classifier_quat = eval(args.model_classifier_quat)
+args.model_batch_normalization = eval(args.model_batch_normalization)
+args.model_conv_structure = eval(args.model_conv_structure)
+args.model_classifier_structure = eval(args.model_classifier_structure)
+args.model_embeddings_dim = eval(args.model_embeddings_dim)
+args.use_r2he = eval(args.use_r2he)
+
 
 if args.use_cuda:
     device = 'cuda:' + str(args.gpu_id)
@@ -89,15 +112,27 @@ else:
 tr_data, val_data, test_data = uf.load_datasets(args)
 
 #load model
+
 print ('\nMoving model to device')
 if args.model_name == 'r2he':
-    model = locals()[args.model_name](latent_dim=args.model_latent_dim,
-                                      in_channels=args.model_in_channels,
-                                      architecture=args.model_architecture,
-                                      classifier_dropout=args.model_classifier_dropout,
-                                      flattened_dim=args.model_flattened_dim,
-                                      quat=args.model_quat,
-                                      verbose=args.model_verbose)
+
+    model = locals()[args.model_name](quat = args.model_quat,
+                                    classifier_quat = args.model_classifier_quat,
+                                    conv_structure = args.model_conv_structure,
+                                    classifier_structure = args.model_classifier_structure,
+                                    batch_normalization = args.model_batch_normalization,
+                                    time_dim = args.time_dim,
+                                    freq_dim = args.freq_dim,
+                                    classifier_dropout = args.model_classifier_dropout,
+                                    num_classes = args.model_num_classes,
+                                    embeddings_dim = args.model_embeddings_dim,
+                                    verbose = args.model_verbose
+                                    )
+
+    #model = locals()[args.model_name]()
+if args.model_name == 'simple_autoencoder':
+    model = locals()[args.model_name](batch_normalization = args.model_batch_normalization)
+
 
 model = model.to(device)
 
@@ -108,19 +143,29 @@ print ('Total paramters: ' + str(model_params))
 #load pretrained model if desired
 if args.load_pretrained is not None:
     print ('Loading pretrained model: ' + args.load_pretrained)
-    model.load_state_dict(torch.load(args.load_pretrained), strict=False)  #load best model
+    pretrained_dict = torch.load(args.load_pretrained)
+    model.load_state_dict(pretrained_dict, strict=False)  #load best model
+
+#load r2he model if desired
+if args.use_r2he:
+    r2he = locals()[args.r2he_model_name]
+    pretrained_dict = torch.load(args.r2he_model_path)
+    r2he.load_state_dict(pretrained_dict, strict=False)
+    r2he = r2he.to(device)
 
 
 #define optimizer and loss
 optimizer = optim.Adam(model.parameters(), lr=args.learning_rate,
                               weight_decay=args.regularization_lambda)
-loss_function = locals()[args.loss_function]
+
+#loss_function = nn.BCELoss()
+loss_function = nn.CrossEntropyLoss()
 
 #init history
 train_loss_hist = []
 val_loss_hist = []
 
-def evaluate(model, device, loss_function, dataloader):
+def evaluate(model, device, loss_function, dataloader, emo_weight):
     #compute loss without backprop
     model.eval()
     temp_loss = []
@@ -130,18 +175,27 @@ def evaluate(model, device, loss_function, dataloader):
             sounds = sounds.to(device)
             truth = truth.to(device)
 
-            recon, v, a, d = model(sounds)
-            loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
-            loss['total'] = loss['total'].cpu().numpy()
+            #generate quaternion emotional embeddings if desired
+            if args.use_r2he:
+                if args.r2he_features_type == 'reconstruction':
+                    sounds = r2he()
+                elif args.r2he_features_type == 'embeddings':
+                    sounds = r2he.get_embeddings()
+                else:
+                    raise ValueError('wrong r2he features type selected')
 
-            temp_loss.append(loss)
+            pred = model(sounds)
+
+            loss = loss_function(pred, truth)
+
+            temp_loss.append({'loss':loss['loss'].cpu().numpy(),
+                              'acc': loss['acc']})
             pbar.update(1)
     return temp_loss
 
 def mean_batch_loss(batch_loss):
     #compute mean of each loss item
-    d = {'total':[], 'emo':[], 'recon':[],
-                  'valence':[], 'arousal':[], 'dominance':[]}
+    d = {'loss':[], 'acc':[]}
     for i in batch_loss:
         for j in i:
             name = j
@@ -158,6 +212,20 @@ for epoch in range(args.num_epochs):
     print ('Epoch: [' + str(epoch+1) + '/' + str(args.num_epochs) + '] ')
     train_batch_losses = []
     model.train()
+
+    #emotional loss warm up and holes
+    emo_weight = args.loss_beta
+    #warm up
+    if args.emo_loss_warmup_epochs is not None:
+        if epoch < args.emo_loss_warmup_epochs:
+            ramp = np.arange(args.emo_loss_warmup_epochs) / args.emo_loss_warmup_epochs
+            w = ramp[epoch]
+            emo_weight = emo_weight * w
+    #holesramp
+    if args.emo_loss_holes is not None:
+        if epoch % args.emo_loss_holes == 0:
+            emo_weight = 0
+
     #train data
     with tqdm(total=len(tr_data)) as pbar:
         for i, (sounds, truth) in enumerate(tr_data):
@@ -165,18 +233,33 @@ for epoch in range(args.num_epochs):
             sounds = sounds.to(device)
             truth = truth.to(device)
 
-            recon, v, a, d = model(sounds)
-            loss = loss_function(sounds, recon, truth, v, a, d, args.loss_beta)
-            loss['total'].backward()
+            #generate quaternion emotional embeddings if desired
+            if args.use_r2he:
+                with torch.no_grad():
+                    if args.r2he_features_type == 'reconstruction':
+                        sounds = r2he()
+                    elif args.r2he_features_type == 'embeddings':
+                        sounds = r2he.get_embeddings()
+                    else:
+                        raise ValueError('wrong r2he features type selected')
+
+            recon, pred = model(sounds)
+
+            #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
+            #recon = torch.unsqueeze(torch.sqrt(torch.sum(recon**2, axis=1)), dim=1)
+            #loss = loss_function(recon, sounds)
+            loss = loss_function(pred, truth)
+            loss['loss'].backward()
             optimizer.step()
 
-            loss['total'] = loss['total'].detach().cpu().item()
-            train_batch_losses.append(loss)
+            #loss = loss.detach().cpu().item()
+            train_batch_losses.append({'loss':loss['loss'].detach().cpu().numpy(),
+                                       'acc': loss['acc']})
             pbar.update(1)
-            del loss
+            #del loss
 
     #validation data
-    val_batch_losses = evaluate(model, device, loss_function, val_data)
+    val_batch_losses = evaluate(model, device, loss_function, val_data, emo_weight)
 
     train_epoch_loss = mean_batch_loss(train_batch_losses)
     val_epoch_loss = mean_batch_loss(val_batch_losses)
@@ -186,11 +269,12 @@ for epoch in range(args.num_epochs):
     print (train_epoch_loss)
     print ('\n Validation:')
     print (val_epoch_loss)
+    print ('Comments:')
+    print (args.comment_1, args.comment_2)
 
     train_loss_hist.append(train_epoch_loss)
     val_loss_hist.append(val_epoch_loss)
 
-    #print ('\n  Train loss: ' + str(np.round(train_epoch_loss.item(), decimals=5)) + ' | Val loss: ' + str(np.round(val_epoch_loss.item(), decimals=5)))
 
     #compute epoch time
     epoch_time = float(time.perf_counter()) - float(epoch_start)
@@ -202,33 +286,32 @@ for epoch in range(args.num_epochs):
         print ('\nModel saved')
         saved_epoch = epoch + 1
     else:
-        if args.save_model_metric == 'total_loss':
-            best_loss = min([i['total'] for i in val_loss_hist[:-1]])
+        if args.save_model_metric == 'loss':
+            best_loss = min([i['loss'] for i in val_loss_hist[:-1]])
             #best_loss = min(val_loss_hist['total'].item()[:-1])  #not looking at curr_loss
-            curr_loss = val_loss_hist[-1]['total']
+            curr_loss = val_loss_hist[-1]['loss']
             if curr_loss < best_loss:
                 torch.save(model.state_dict(), args.model_path)
                 print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
                 saved_epoch = epoch + 1
-        if args.save_model_metric == 'epochs':
+        elif args.save_model_metric == 'acc':
+            best_loss = max([i['acc'] for i in val_loss_hist[:-1]])
+            #best_loss = min(val_loss_hist['total'].item()[:-1])  #not looking at curr_loss
+            curr_loss = val_loss_hist[-1]['acc']
+            if curr_loss > best_loss:
+                torch.save(model.state_dict(), args.model_path)
+                print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
+                saved_epoch = epoch + 1
+        elif args.save_model_metric == 'epochs':
             if epoch % 100 == 0:
                 torch.save(model.state_dict(), args.model_path)
                 print ('\nModel saved')  #SUBSTITUTE WITH SAVE MODEL FUNC
                 saved_epoch = epoch + 1
-
-
         else:
             raise ValueError('Wrong metric selected')
-    '''
-    if args.num_experiment != 0:
-        #print info on dataset, experiment and instance if performing a grid search
-        utilstring = 'dataset: ' + str(args.dataset) + ', exp: ' + str(args.num_experiment) + ', run: ' + str(args.num_run) + ', fold: ' + str(args.num_fold)
-        print ('')
-        print (utilstring)
-    '''
 
     if args.early_stopping and epoch >= args.patience+1:
-        patience_vec = [i['total'] for i in val_loss_hist[-args.patience+1:]]
+        patience_vec = [i['loss'] for i in val_loss_hist[-args.patience+1:]]
         #patience_vec = val_loss_hist[-args.patience+1:]
         best_l = np.argmin(patience_vec)
         if best_l == 0:
@@ -241,9 +324,9 @@ print ('\nComputing metrics with best saved model')
 
 model.load_state_dict(torch.load(args.model_path), strict=False)  #load best model
 
-train_batch_losses = evaluate(model, device, loss_function, tr_data)
-val_batch_losses = evaluate(model, device, loss_function, val_data)
-test_batch_losses = evaluate(model, device, loss_function, test_data)
+train_batch_losses = evaluate(model, device, loss_function, tr_data, 1)
+val_batch_losses = evaluate(model, device, loss_function, val_data, 1)
+test_batch_losses = evaluate(model, device, loss_function, test_data, 1)
 
 train_loss = mean_batch_loss(train_batch_losses)
 val_loss = mean_batch_loss(val_batch_losses)
@@ -253,29 +336,13 @@ test_loss = mean_batch_loss(test_batch_losses)
 temp_results = {}
 
 #save loss
-temp_results['train_loss_total'] = train_loss['total']
-temp_results['val_loss_total'] = val_loss['total']
-temp_results['test_loss_total'] = test_loss['total']
+temp_results['train_loss'] = train_loss['loss']
+temp_results['val_loss'] = val_loss['loss']
+temp_results['test_loss'] = test_loss['loss']
 
-temp_results['train_loss_recon'] = train_loss['recon']
-temp_results['val_loss_recon'] = val_loss['recon']
-temp_results['test_loss_recon'] = test_loss['recon']
-
-temp_results['train_loss_emo'] = train_loss['emo']
-temp_results['val_loss_emo'] = val_loss['emo']
-temp_results['test_loss_emo'] = test_loss['emo']
-
-temp_results['train_loss_valence'] = train_loss['valence']
-temp_results['val_loss_valence'] = val_loss['valence']
-temp_results['test_loss_valence'] = test_loss['valence']
-
-temp_results['train_loss_arousal'] = train_loss['arousal']
-temp_results['val_loss_arousal'] = val_loss['arousal']
-temp_results['test_loss_arousal'] = test_loss['arousal']
-
-temp_results['train_loss_dominance'] = train_loss['dominance']
-temp_results['val_loss_dominance'] = val_loss['dominance']
-temp_results['test_loss_dominance'] = test_loss['dominance']
+temp_results['train_acc'] = train_loss['acc']
+temp_results['val_acc'] = val_loss['acc']
+temp_results['test_acc'] = test_loss['acc']
 
 temp_results['train_loss_hist'] = train_loss_hist
 temp_results['val_loss_hist'] = val_loss_hist
@@ -293,7 +360,6 @@ keys.remove('val_loss_hist')
 train_keys = [i for i in keys if 'train' in i]
 val_keys = [i for i in keys if 'val' in i]
 test_keys = [i for i in keys if 'test' in i]
-
 
 print ('\n train:')
 for i in train_keys:

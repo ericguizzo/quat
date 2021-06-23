@@ -13,6 +13,91 @@ VGG_types = {
     "VGG19": [64,64,"M",128,128,"M",256,256,256,256,"M",512,512,512,512,"M",512,512,512,512,"M",]
     }
 
+class VGG(nn.Module):
+    def __init__(self,
+                architecture='VGG16',
+                classifier_dropout=0.5,
+                flatten_dim=32768,
+                verbose=True,
+                quat=False,
+                num_classes = 5
+                ):
+        super(VGG, self).__init__()
+        self.quat = quat
+        if quat:
+            self.in_channels = 4
+        else:
+            self.in_channels = 1
+        self.verbose = verbose
+        self.flatten_dim = flatten_dim
+        self.last_dim = [i for i in VGG_types[architecture] if type(i) != str][-1]
+        self.first_dim = [i for i in VGG_types[architecture] if type(i) != str][0]
+
+        self.features = self.create_conv_layers(VGG_types[architecture])
+
+        classifier_layers = [nn.Linear(flatten_dim, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             nn.Linear(4096, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             nn.Linear(4096, num_classes)
+                             ]
+        classifier_layers_q = [QuaternionLinear(flatten_dim, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             QuaternionLinear(4096, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             nn.Linear(4096, num_classes)
+                             ]
+        if quat:
+            self.classifier = nn.Sequential(*classifier_layers_q)
+        else:
+            self.classifier = nn.Sequential(*classifier_layers)
+
+    def create_conv_layers(self, architecture):
+        layers = []
+        in_channels = self.in_channels
+
+        for x in architecture:
+            if type(x) == int:
+                out_channels = x
+                if self.quat:
+                    c = QuaternionConv(in_channels=in_channels,
+                              out_channels=out_channels,
+                              kernel_size=(3, 3),
+                              stride=(1, 1),
+                              padding=(1, 1))
+                else:
+                    c = nn.Conv2d(in_channels=in_channels,
+                                  out_channels=out_channels,
+                                  kernel_size=(3, 3),
+                                  stride=(1, 1),
+                                  padding=(1, 1))
+                layers += [c,
+                    nn.ReLU(),
+                ]
+                in_channels = x
+            elif x == "M":
+                layers += [nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2))]
+
+        return nn.Sequential(*layers)
+
+    def forward(self, x):
+        if self.verbose:
+            print ('input: ', x.shape)
+        x = self.features(x)
+        if self.verbose:
+            print ('features: ', x.shape)
+        x = torch.flatten(x, start_dim=1)
+        if self.verbose:
+            print('flatten: ', x.shape)
+        x = self.classifier(x)
+        if self.verbose:
+            print('classification: ', x.shape)
+        return x
+
 class cazzo(nn.Module):
     def __init__(self,
                 latent_dim=4096,

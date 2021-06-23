@@ -27,7 +27,6 @@ parser.add_argument('--train_perc', type=float, default=0.7)
 parser.add_argument('--val_perc', type=float, default=0.2)
 parser.add_argument('--test_perc', type=float, default=0.1)
 parser.add_argument('--normalize_predictors', type=str, default='True')
-
 parser.add_argument('--fast_test', type=str, default='True')
 parser.add_argument('--fast_test_bound', type=int, default=5)
 
@@ -68,6 +67,12 @@ parser.add_argument('--model_num_classes', type=int, default=5)
 parser.add_argument('--model_embeddings_dim', type=str, default='[64,64]')
 parser.add_argument('--model_verbose', type=str, default='False')
 
+parser.add_argument('--use_r2he', type=str, default=True)
+parser.add_argument('--r2he_model_path', type=str, default=None)
+parser.add_argument('--r2he_model_name', type=str, default='simple_autoencoder')
+parser.add_argument('--r2he_features_type', type=str, default='reconstruction',
+                    help='reconstruction or embeddings')
+
 
 #grid search parameters
 #SPECIFY ONLY IF PERFORMING A GRID SEARCH WITH exp_instance.py SCRIPT
@@ -95,6 +100,8 @@ args.model_batch_normalization = eval(args.model_batch_normalization)
 args.model_conv_structure = eval(args.model_conv_structure)
 args.model_classifier_structure = eval(args.model_classifier_structure)
 args.model_embeddings_dim = eval(args.model_embeddings_dim)
+args.use_r2he = eval(args.use_r2he)
+
 
 if args.use_cuda:
     device = 'cuda:' + str(args.gpu_id)
@@ -137,8 +144,15 @@ print ('Total paramters: ' + str(model_params))
 if args.load_pretrained is not None:
     print ('Loading pretrained model: ' + args.load_pretrained)
     pretrained_dict = torch.load(args.load_pretrained)
-    model_dict = model.state_dict()
     model.load_state_dict(pretrained_dict, strict=False)  #load best model
+
+#load r2he model if desired
+if args.use_r2he:
+    r2he = locals()[args.r2he_model_name]
+    pretrained_dict = torch.load(args.r2he_model_path)
+    r2he.load_state_dict(pretrained_dict, strict=False)
+    r2he = r2he.to(device)
+
 
 #define optimizer and loss
 optimizer = optim.Adam(model.parameters(), lr=args.learning_rate,
@@ -160,6 +174,15 @@ def evaluate(model, device, loss_function, dataloader, emo_weight):
         for i, (sounds, truth) in enumerate(dataloader):
             sounds = sounds.to(device)
             truth = truth.to(device)
+            
+            #generate quaternion emotional embeddings if desired
+            if args.use_r2he:
+                if args.r2he_features_type == 'reconstruction':
+                    sounds = r2he()
+                elif args.r2he_features_type == 'embeddings':
+                    sounds = r2he.get_embeddings()
+                else:
+                    raise ValueError('wrong r2he features type selected')
 
             recon, pred = model(sounds)
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
@@ -217,6 +240,16 @@ for epoch in range(args.num_epochs):
             optimizer.zero_grad()
             sounds = sounds.to(device)
             truth = truth.to(device)
+
+            #generate quaternion emotional embeddings if desired
+            if args.use_r2he:
+                with torch.no_grad():
+                    if args.r2he_features_type == 'reconstruction':
+                        sounds = r2he()
+                    elif args.r2he_features_type == 'embeddings':
+                        sounds = r2he.get_embeddings()
+                    else:
+                        raise ValueError('wrong r2he features type selected')
 
             recon, pred = model(sounds)
 
