@@ -11,7 +11,7 @@
         "batch_size": 20,
         "model_name": "simple_autoencoder",
         "fast_test": "False",
-        "load_pretrained": "'../new_experiments/experiment_21_pretraining_reconstruction_sa_nobatchnorm.txt/models/model_xval_iemocap_exp21_pretraining_reconstruction_sa_nobatchnorm.txt_run1_fold0'"
+        "load_pretrained": "'../new_experiments/experiment_21_pretraining_reconstruction_sa_nobatchnorm.txt/models/model_xval_iemocap_exp21_pretraining_reconstruction_sa_nobatchnorm.txt_run3_fold0'"
 ,
         "patience": 30,
         "save_model_metric": "total_loss",
@@ -19,7 +19,7 @@
         "model_quat": "True",
         "model_classifier_quat": "True",
         "time_dim":512,
-        "model_batch_normalization":"False"
+        "model_batch_normalization":"True"
       },
 
 
