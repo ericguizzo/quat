@@ -1,7 +1,7 @@
 {
   "global_parameters":{
         "gpu_id":1,
-        "experiment_description": "test del cazzo",
+        "experiment_description": "test_cazzo",
         "script": "training_emotion_recognition.py",
         "dataset": "iemocap",
         "num_experiment": 14,
