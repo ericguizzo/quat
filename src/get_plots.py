@@ -44,7 +44,8 @@ parser.add_argument('--sample_rate', type=int, default=16000)
 '../new_experiments/experiment_13_5samples.txt/models/model_xval_iemocap_exp13_5samples.txt_run1_fold0'
 '../new_experiments/experiment_10_5adding_emo.txt/models/model_xval_iemocap_exp10_5adding_emo.txt_run1_fold0'
 '../new_experiments/experiment_16_betagrid.txt/models/model_xval_iemocap_exp16_betagrid.txt_run1_fold0'
-M_PATH='../new_experiments/experiment_15_pretraining_reconstruction.txt/models/model_xval_iemocap_exp15_pretraining_reconstruction.txt_run1_fold0'
+'../new_experiments/experiment_15_pretraining_reconstruction.txt/models/model_xval_iemocap_exp15_pretraining_reconstruction.txt_run1_fold0'
+M_PATH='../new_experiments/experiment_23_betagrid_RIPARTO.txt/models/model_xval_iemocap_exp23_betagrid_RIPARTO.txt_run1_fold0'
 parser.add_argument('--model_path', type=str, default=M_PATH)
 parser.add_argument('--model_name', type=str, default='simple_autoencoder')
 parser.add_argument('--model_quat', type=str, default='True')
