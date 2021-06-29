@@ -56,6 +56,7 @@ parser.add_argument('--model_verbose', type=str, default='False')
 parser.add_argument('--model_architecture', type=str, default='simple')
 parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
 parser.add_argument('--fast_test_bound', type=int, default=100)
+parser.add_argument('--shuffle_data', type=int, default='False')
 
 args = parser.parse_args()
 
@@ -64,6 +65,7 @@ args.datapoints_list = eval(args.datapoints_list)
 args.model_verbose = eval(args.model_verbose)
 args.fast_test = eval(args.fast_test)
 args.model_quat = eval(args.model_quat)
+args.shuffle_data = eval(args.shuffle_data)
 
 
 #def gen_plot(o, r, v, a, d, sound_id, curr_path, format='png'):
