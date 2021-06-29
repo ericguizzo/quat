@@ -31,6 +31,7 @@ parser.add_argument('--time_dim', type=int, default=512)
 parser.add_argument('--freq_dim', type=int, default=128)
 parser.add_argument('--fast_test', type=str, default='True')
 parser.add_argument('--fast_test_bound', type=int, default=5)
+parser.add_argument('--shuffle_data', type=str, default='True')
 
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
@@ -88,6 +89,8 @@ args.fixed_seed = eval(args.fixed_seed)
 args.model_verbose = eval(args.model_verbose)
 args.model_quat = eval(args.model_quat)
 args.model_classifier_quat = eval(args.model_classifier_quat)
+args.shuffle_data = eval(args.shuffle_data)
+
 
 
 if args.use_cuda:

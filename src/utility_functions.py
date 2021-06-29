@@ -287,6 +287,10 @@ def load_datasets(args):
     dummy = dummy.item()
     #create list of datapoints for current fold
     foldable_list = list(dummy.keys())
+
+    if args.shuffle_data:
+        random.shuffle(foldable_list)
+
     fold_actors_list = folds_generator(args.num_folds, foldable_list, [args.train_perc, args.val_perc, args.test_perc])
     train_list = fold_actors_list[args.num_fold]['train']
     val_list = fold_actors_list[args.num_fold]['val']
@@ -327,7 +331,7 @@ def load_datasets(args):
         validation_target = validation_target[:bound]
         test_predictors = test_predictors[:bound]
         test_target = test_target[:bound]
-    
+
     if args.normalize_predictors:
         #normalize to 0 mean and 1 std
         tr_max = np.max(training_predictors)
