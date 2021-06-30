@@ -174,9 +174,9 @@ def evaluate(model, device, loss_function, dataloader, emo_weight):
             #generate quaternion emotional embeddings if desired
             if args.use_r2he:
                 if args.r2he_features_type == 'reconstruction':
-                    sounds = r2he(sounds)
+                    sounds, _ = r2he(sounds)
                 elif args.r2he_features_type == 'embeddings':
-                    sounds = r2he.get_embeddings(sounds)
+                    sounds, _ = r2he.get_embeddings(sounds)
                 else:
                     raise ValueError('wrong r2he features type selected')
 
@@ -233,9 +233,9 @@ for epoch in range(args.num_epochs):
             if args.use_r2he:
                 with torch.no_grad():
                     if args.r2he_features_type == 'reconstruction':
-                        sounds = r2he(sounds)
+                        sounds, _ = r2he(sounds)
                     elif args.r2he_features_type == 'embeddings':
-                        sounds = r2he.get_embeddings(sounds)
+                        sounds, _ = r2he.get_embeddings(sounds)
                     else:
                         raise ValueError('wrong r2he features type selected')
             print (sounds.shape)
