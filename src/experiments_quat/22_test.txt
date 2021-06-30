@@ -11,7 +11,7 @@
         "batch_size": 20,
         "model_name": "VGGNet",
         "fast_test": "True",
-        "load_pretrained": "'../new_experiments/experiment_21_pretraining_reconstruction_sa_nobatchnorm.txt/models/model_xval_iemocap_exp21_pretraining_reconstruction_sa_nobatchnorm.txt_run1_fold0'",
+        "load_pretrained": "'../new_experiments/experiment_23_betagrid_RIPARTO.txt/models/model_xval_iemocap_exp23_betagrid_RIPARTO.txt_run1_fold0'",
 
         "patience": 30,
         "save_model_metric": "loss",
