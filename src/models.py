@@ -222,7 +222,7 @@ class simple_autoencoder(nn.Module):
 
 
     def get_embeddings(self, x):
-        x = self.encoder(x)
+        x = self.encode(x)
         x = x.view(-1, 4, self.embeddings_dim[0], self.embeddings_dim[1])
         return x
         return x, 'dummy'
