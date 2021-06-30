@@ -31,7 +31,7 @@ parser.add_argument('--time_dim', type=int, default=512)
 parser.add_argument('--freq_dim', type=int, default=128)
 parser.add_argument('--fast_test', type=str, default='True')
 parser.add_argument('--fast_test_bound', type=int, default=5)
-parser.add_argument('--shuffle_data', type=str, default='True')
+parser.add_argument('--shuffle_data', type=str, default='False')
 
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
