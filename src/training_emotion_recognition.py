@@ -231,13 +231,13 @@ for epoch in range(args.num_epochs):
 
             #generate quaternion emotional embeddings if desired
             if args.use_r2he:
-                with torch.no_grad():
-                    if args.r2he_features_type == 'reconstruction':
-                        sounds, _ = r2he(sounds)
-                    elif args.r2he_features_type == 'embeddings':
-                        sounds, _ = r2he.get_embeddings(sounds)
-                    else:
-                        raise ValueError('wrong r2he features type selected')
+                #with torch.no_grad():
+                if args.r2he_features_type == 'reconstruction':
+                    sounds, _ = r2he(sounds)
+                elif args.r2he_features_type == 'embeddings':
+                    sounds, _ = r2he.get_embeddings(sounds)
+                else:
+                    raise ValueError('wrong r2he features type selected')
             print (sounds.shape)
             pred = model(sounds)
 
