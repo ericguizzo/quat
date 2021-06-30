@@ -1,11 +1,15 @@
 import torch
 from torch import nn
 import numpy as np
-from models import r2he, simple_autoencoder
+from models import simple_autoencoder, VGGNet
 from torchsummary import summary
 
 
-x = torch.rand(4,1,512, 128)
+x = torch.rand(5,4,64, 64)
+model = VGGNet()
+x = model(x)
+print (x.shape)
+'''
 model = simple_autoencoder(quat=True)
 print ('input_dim', x.shape)
 x, pred = model(x)
@@ -14,7 +18,7 @@ print ('output_dim', x.shape)
 #compute number of parameters
 model_params = sum([np.prod(p.size()) for p in model.parameters()])
 print ('Total paramters: ' + str(model_params))
-
+'''
 '''
 model = r2he(verbose=True,
              latent_dim=100,

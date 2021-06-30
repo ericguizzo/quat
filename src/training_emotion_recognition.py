@@ -238,7 +238,7 @@ for epoch in range(args.num_epochs):
                     sounds, _ = r2he.get_embeddings(sounds)
                 else:
                     raise ValueError('wrong r2he features type selected')
-            print (sounds.shape)
+            #print (sounds.shape)
             pred = model(sounds)
 
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
