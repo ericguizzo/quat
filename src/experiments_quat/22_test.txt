@@ -18,12 +18,13 @@
         "early_stopping": "True",
         "model_quat": "False",
         "time_dim":512,
+
         "spreadsheet_profile": "profile_emotion_recognition"
       },
 
 
   "1":{"comment_1": "test", "comment_2": "coglione",
-        "use_r2he":"False"
+        "use_r2he":"True"
         }
 
 }
