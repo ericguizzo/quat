@@ -6,7 +6,7 @@ from torchsummary import summary
 
 
 x = torch.rand(5,4,64, 64)
-model = VGGNet()
+model = VGGNet(quat=True, flatten_dim=2048)
 x = model(x)
 print (x.shape)
 '''
