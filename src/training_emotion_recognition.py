@@ -57,6 +57,7 @@ parser.add_argument('--emo_loss_warmup_epochs', type=int, default=None)  #warmup
 
 #model parameters
 parser.add_argument('--model_name', type=str, default='VGGNet')
+parser.add_argument('--model_architecture', type=str, default='VGG16')
 parser.add_argument('--model_quat', type=str, default='True')
 parser.add_argument('--model_classifier_quat', type=str, default='True')
 parser.add_argument('--model_conv_structure', type=str, default='[16,32,64,128,256]')
@@ -64,8 +65,9 @@ parser.add_argument('--model_classifier_structure', type=str, default='[4096,409
 parser.add_argument('--model_batch_normalization', type=str, default='True')
 parser.add_argument('--time_dim', type=int, default=512)
 parser.add_argument('--freq_dim', type=int, default=128)
+parser.add_argument('--model_flatten_dim', type=int, default=32768)
 parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
-parser.add_argument('--model_num_classes', type=int, default=5)
+parser.add_argument('--model_num_classes', type=int, default=4)
 parser.add_argument('--model_embeddings_dim', type=str, default='[64,64]')
 parser.add_argument('--model_verbose', type=str, default='False')
 
@@ -118,7 +120,19 @@ tr_data, val_data, test_data = uf.load_datasets(args)
 
 print ('\nMoving model to device')
 if args.model_name == 'VGGNet':
-    model = VGGNet()
+                architecture='VGG16',
+                classifier_dropout=0.5,
+                flatten_dim=32768,
+                verbose=True,
+                quat=False,
+                num_classes = 4
+    model = VGGNet(architecture=args.model_architecture,
+                   classifier_dropout=args.model_classifier_dropout,
+                   flatten_dim=args.model_flatten_dim,
+                   verbose=args.model_verbose,
+                   quat=args.model_quat,
+                   num_classes=args.model_num_classes
+                   )
 
 model = model.to(device)
 
