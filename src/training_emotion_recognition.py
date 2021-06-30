@@ -142,7 +142,8 @@ if args.load_pretrained is not None:
 
 #load r2he model if desired
 if args.use_r2he:
-    r2he = locals()[args.r2he_model_name]
+    if args.r2he_model_name == 'simple_autoencoder':
+        r2he = simple_autoencoder()
     pretrained_dict_r2he = torch.load(args.r2he_model_path)
     print ('loading r2he: ', args.r2he_model_path)
     r2he.load_state_dict(pretrained_dict_r2he, strict=False)
