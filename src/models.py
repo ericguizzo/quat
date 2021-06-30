@@ -21,7 +21,7 @@ class VGGNet(nn.Module):
                 flatten_dim=32768,
                 verbose=True,
                 quat=False,
-                num_classes = 5
+                num_classes = 4
                 ):
         super(VGGNet, self).__init__()
         self.quat = quat
