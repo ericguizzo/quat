@@ -29,7 +29,7 @@ parser.add_argument('--test_perc', type=float, default=0.1)
 parser.add_argument('--normalize_predictors', type=str, default='True')
 parser.add_argument('--fast_test', type=str, default='True')
 parser.add_argument('--fast_test_bound', type=int, default=5)
-parser.add_argument('--shuffle_data', type=str, default='True')
+parser.add_argument('--shuffle_data', type=str, default='False')
 
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
@@ -46,7 +46,6 @@ parser.add_argument('--num_folds', type=int, default=1)
 parser.add_argument('--num_fold', type=int, default=0)
 parser.add_argument('--fixed_seed', type=str, default='True')
 parser.add_argument('--spreadsheet_profile', type=str, default=None)
-
 
 #loss parameters
 parser.add_argument('--loss_function', type=str, default='emotion_recognition_loss')
