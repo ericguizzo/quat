@@ -35,7 +35,7 @@
         "model_quat":"True",
         "r2he_features_type":"embeddings",
         "model_flatten_dim":2048
-        }
+        },
   "4":{"comment_1": "baseline_165733060_params", "comment_2": "no_r2he_real_reg",
         "use_r2he":"False",
         "model_quat":"False",
