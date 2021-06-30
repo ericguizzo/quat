@@ -120,12 +120,6 @@ tr_data, val_data, test_data = uf.load_datasets(args)
 
 print ('\nMoving model to device')
 if args.model_name == 'VGGNet':
-                architecture='VGG16',
-                classifier_dropout=0.5,
-                flatten_dim=32768,
-                verbose=True,
-                quat=False,
-                num_classes = 4
     model = VGGNet(architecture=args.model_architecture,
                    classifier_dropout=args.model_classifier_dropout,
                    flatten_dim=args.model_flatten_dim,
