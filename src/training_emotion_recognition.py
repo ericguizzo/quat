@@ -56,7 +56,7 @@ parser.add_argument('--emo_loss_warmup_epochs', type=int, default=None)  #warmup
 
 
 #model parameters
-parser.add_argument('--model_name', type=str, default='r2he')
+parser.add_argument('--model_name', type=str, default='VGGNet')
 parser.add_argument('--model_quat', type=str, default='True')
 parser.add_argument('--model_classifier_quat', type=str, default='True')
 parser.add_argument('--model_conv_structure', type=str, default='[16,32,64,128,256]')
