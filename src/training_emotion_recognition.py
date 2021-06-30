@@ -144,6 +144,7 @@ if args.load_pretrained is not None:
 if args.use_r2he:
     r2he = locals()[args.r2he_model_name]
     pretrained_dict_r2he = torch.load(args.r2he_model_path)
+    print ('loading r2he: ', pretrained_dict_r2he)
     r2he.load_state_dict(pretrained_dict_r2he, strict=False)
     r2he = r2he.to(device)
 
