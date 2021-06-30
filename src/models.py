@@ -222,8 +222,8 @@ class simple_autoencoder(nn.Module):
     def get_embeddings(self, x):
         x = self.encode(x)
         x = x.view(-1, 4, self.flatten_dim//4)
-        print ('h', x.shape)
-        return x
+        #print ('h', x.shape)
+        return x, 'dummy'
 
 
     def forward(self, x):
