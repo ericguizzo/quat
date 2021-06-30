@@ -29,7 +29,7 @@ parser.add_argument('--test_perc', type=float, default=0.1)
 parser.add_argument('--normalize_predictors', type=str, default='True')
 parser.add_argument('--fast_test', type=str, default='True')
 parser.add_argument('--fast_test_bound', type=int, default=5)
-parser.add_argument('--shuffle_data', type=str, default='False')
+parser.add_argument('--shuffle_data', type=str, default='True')
 
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
@@ -102,6 +102,7 @@ args.model_batch_normalization = eval(args.model_batch_normalization)
 args.model_conv_structure = eval(args.model_conv_structure)
 args.model_classifier_structure = eval(args.model_classifier_structure)
 args.model_embeddings_dim = eval(args.model_embeddings_dim)
+args.shuffle_data = eval(args.shuffle_data)
 args.use_r2he = eval(args.use_r2he)
 
 
