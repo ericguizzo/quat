@@ -24,7 +24,9 @@
 
 
   "1":{"comment_1": "test", "comment_2": "coglione",
-        "use_r2he":"True"
+        "use_r2he":"True",
+        "r2he_features_type":"reconstruction"
+
         }
 
 }
