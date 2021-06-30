@@ -102,13 +102,14 @@ class VGGNet(nn.Module):
 
 class simple_autoencoder(nn.Module):
     def __init__(self, quat=True, classifier_quat=True, hidden_size=2048 ,flatten_dim=16384,
-                 classifier_dropout=0.5, num_classes=5):
+                 classifier_dropout=0.5, embeddings_dim=[64,64], num_classes=5):
         super(simple_autoencoder, self).__init__()
         ## encoder layers ##
         # conv layer (depth from 3 --> 16), 3x3 kernels
         self.flatten_dim = flatten_dim
         self.hidden_size = hidden_size
         self.num_classes = num_classes
+        self.embeddings_dim = embeddings_dim
         self.conv1 = nn.Conv2d(1, 16, 3, padding=1)
         self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
         self.conv3 = nn.Conv2d(32, 64, 3, padding=1)
@@ -219,10 +220,11 @@ class simple_autoencoder(nn.Module):
 
         return x
 
+
     def get_embeddings(self, x):
-        x = self.encode(x)
-        x = x.view(-1, 4, self.flatten_dim//4)
-        #print ('h', x.shape)
+        x = self.encoder(x)
+        x = x.view(-1, 4, self.embeddings_dim[0], self.embeddings_dim[1])
+        return x
         return x, 'dummy'
 
 
