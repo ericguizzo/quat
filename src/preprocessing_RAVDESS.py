@@ -123,11 +123,14 @@ def main():
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
         curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_RAVDESS)
         uf.print_bar(index, num_files)
-        print ('COGLIONE', curr_predictors.shape)
+
         #append preprocessed predictors and target to the dict
-        predictors[i] = curr_predictors
-        target[i] = curr_target
-        index +=1
+        if len(curr_predictors.shape) > 1
+            print ('COGLIONE', curr_predictors.shape)
+            predictors[i] = curr_predictors
+            target[i] = curr_target
+            index +=1
+        
     #save dicts
     #save dicts
     print ('\nSaving matrices...')
