@@ -92,6 +92,7 @@ def main():
     #compute max file length of current dataet
     #for the zeropadding
     max_file_length = get_max_length_RAVDESS()
+    max_file_length = SR * 4
     #define the list of foldable items. In the case of RAVDESS
     #actors are simply numbered from 0 to 24
     contents = os.listdir(INPUT_RAVDESS_FOLDER)  #get list of filepaths
@@ -123,6 +124,7 @@ def main():
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
         curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_RAVDESS)
         uf.print_bar(index, num_files)
+        print ('COGLIONE', curr_predictors.shape)
         #append preprocessed predictors and target to the dict
         predictors[i] = curr_predictors
         target[i] = curr_target
