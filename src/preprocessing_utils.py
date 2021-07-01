@@ -278,6 +278,8 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function, p
                                 target.append(cut_target[i])
 
                             #print ('Foldable item progress:')
+            else:
+                print ('silent sample')
 
         except Exception as e:
             #print ('\r corrupted file found: not added to dataset')
