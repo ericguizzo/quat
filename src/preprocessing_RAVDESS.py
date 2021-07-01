@@ -125,12 +125,12 @@ def main():
         uf.print_bar(index, num_files)
 
         #append preprocessed predictors and target to the dict
-        if len(curr_predictors.shape) > 1
+        if len(curr_predictors.shape) > 1:
             print ('COGLIONE', curr_predictors.shape)
             predictors[i] = curr_predictors
             target[i] = curr_target
             index +=1
-        
+
     #save dicts
     #save dicts
     print ('\nSaving matrices...')
