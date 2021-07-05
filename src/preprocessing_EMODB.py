@@ -15,7 +15,7 @@ SR = cfg.getint('sampling', 'sr_target')
 AUGMENTATION = eval(cfg.get('feature_extraction', 'augmentation'))
 NUM_AUG_SAMPLES = eval(cfg.get('feature_extraction', 'num_aug_samples'))
 SEGMENTATION = False
-INPUT_RAVDESS_FOLDER = cfg.get('preprocessing', 'input_emodb_folder')
+INPUT_EMODB_FOLDER = cfg.get('preprocessing', 'input_emodb_folder')
 OUTPUT_FOLDER = cfg.get('preprocessing', 'output_folder')
 
 
