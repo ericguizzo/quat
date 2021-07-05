@@ -307,6 +307,7 @@ for epoch in range(args.num_epochs):
 
     if args.early_stopping and epoch >= args.patience+1:
         patience_vec = [i['loss'] for i in val_loss_hist[-args.patience+1:]]
+        print ('CAZZO', patience_vec)
         #patience_vec = val_loss_hist[-args.patience+1:]
         best_l = np.argmin(patience_vec)
         if best_l == 0:
