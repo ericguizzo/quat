@@ -1,5 +1,4 @@
 from __future__ import print_function
-import loadconfig
 import configparser
 import random
 import utility_functions as uf
