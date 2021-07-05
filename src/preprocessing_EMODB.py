@@ -74,8 +74,7 @@ def main():
     #compute max file length of current dataet
     #for the zeropadding
     max_file_length = get_max_length_EMODB()
-    print ('coglione', max_file_length)
-    sys.exit(0)
+    max_file_length = 4
     #define the list of foldable items. In the case of RAVDESS
     #actors are simply numbered from 0 to 24
 
