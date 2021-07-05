@@ -10,7 +10,7 @@
         "num_experiment": 24,
         "num_folds": 1,
         "num_epochs": 200,
-        "learning_rate": 0.000001,
+        "learning_rate": 0.00001,
         "batch_size": 20,
         "model_name": "VGGNet",
         "fast_test": "False",
