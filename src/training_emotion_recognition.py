@@ -304,7 +304,7 @@ for epoch in range(args.num_epochs):
                 saved_epoch = epoch + 1
         else:
             raise ValueError('Wrong metric selected')
-
+    print ('bastardo', args.early_stopping)
     if args.early_stopping and epoch >= args.patience+1:
         patience_vec = [i['loss'] for i in val_loss_hist[-args.patience+1:]]
         print ('CAZZO', patience_vec)
