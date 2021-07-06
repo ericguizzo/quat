@@ -14,7 +14,7 @@
 
         "patience": 20,
         "save_model_metric": "loss",
-        "early_stopping": "False",
+        "early_stopping": "True",
         "time_dim":512,
         "spreadsheet_profile": "profile_emotion_recognition"
       },
