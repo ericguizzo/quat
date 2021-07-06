@@ -227,6 +227,8 @@ if __name__ == '__main__':
     parser.add_argument('--gpu_id', type=int, default=1)
     args = parser.parse_args()
 
+    args.ids = eval(args.ids)
+
     grid_search(experiments_folder=args.experiments_folder,
                 output_folder=args.output_folder,
                 ids=eval(args.ids),
