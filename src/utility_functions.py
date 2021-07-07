@@ -336,7 +336,7 @@ def load_datasets(args):
         test_target = test_target[:bound]
 
     if args.predictors_normailzation == '01':
-        #normalize to 0 mean and 1 std
+        print('normalize to 0 and 1')
         tr_max = np.max(training_predictors)
         #tr_max = 128
         training_predictors = np.divide(training_predictors, tr_max)
@@ -344,7 +344,7 @@ def load_datasets(args):
         test_predictors = np.divide(test_predictors, tr_max)
 
     elif args.predictors_normailzation == '0mean':
-        #normalize to 0 mean and 1 std
+        print ('normalize to 0 mean and 1 std')
         tr_mean = np.mean(training_predictors)
         tr_std = np.std(training_predictors)
         training_predictors = np.subtract(training_predictors, tr_mean)
@@ -355,7 +355,7 @@ def load_datasets(args):
         test_predictors = np.divide(test_predictors, tr_std)
     else:
         raise ValueError('Invalid predictors_normailzation option')
-    
+
     print ("Predictors range: ", np.min(training_predictors), np.max(training_predictors))
 
     #reshaping for cnn
