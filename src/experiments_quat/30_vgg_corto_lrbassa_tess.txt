@@ -46,4 +46,5 @@
         "model_quat":"False",
         "learning_rate": 0.00001,
         "predictors_normailzation":"0mean"
+      }
 }
