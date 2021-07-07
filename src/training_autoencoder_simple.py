@@ -26,7 +26,7 @@ parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemo
 parser.add_argument('--train_perc', type=float, default=0.7)
 parser.add_argument('--val_perc', type=float, default=0.2)
 parser.add_argument('--test_perc', type=float, default=0.1)
-parser.add_argument('--normalize_predictors', type=str, default='True')
+parser.add_argument('--predictors_normailzation', type=str, default='01')
 parser.add_argument('--time_dim', type=int, default=512)
 parser.add_argument('--freq_dim', type=int, default=128)
 parser.add_argument('--fast_test', type=str, default='True')
@@ -82,7 +82,6 @@ args = parser.parse_args()
 #output filenames
 
 args.fast_test = eval(args.fast_test)
-args.normalize_predictors = eval(args.normalize_predictors)
 args.use_cuda = eval(args.use_cuda)
 args.early_stopping = eval(args.early_stopping)
 args.fixed_seed = eval(args.fixed_seed)

@@ -26,7 +26,7 @@ parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemo
 parser.add_argument('--train_perc', type=float, default=0.7)
 parser.add_argument('--val_perc', type=float, default=0.2)
 parser.add_argument('--test_perc', type=float, default=0.1)
-parser.add_argument('--normalize_predictors', type=str, default='True')
+parser.add_argument('--predictors_normailzation', type=str, default='01')
 parser.add_argument('--fast_test', type=str, default='True')
 parser.add_argument('--fast_test_bound', type=int, default=5)
 parser.add_argument('--shuffle_data', type=str, default='False')
@@ -92,7 +92,6 @@ args = parser.parse_args()
 #output filenames
 
 args.fast_test = eval(args.fast_test)
-args.normalize_predictors = eval(args.normalize_predictors)
 args.use_cuda = eval(args.use_cuda)
 args.early_stopping = eval(args.early_stopping)
 args.fixed_seed = eval(args.fixed_seed)
@@ -304,7 +303,7 @@ for epoch in range(args.num_epochs):
                 saved_epoch = epoch + 1
         else:
             raise ValueError('Wrong metric selected')
-            
+
     if args.early_stopping and epoch >= args.patience+1:
         patience_vec = [i['loss'] for i in val_loss_hist[-args.patience+1:]]
         #patience_vec = val_loss_hist[-args.patience+1:]

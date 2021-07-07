@@ -41,7 +41,7 @@
   "4":{"comment_1": "baseline_165733060_params", "comment_2": "no_r2he_real_lrHIGHER",
         "use_r2he":"False",
         "model_quat":"False",
-        "learning_rate": 0.0005
+        "learning_rate": 0.0001
         }
 
 }

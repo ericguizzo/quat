@@ -279,6 +279,15 @@ def load_datasets(args):
     print ('\n Loading dataset')
     loading_start = float(time.perf_counter())
 
+    if args.fixed_seed:
+        seed = 1
+        np.random.seed(seed)
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+        torch.manual_seed(seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(seed)
+
     #PREDICTORS_LOAD = os.path.join(args.dataset_path, 'iemocap_randsplit_spectrum_fast_predictors.npy')
     #TARGET_LOAD = os.path.join(args.dataset_path, 'iemocap_randsplit_spectrum_fast_target.npy')
     PREDICTORS_LOAD = args.predictors_path
@@ -313,14 +322,7 @@ def load_datasets(args):
     print ('\n test:')
     test_predictors, test_target = build_matrix_dataset(predictors_merged,
                                                                 target_merged, test_list)
-    if args.fixed_seed:
-        seed = 1
-        np.random.seed(seed)
-        torch.backends.cudnn.deterministic = True
-        torch.backends.cudnn.benchmark = False
-        torch.manual_seed(seed)
-        if torch.cuda.is_available():
-            torch.cuda.manual_seed_all(seed)
+
 
     if args.fast_test:
         print ('FAST TEST: using unly 100 datapoints ')
@@ -333,15 +335,15 @@ def load_datasets(args):
         test_predictors = test_predictors[:bound]
         test_target = test_target[:bound]
 
-    if args.normalize_predictors:
+    if args.predictors_normailzation == '01'
         #normalize to 0 mean and 1 std
         tr_max = np.max(training_predictors)
         #tr_max = 128
         training_predictors = np.divide(training_predictors, tr_max)
         validation_predictors = np.divide(validation_predictors, tr_max)
         test_predictors = np.divide(test_predictors, tr_max)
-    '''
-    if args.normalize_predictors:
+
+    elif args.predictors_normailzation == '0mean'
         #normalize to 0 mean and 1 std
         tr_mean = np.mean(training_predictors)
         tr_std = np.std(training_predictors)
@@ -351,6 +353,8 @@ def load_datasets(args):
         validation_predictors = np.divide(validation_predictors, tr_std)
         test_predictors = np.subtract(test_predictors, tr_mean)
         test_predictors = np.divide(test_predictors, tr_std)
+    else:
+        raise ValueError('Invalid predictors_normailzation option')
     '''
     print ("Predictors range: ", np.min(training_predictors), np.max(training_predictors))
 
