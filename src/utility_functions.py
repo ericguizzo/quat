@@ -355,7 +355,7 @@ def load_datasets(args):
         test_predictors = np.divide(test_predictors, tr_std)
     else:
         raise ValueError('Invalid predictors_normailzation option')
-    '''
+    
     print ("Predictors range: ", np.min(training_predictors), np.max(training_predictors))
 
     #reshaping for cnn
