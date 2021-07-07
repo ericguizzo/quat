@@ -335,7 +335,7 @@ def load_datasets(args):
         test_predictors = test_predictors[:bound]
         test_target = test_target[:bound]
 
-    if args.predictors_normailzation == '01'
+    if args.predictors_normailzation == '01':
         #normalize to 0 mean and 1 std
         tr_max = np.max(training_predictors)
         #tr_max = 128
@@ -343,7 +343,7 @@ def load_datasets(args):
         validation_predictors = np.divide(validation_predictors, tr_max)
         test_predictors = np.divide(test_predictors, tr_max)
 
-    elif args.predictors_normailzation == '0mean'
+    elif args.predictors_normailzation == '0mean':
         #normalize to 0 mean and 1 std
         tr_mean = np.mean(training_predictors)
         tr_std = np.std(training_predictors)
