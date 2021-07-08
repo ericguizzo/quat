@@ -58,5 +58,12 @@
         "r2he_features_type":"embeddings",
         "model_flatten_dim":2048,
         "learning_rate": 0.001
+        },
+  "6":{"comment_1": "lr_0.00001", "comment_2": "feat_embeddings",
+        "use_r2he":"True",
+        "model_quat":"True",
+        "r2he_features_type":"embeddings",
+        "model_flatten_dim":2048,
+        "learning_rate": 0.00001
         }
 }
