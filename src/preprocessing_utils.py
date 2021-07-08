@@ -255,6 +255,7 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function, p
             #print (sound_file)
             samples, sr = librosa.core.load(sound_file, sr=librosa_SR)  #read audio
             print (len(samples))
+            print (np.max(samples))
             if np.max(samples) > 0.05:  #if sound is not empty
                 if NORMALIZATION:
                     samples = np.divide(samples, np.max(samples))
