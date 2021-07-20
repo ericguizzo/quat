@@ -1,15 +1,19 @@
 import torch
 from torch import nn
 import numpy as np
-from models import simple_autoencoder, VGGNet, AlexNet
+from models import simple_autoencoder, VGGNet, AlexNet, resnet50
 from torchsummary import summary
 from torchvision import models
 
 
-x = torch.rand(5,3,64, 64)
-model = models.resnet50(num_classes=4)
+x = torch.rand(5,4,512, 128)
+model = resnet50(num_classes=4, quat=True)
+print (model)
 x = model(x)
 print (x.shape)
+model_params = sum([np.prod(p.size()) for p in model.parameters()])
+print ('Total paramters: ' + str(model_params))
+
 '''
 model = simple_autoencoder(quat=True)
 print ('input_dim', x.shape)

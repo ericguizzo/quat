@@ -129,6 +129,10 @@ elif args.model_name == 'AlexNet':
     model = AlexNet(quat=args.model_quat,
                     num_classes=args.model_num_classes
                     )
+elif args.model_name == 'resnet50':
+    model = AlexNet(quat=args.model_quat,
+                    num_classes=args.model_num_classes
+                    )
 else:
     raise ValueError('Invalid model name')
 
