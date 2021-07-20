@@ -1,12 +1,13 @@
 import torch
 from torch import nn
 import numpy as np
-from models import simple_autoencoder, VGGNet
+from models import simple_autoencoder, VGGNet, AlexNet
 from torchsummary import summary
+from torchvision import models
 
 
-x = torch.rand(5,4,64, 64)
-model = VGGNet(quat=True, flatten_dim=2048)
+x = torch.rand(5,1,64, 64)
+model = AlexNet(quat=False, num_classes=4)
 x = model(x)
 print (x.shape)
 '''
