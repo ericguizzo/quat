@@ -125,11 +125,11 @@ if args.model_name == 'VGGNet':
                    quat=args.model_quat,
                    num_classes=args.model_num_classes
                    )
-if args.model_name == 'AlexNet':
+elif args.model_name == 'AlexNet':
     model = AlexNet(quat=args.model_quat,
                     num_classes=args.model_num_classes
                     )
-elif:
+else:
     raise ValueError('Invalid model name')
 
 model = model.to(device)
