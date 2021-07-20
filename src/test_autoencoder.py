@@ -6,8 +6,8 @@ from torchsummary import summary
 from torchvision import models
 
 
-x = torch.rand(5,1,64, 64)
-model = AlexNet(quat=False, num_classes=4)
+x = torch.rand(5,3,64, 64)
+model = models.resnet50(num_classes=4)
 x = model(x)
 print (x.shape)
 '''
