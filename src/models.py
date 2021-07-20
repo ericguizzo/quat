@@ -301,7 +301,8 @@ class simple_autoencoder(nn.Module):
 
         return x, pred
 
-__all__ = ['ResNet','resnet50']
+
+#__all__ = ['ResNet','resnet50']
 
 
 model_urls = {
