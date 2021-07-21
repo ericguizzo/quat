@@ -146,8 +146,11 @@ print ('Total paramters: ' + str(model_params))
 if args.load_pretrained is not None:
     print ('Loading pretrained model: ' + args.load_pretrained)
     pretrained_dict = torch.load(args.load_pretrained)
-    pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model.state_dict()}
-
+    l_w = list(pretrained_dict.keys())[-1]
+    l_b = list(pretrained_dict.keys())[-2]
+    #pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model.state_dict()}
+    del pretrained_dict[l_w]
+    del pretrained_dict[l_b]
     model.load_state_dict(pretrained_dict, strict=False)  #load best model
 
 #load r2he model if desired
