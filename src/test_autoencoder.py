@@ -6,9 +6,9 @@ from torchsummary import summary
 from torchvision import models
 
 
-x = torch.rand(5,4,512, 128)
-model = resnet50(num_classes=4, quat=True)
-print (model)
+x = torch.rand(4, 4, 64, 64)
+model = VGGNet(num_classes=4, quat=True, flatten_dim=2048)
+#print (model)
 x = model(x)
 print (x.shape)
 model_params = sum([np.prod(p.size()) for p in model.parameters()])
