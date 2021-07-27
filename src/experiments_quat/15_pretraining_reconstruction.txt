@@ -19,7 +19,7 @@
   "1":{"comment_1": "beta_0", "comment_2": "pretraining_reconstruction",
        "loss_beta": 0, "save_model_metric": "total_loss", "early_stopping": "True",
        "time_dim":512, "model_classifier_quat": "True"
-        }
+        },
   "2":{"comment_1": "beta_0", "comment_2": "pretraining_reconstruction",
        "loss_beta": 0, "save_model_metric": "total_loss", "early_stopping": "True",
        "time_dim":512, "model_classifier_quat": "False"
