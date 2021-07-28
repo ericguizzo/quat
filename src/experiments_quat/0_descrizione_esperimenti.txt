@@ -1,13 +1,13 @@
-- exp 1 training conBeta 0: solo autoencoder
-    sembra merda; loss resta a 0.69
-- exp 2 nell'emo_loss uso mse al posto di binary cross entropy
-  schifo
+non ci capisco piú un cazzo
 
+exp 15: pretrainings solo reconstruction
+  1 - quat
+  3 - real
+  4 - quat anti transfer
 
-
-batch norm pare sia fondamentale per far funzionare il secondo training
-ossia quando carico il modello trainato solo su reconstruction e lo specializzo su
-emotion
-
-17 betagrid contiene il modello migliore. per qualche motivoil vecchio simple_autoencoder va meglio
-con quei cazzo di batchnormalization messi a caso e asimmetrici
+exp 23: re-training autoencoder aggiungendo classification
+  1 - quat
+  3 - real
+  4 - quat pre-antitransfer (solo su exp15.4)
+  5 - quat post-anti (solo su questo )
+  6 - quat pre + post antitransfer (su entrambi)

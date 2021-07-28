@@ -200,7 +200,7 @@ def evaluate(model, device, loss_function, dataloader, emo_weight):
             #print ('COGLIONE', recon.shape, sounds.shape)
             #loss = loss_function(recon, sounds)
             if args.anti_transfer_model is not None:
-                AT_term = AT.loss(x,                      #input batch
+                AT_term = AT.loss(sounds,                      #input batch
                                   model.get_embeddings,       #current model
                                   beta=1.,                #weight parameter
                                   aggregation=args.anti_transfer_aggregation,     #channel aggregation
@@ -268,7 +268,7 @@ for epoch in range(args.num_epochs):
             #recon = torch.unsqueeze(torch.sqrt(torch.sum(recon**2, axis=1)), dim=1)
             #loss = loss_function(recon, sounds)
             if args.anti_transfer_model is not None:
-                AT_term = AT.loss(x,                      #input batch
+                AT_term = AT.loss(sounds,                      #input batch
                                   model.get_embeddings,       #current model
                                   beta=1.,                #weight parameter
                                   aggregation=args.anti_transfer_aggregation,     #channel aggregation
