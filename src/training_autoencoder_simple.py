@@ -12,6 +12,7 @@ from models import *
 from loss_emo import *
 import utility_functions as uf
 from tqdm import tqdm
+from anti_transfer_loss import ATLoss
 
 parser = argparse.ArgumentParser()
 #saving parameters
@@ -156,6 +157,7 @@ parser.add_argument('--anti_transfer_distance', type=str, default='cos_squared')
 '''
 if args.anti_transfer_model is not None:
     print ('anti-transfer!')
+    #gen model
     if args.model_name == 'r2he':
         at_model = locals()[args.model_name](latent_dim=args.model_latent_dim,
                                           in_channels=args.model_in_channels,
@@ -167,11 +169,14 @@ if args.anti_transfer_model is not None:
     if args.model_name == 'simple_autoencoder':
         at_model = locals()[args.model_name](quat=False,
                                           classifier_quat=False)
-
-    #at_model = at_model[:args.anti_transfer_layer]
-    at_model = at_model.to(device)
+    #load weights, cut unused part (decoder and classifier), move to gpu
     at_pretrained_dict = torch.load(args.anti_transfer_model)
     at_model.load_state_dict(at_pretrained_dict, strict=False)
+    at_model = at_model.get_embeddings
+    at_model = at_model.to(device)
+
+    AT = AT = ATLoss(at_model) #anti-transfer loss class
+
 
 
 

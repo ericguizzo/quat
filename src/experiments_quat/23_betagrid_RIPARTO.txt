@@ -14,7 +14,6 @@
         "patience": 30,
         "save_model_metric": "total_loss",
         "early_stopping": "True",
-        "model_quat": "True",
         "time_dim":512
       },
 
@@ -28,7 +27,7 @@
        "loss_beta": 0.01,
        "regularization_lambda":0.00001,
        "learning_rate": 0.000001,
-       "load_pretrained": "'../new_experiments/experiment_15_pretraining_reconstruction.txt/models/model_xval_iemocap_exp15_pretraining_reconstruction.txt_run2_fold0'"
+       "load_pretrained": "'../new_experiments/experiment_15_pretraining_reconstruction.txt/models/model_xval_iemocap_exp15_pretraining_reconstruction.txt_run3_fold0'"
         },
   "3":{"comment_1": "beta_0.01", "comment_2": "warm_10_holes_2",
        "loss_beta": 0.01,
@@ -36,6 +35,6 @@
        "model_classifier_quat":"False"
        "regularization_lambda":0.00001,
        "learning_rate": 0.000001,
-       "load_pretrained": "'../new_experiments/experiment_15_pretraining_reconstruction.txt/models/model_xval_iemocap_exp15_pretraining_reconstruction.txt_run2_fold0'"
+       "load_pretrained": "'../new_experiments/experiment_15_pretraining_reconstruction.txt/models/model_xval_iemocap_exp15_pretraining_reconstruction.txt_run3_fold0'"
         }
 }
