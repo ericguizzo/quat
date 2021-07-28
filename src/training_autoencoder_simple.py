@@ -55,6 +55,12 @@ parser.add_argument('--loss_beta', type=float, default=1.)
 parser.add_argument('--emo_loss_holes', type=int, default=None)  #emo loss is deactivated every x epochs
 parser.add_argument('--emo_loss_warmup_epochs', type=int, default=None)  #warmup ramp length
 
+#anti-transfer parameters
+parser.add_argument('--anti_transfer_model', type=str, default=None)
+parser.add_argument('--anti_transfer_layer', type=int, default=1)
+parser.add_argument('--anti_transfer_aggregation', type=str, default='gram')
+parser.add_argument('--anti_transfer_distance', type=str, default='cos_squared')
+
 
 #model parameters
 parser.add_argument('--model_name', type=str, default='r2he')
@@ -112,18 +118,18 @@ if args.model_name == 'r2he':
                                       verbose=args.model_verbose)
 if args.model_name == 'simple_autoencoder':
     print ('AAAAAFJFJFJFJFJFJFJFJFJFJFJFJ')
-    model = locals()[args.model_name]()
-
+    model = locals()[args.model_name](quat=args.model_quat,
+                                      classifier_quat=args.classifier_quat)
 
 model = model.to(device)
+
+print (model)
 
 #compute number of parameters
 model_params = sum([np.prod(p.size()) for p in model.parameters()])
 print ('Total paramters: ' + str(model_params))
 
 #load pretrained model if desired
-
-
 #args.load_pretrained = '../new_experiments/experiment_9_5samples.txt/models/model_xval_iemocap_exp9_5samples.txt_run1_fold0'
 if args.load_pretrained is not None:
     print ('Loading pretrained model: ' + args.load_pretrained)
@@ -140,6 +146,32 @@ if args.load_pretrained is not None:
     #with torch.no_grad():
     #    model.fc1.weight.copy_(state_dict['fc1.weight'])
     #    model.fc1.bias.copy_(state_dict['fc1.bias'])
+
+'''
+parser.add_argument('--anti_transfer_model', type=str, default=None)
+parser.add_argument('--anti_transfer_layer', type=int, default=1)
+parser.add_argument('--anti_transfer_aggregation', type=str, default='gram')
+parser.add_argument('--anti_transfer_distance', type=str, default='cos_squared')
+'''
+if args.anti_transfer_model is not None:
+    print ('anti-transfer!')
+    if args.model_name == 'r2he':
+        at_model = locals()[args.model_name](latent_dim=args.model_latent_dim,
+                                          in_channels=args.model_in_channels,
+                                          architecture=args.model_architecture,
+                                          classifier_dropout=args.model_classifier_dropout,
+                                          flattened_dim=args.model_flattened_dim,
+                                          quat=args.model_quat,
+                                          verbose=args.model_verbose)
+    if args.model_name == 'simple_autoencoder':
+    model = locals()[args.model_name](quat=False,
+                                      classifier_quat=False)
+
+    #at_model = at_model[:args.anti_transfer_layer]
+    at_model = at_model.to(device)
+    at_pretrained_dict = torch.load(args.anti_transfer_model)
+    at_model.load_state_dict(at_pretrained_dict, strict=False)
+
 
 
 #define optimizer and loss
