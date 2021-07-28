@@ -164,8 +164,8 @@ if args.anti_transfer_model is not None:
                                           quat=args.model_quat,
                                           verbose=args.model_verbose)
     if args.model_name == 'simple_autoencoder':
-    model = locals()[args.model_name](quat=False,
-                                      classifier_quat=False)
+        at_model = locals()[args.model_name](quat=False,
+                                          classifier_quat=False)
 
     #at_model = at_model[:args.anti_transfer_layer]
     at_model = at_model.to(device)
