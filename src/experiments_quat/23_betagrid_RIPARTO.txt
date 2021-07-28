@@ -14,7 +14,8 @@
         "patience": 30,
         "save_model_metric": "total_loss",
         "early_stopping": "True",
-        "time_dim":512
+        "time_dim":512,
+        "spreadsheet_profile": "profile_autoencoder"
       },
 
   "1":{"comment_1": "beta_0.01", "comment_2": "warm_10_holes_2",

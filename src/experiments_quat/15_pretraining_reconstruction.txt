@@ -12,7 +12,8 @@
         "model_name": "simple_autoencoder",
         "fast_test": "False",
         "patience": 100,
-        "regularization_lambda": 0.00
+        "regularization_lambda": 0.00,
+        "spreadsheet_profile": "profile_autoencoder"
       },
 
   "1":{"comment_1": "beta_0", "comment_2": "pretraining_reconstruction",
