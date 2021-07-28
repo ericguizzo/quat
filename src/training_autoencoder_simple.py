@@ -203,7 +203,7 @@ def evaluate(model, device, loss_function, dataloader, emo_weight):
 
             recon, pred = model(sounds)
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
-            print ('COGLIONE', recon.shape, sounds.shape)
+            #print ('COGLIONE', recon.shape, sounds.shape)
             #loss = loss_function(recon, sounds)
             loss = loss_function(recon, sounds, truth, pred, emo_weight)
             #loss = loss['total'].cpu().numpy()
