@@ -4,7 +4,7 @@ import numpy as np
 
 
 
-def emo_loss(recon, sounds, truth, pred, beta):
+def emo_loss(recon, sounds, truth, pred, beta, at_term=0):
     #split activation (sum quat channels)
 
     #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
@@ -26,7 +26,7 @@ def emo_loss(recon, sounds, truth, pred, beta):
     #emo_loss = beta * F.mse_loss(truth, pred)
     #print ('IMBECILLE', truth.shape, pred.shape)
     emo_loss = beta * F.cross_entropy(pred, torch.argmax(truth, axis=1).long())
-    total_loss = (recon_loss) + emo_loss
+    total_loss = (recon_loss) + emo_loss + at_term
 
     acc = torch.sum(torch.argmax(pred, axis=1) == torch.argmax(truth, axis=1)) / pred.shape[0]
     #total_loss = recon_loss
@@ -35,7 +35,7 @@ def emo_loss(recon, sounds, truth, pred, beta):
     #return {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),
     #    'valence':valence_loss.detach().item(),'arousal':arousal_loss.detach().item(), 'dominance':dominance_loss.detach().item()}
     return {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),
-        'valence':acc.detach().item(),'arousal':0, 'dominance':0}
+        'acc':acc.detach().item(),'at':at_term.detach().item()}
 
     #return {'total':recon_loss}
 

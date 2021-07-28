@@ -125,7 +125,7 @@ if args.model_name == 'simple_autoencoder':
 
 model = model.to(device)
 
-print (model)
+#print (model)
 
 #compute number of parameters
 model_params = sum([np.prod(p.size()) for p in model.parameters()])
@@ -149,12 +149,7 @@ if args.load_pretrained is not None:
     #    model.fc1.weight.copy_(state_dict['fc1.weight'])
     #    model.fc1.bias.copy_(state_dict['fc1.bias'])
 
-'''
-parser.add_argument('--anti_transfer_model', type=str, default=None)
-parser.add_argument('--anti_transfer_layer', type=int, default=1)
-parser.add_argument('--anti_transfer_aggregation', type=str, default='gram')
-parser.add_argument('--anti_transfer_distance', type=str, default='cos_squared')
-'''
+
 if args.anti_transfer_model is not None:
     print ('anti-transfer!')
     #gen model
@@ -205,7 +200,16 @@ def evaluate(model, device, loss_function, dataloader, emo_weight):
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
             #print ('COGLIONE', recon.shape, sounds.shape)
             #loss = loss_function(recon, sounds)
-            loss = loss_function(recon, sounds, truth, pred, emo_weight)
+            if args.anti_transfer_model is not None:
+                AT_term = AT.loss(x,                      #input batch
+                                  model.get_embeddings,       #current model
+                                  beta=1.,                #weight parameter
+                                  aggregation=args.anti_transfer_aggregation,     #channel aggregation
+                                  distance=args.anti_transfer_distance) #distance function
+            else:
+                AT_term = 0
+            loss = loss_function(recon, sounds, truth, pred, emo_weight, AT_term)
+
             #loss = loss['total'].cpu().numpy()
 
             #temp_loss.append({'total':loss, 'emo':0, 'recon':0,
@@ -213,14 +217,15 @@ def evaluate(model, device, loss_function, dataloader, emo_weight):
             temp_loss.append({'total':loss['total'].cpu().numpy(),
                                        'emo': loss['emo'],
                                        'recon':loss['recon'],
-                                       'valence':loss['valence'], 'arousal':0, 'dominance':0})
+                                       'acc':loss['acc'],
+                                       'at':loss['at']})
             pbar.update(1)
     return temp_loss
 
 def mean_batch_loss(batch_loss):
     #compute mean of each loss item
     d = {'total':[], 'emo':[], 'recon':[],
-                  'valence':[], 'arousal':[], 'dominance':[]}
+                  'acc':[], 'at':[]}
     for i in batch_loss:
         for j in i:
             name = j
@@ -263,7 +268,15 @@ for epoch in range(args.num_epochs):
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
             #recon = torch.unsqueeze(torch.sqrt(torch.sum(recon**2, axis=1)), dim=1)
             #loss = loss_function(recon, sounds)
-            loss = loss_function(recon, sounds, truth, pred, emo_weight)
+            if args.anti_transfer_model is not None:
+                AT_term = AT.loss(x,                      #input batch
+                                  model.get_embeddings,       #current model
+                                  beta=1.,                #weight parameter
+                                  aggregation=args.anti_transfer_aggregation,     #channel aggregation
+                                  distance=args.anti_transfer_distance) #distance function
+            else:
+                AT_term = 0
+            loss = loss_function(recon, sounds, truth, pred, emo_weight, AT_term)
             loss['total'].backward()
             optimizer.step()
 
@@ -271,7 +284,8 @@ for epoch in range(args.num_epochs):
             train_batch_losses.append({'total':loss['total'].detach().cpu().numpy(),
                                        'emo': loss['emo'],
                                        'recon':loss['recon'],
-                                       'valence':loss['valence'], 'arousal':0, 'dominance':0})
+                                       'acc':loss['acc'],
+                                       'at':loss['at']})
             pbar.update(1)
             #del loss
 
@@ -368,17 +382,13 @@ temp_results['train_loss_emo'] = train_loss['emo']
 temp_results['val_loss_emo'] = val_loss['emo']
 temp_results['test_loss_emo'] = test_loss['emo']
 
-temp_results['train_loss_valence'] = train_loss['valence']
-temp_results['val_loss_valence'] = val_loss['valence']
-temp_results['test_loss_valence'] = test_loss['valence']
+temp_results['train_loss_acc'] = train_loss['acc']
+temp_results['val_loss_acc'] = val_loss['acc']
+temp_results['test_loss_acc'] = test_loss['acc']
 
-temp_results['train_loss_arousal'] = train_loss['arousal']
-temp_results['val_loss_arousal'] = val_loss['arousal']
-temp_results['test_loss_arousal'] = test_loss['arousal']
-
-temp_results['train_loss_dominance'] = train_loss['dominance']
-temp_results['val_loss_dominance'] = val_loss['dominance']
-temp_results['test_loss_dominance'] = test_loss['dominance']
+temp_results['train_loss_at'] = train_loss['at']
+temp_results['val_loss_at'] = val_loss['at']
+temp_results['test_loss_at'] = test_loss['at']
 
 temp_results['train_loss_hist'] = train_loss_hist
 temp_results['val_loss_hist'] = val_loss_hist
