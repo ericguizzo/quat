@@ -167,10 +167,9 @@ if args.anti_transfer_model is not None:
     #load weights, cut unused part (decoder and classifier), move to gpu
     at_pretrained_dict = torch.load(args.anti_transfer_model)
     at_model.load_state_dict(at_pretrained_dict, strict=False)
-    at_model = at_model.get_embeddings
     at_model = at_model.to(device)
 
-    AT = AT = ATLoss(at_model) #anti-transfer loss class
+    AT = AT = ATLoss(at_model.get_embeddings) #anti-transfer loss class
 
 
 
