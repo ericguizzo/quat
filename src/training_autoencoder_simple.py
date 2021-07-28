@@ -96,7 +96,7 @@ args.model_quat = eval(args.model_quat)
 args.model_classifier_quat = eval(args.model_classifier_quat)
 args.shuffle_data = eval(args.shuffle_data)
 
-print ('Quat: ', args.model_quat, 'Class_quat: ', model.classifier_quat)
+print ('Quat: ', args.model_quat, 'Class_quat: ', args.model_classifier_quat)
 
 
 if args.use_cuda:
