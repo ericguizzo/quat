@@ -35,7 +35,7 @@ print ('Features type: ' + str(FEATURES_TYPE))
 #and change num_classes_IEMOCAP
 num_classes_IEMOCAP = 5
 
-
+'''[
 label_to_int = {'neu':0,
                 'ang':1,
                 'hap':2,
@@ -59,7 +59,7 @@ label_to_int = {'neu':0,
                 'dis':4,
                 'oth':4,
                 'xxx':4}
-'''
+
 
 '''
 label_to_int = {'neu':0,
