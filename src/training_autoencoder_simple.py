@@ -119,7 +119,7 @@ if args.model_name == 'r2he':
 if args.model_name == 'simple_autoencoder':
     print ('AAAAAFJFJFJFJFJFJFJFJFJFJFJFJ')
     model = locals()[args.model_name](quat=args.model_quat,
-                                      classifier_quat=args.classifier_quat)
+                                      classifier_quat=args.model_classifier_quat)
 
 model = model.to(device)
 
