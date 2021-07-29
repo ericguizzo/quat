@@ -35,7 +35,7 @@ def emo_loss(recon, sounds, truth, pred, beta, at_term=0):
     #return {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),
     #    'valence':valence_loss.detach().item(),'arousal':arousal_loss.detach().item(), 'dominance':dominance_loss.detach().item()}
     return {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),
-        'acc':acc.detach().item(),'at':at_term.detach().item()}
+        'acc':acc,'at':at_term.detach().item()}
 
     #return {'total':recon_loss}
 
