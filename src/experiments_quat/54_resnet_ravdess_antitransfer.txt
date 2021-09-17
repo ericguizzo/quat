@@ -22,7 +22,6 @@
         "spreadsheet_profile": "profile_emotion_recognition"
       },
 
-
   "1":{"comment_1": "antitransfer", "comment_2": "pre_only",
         "use_r2he":"True",
         "model_quat":"True",
