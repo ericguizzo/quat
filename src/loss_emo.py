@@ -34,6 +34,11 @@ def emo_loss(recon, sounds, truth, pred, beta, at_term=0):
     #emo_loss = torch.tensor(0)
     #return {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),
     #    'valence':valence_loss.detach().item(),'arousal':arousal_loss.detach().item(), 'dominance':dominance_loss.detach().item()}
+    if isinstance(at_term, int):
+        at_term = 0.
+    else:
+        at_term = at_term.detach().item()
+
     return {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),
         'acc':acc.item(),'at':at_term}
 
