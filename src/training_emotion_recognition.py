@@ -72,6 +72,7 @@ parser.add_argument('--model_verbose', type=str, default='False')
 
 parser.add_argument('--use_r2he', type=str, default='True')
 parser.add_argument('--r2he_model_path', type=str, default=None)
+parser.add_argument('--r2he_model_path_secondary', type=str, default=None)
 parser.add_argument('--r2he_model_name', type=str, default='simple_autoencoder')
 parser.add_argument('--r2he_features_type', type=str, default='reconstruction',
                     help='reconstruction or embeddings')
@@ -157,10 +158,21 @@ if args.load_pretrained is not None:
 if args.use_r2he:
     if args.r2he_model_name == 'simple_autoencoder':
         r2he = simple_autoencoder()
-    pretrained_dict_r2he = torch.load(args.r2he_model_path)
-    print ('loading r2he: ', args.r2he_model_path)
-    r2he.load_state_dict(pretrained_dict_r2he, strict=False)
-    r2he = r2he.to(device)
+        pretrained_dict_r2he = torch.load(args.r2he_model_path)
+        print ('loading r2he: ', args.r2he_model_path)
+        r2he.load_state_dict(pretrained_dict_r2he, strict=False)
+        r2he = r2he.to(device)
+    elif args.r2he_model_name == 'dual_simple_autoencoder':
+        r2he = dual_simple_autoencoder()
+        pretrained_dict_r2he1 = torch.load(args.r2he_model_path)
+        assert args.r2he_model_path_secondary is not None
+        pretrained_dict_r2he2 = torch.load(args.r2he_model_path_secondary)
+        print ('loading r2he primary: ', args.r2he_model_path)
+        print ('loading r2he secondary: ', args.r2he_model_path_secondary)
+        r2he.model_1.load_state_dict(pretrained_dict_r2he, strict=False)
+        r2he.model_2.load_state_dict(pretrained_dict_r2he2, strict=False)
+
+        r2he = r2he.to(device)
 
 
 #define optimizer and loss

@@ -302,8 +302,136 @@ class simple_autoencoder(nn.Module):
         return x, pred
 
 
+class simple_autoencoder_2(nn.Module):
+    def __init__(self, quat=True, classifier_quat=True, hidden_size=2048 ,flatten_dim=16384,
+                 classifier_dropout=0.5, embeddings_dim=[64,64], num_classes=5):
+        super(simple_autoencoder_2, self).__init__()
+        ## encoder layers ##
+        # conv layer (depth from 3 --> 16), 3x3 kernels
+        self.flatten_dim = flatten_dim
+        self.hidden_size = hidden_size
+        self.num_classes = num_classes
+        self.embeddings_dim = embeddings_dim
+        self.conv1 = nn.Conv2d(1, 2, 3, padding=1)
+        self.conv2 = nn.Conv2d(2, 4, 3, padding=1)
+        self.conv3 = nn.Conv2d(4, 4, 3, padding=1)
+
+        self.conv1_bn = nn.BatchNorm2d(2)
+        self.conv2_bn = nn.BatchNorm2d(4)
+        #self.conv3_bn = nn.BatchNorm2d(4)
+
+        #self.hidden = nn.Linear(flatten_dim, hidden_size*4)
+        #self.decoder_input = nn.Linear(hidden_size*4, flatten_dim)
+        ## decoder layers ##
+        ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
+        if quat:
+            self.t_conv1 = QuaternionTransposeConv(4, 4, kernel_size=3, stride=[2,1], padding=1, output_padding=[1,0])
+            self.t_conv2 = QuaternionTransposeConv(4, 2, kernel_size=3, stride=[2,2], padding=1, output_padding=[1,1])
+            self.t_conv3 = QuaternionTransposeConv(2, 1, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.tconv1_bn = QuaternionBatchNorm2d(4)
+            self.tconv2_bn = QuaternionBatchNorm2d(2)
+        else:
+            self.t_conv1 = nn.ConvTranspose2d(4, 4, 3, stride=[2,1], padding=1, output_padding=[1,0])
+            self.t_conv2 = nn.ConvTranspose2d(4, 2, 3, stride=2, padding=1, output_padding=1)
+            self.t_conv3 = nn.ConvTranspose2d(2, 1, 3, stride=2, padding=1, output_padding=1)
+            self.tconv1_bn = nn.BatchNorm2d(4)
+            self.tconv2_bn = nn.BatchNorm2d(2)
+
+        classifier_layers = [nn.Linear(flatten_dim, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             nn.Linear(4096, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             nn.Linear(4096, num_classes)]
+
+        classifier_layers_quat = [QuaternionLinear(flatten_dim, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             QuaternionLinear(4096, 4096),
+                             nn.ReLU(),
+                             nn.Dropout(p=classifier_dropout),
+                             nn.Linear(4096, num_classes)]
+
+        if classifier_quat:
+            self.classifier = nn.Sequential(*classifier_layers_quat)
+        else:
+            self.classifier = nn.Sequential(*classifier_layers)
+
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.xavier_normal_(m.weight.data)
+                if m.bias is not None:
+                    m.bias.data.zero_()
+            elif isinstance(m, nn.Conv2d):
+                nn.init.xavier_normal_(m.weight.data)
+                if m.bias is not None:
+                    m.bias.data.zero_()
+            elif isinstance(m, nn.ConvTranspose2d):
+                nn.init.xavier_normal_(m.weight.data)
+                if m.bias is not None:
+                    m.bias.data.zero_()
+
+    def encode(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.max_pool2d(x, kernel_size=[2,2])
+        x = self.conv1_bn(x)
+        x = F.relu(self.conv2(x))
+        x = F.max_pool2d(x, kernel_size=[2,2])
+        x = self.conv2_bn(x)
+        x = F.relu(self.conv3(x))
+        x = F.max_pool2d(x, kernel_size=[2,1])
+
+        return x
+
+
+    def decode(self, x):
+        x = F.relu(self.t_conv1(x))
+        x = self.tconv1_bn(x)
+        x = F.relu(self.t_conv2(x))
+        x = self.tconv2_bn(x)
+        x = torch.sigmoid(self.t_conv3(x))
+
+        return x
+
+
+    def get_embeddings(self, x):
+        x = self.encode(x)
+        return x, 'dummy'
+
+    def forward(self, x):
+        x = self.encode(x)
+        print (x.shape)
+        #x = torch.rand([1, 256, 16, 4])
+        x = self.decode(x)
+        print (x.shape)
+        #pred = self.classifier(x)
+        #x = self.decode(x)
+
+        return x
+        #return x, pred
+
+
 #__all__ = ['ResNet','resnet50']
 
+class dual_simple_autoencoder(nn.Module):
+    def __init__(self, quat=True, classifier_quat=True, hidden_size=2048 ,flatten_dim=16384,
+                 classifier_dropout=0.5, embeddings_dim=[64,64], num_classes=5):
+        super(dual_simple_autoencoder, self).__init__()
+        self.model_1 = simple_autoencoder(quat=quat, classifier_quat=classifier_quat, hidden_size=hidden_size ,flatten_dim=flatten_dim,
+                     classifier_dropout=classifier_dropout, embeddings_dim=embeddings_dim, num_classes=num_classes)
+
+        self.model_2 = simple_autoencoder(quat=quat, classifier_quat=classifier_quat, hidden_size=hidden_size ,flatten_dim=flatten_dim,
+                    classifier_dropout=classifier_dropout, embeddings_dim=embeddings_dim, num_classes=num_classes)
+
+    def get_embeddings(self, x):
+        x1, _ = self.model_1.get_embeddings(x)
+        x2, _ = self.model_2.get_embeddings(x)
+        print (x1.shape, x2.shape)
+        out = torch.cat((x1,x2), -2)
+        print(out.shape)
+
+        return out
 
 model_urls = {
     'resnet18': 'https://download.pytorch.org/models/resnet18-f37072fd.pth',
