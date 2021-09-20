@@ -8,8 +8,9 @@ from typing import Type, Any, Callable, Union, List, Optional
 from torch import Tensor
 from models import *
 
-#a = dual_simple_autoencoder()
-a = simple_autoencoder_2(quat=True)
+a = simple_autoencoder_2(quat=True, classifier_quat=True)
+#a = simple_autoencoder(quat=False)
 
 x = torch.rand(1,1,512,256)
-a(x)
+x, pred = a(x)
+print (x.shape, pred)
