@@ -9,7 +9,7 @@ from torch import Tensor
 from models import *
 
 #a = dual_simple_autoencoder()
-a = simple_autoencoder_2(quat=False)
+a = simple_autoencoder_2(quat=True)
 
 x = torch.rand(1,1,512,256)
 a(x)
