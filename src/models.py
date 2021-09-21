@@ -332,7 +332,7 @@ class simple_autoencoder_2(nn.Module):
             self.tconv2_bn = QuaternionBatchNorm2d(4)
         else:
             self.t_conv1 = nn.ConvTranspose2d(4, 4, 3, stride=[2,1], padding=1, output_padding=[1,0])
-            self.t_conv2 = nn.ConvTranspose2d(4, 2, 3, stride=2, padding=1, output_padding=1)
+            self.t_conv2 = nn.ConvTranspose2d(4, 2, 3, stride=[2,1], padding=1, output_padding=[1,0])
             self.t_conv3 = nn.ConvTranspose2d(2, 1, 3, stride=2, padding=1, output_padding=1)
             self.tconv1_bn = nn.BatchNorm2d(4)
             self.tconv2_bn = nn.BatchNorm2d(2)
@@ -403,6 +403,7 @@ class simple_autoencoder_2(nn.Module):
     def forward(self, x):
         x = self.encode(x)
         x_pred = torch.flatten(x, start_dim=1)
+        print ("CADFWERGFSBGR", x_pred.shape)
         pred = self.classifier(x_pred)
         x = self.decode(x)
 
