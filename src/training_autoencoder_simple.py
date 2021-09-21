@@ -168,6 +168,9 @@ if args.anti_transfer_model is not None:
     if args.model_name == 'simple_autoencoder':
         at_model = locals()[args.model_name](quat=False,
                                           classifier_quat=False)
+    if args.model_name == 'simple_autoencoder_2':
+        at_model = locals()[args.model_name](quat=False,
+                                          classifier_quat=False)
     #load weights, cut unused part (decoder and classifier), move to gpu
     at_pretrained_dict = torch.load(args.anti_transfer_model)
     at_model.load_state_dict(at_pretrained_dict, strict=False)
@@ -265,7 +268,7 @@ for epoch in range(args.num_epochs):
             optimizer.zero_grad()
             sounds = sounds.to(device)
             truth = truth.to(device)
-            
+
             recon, pred = model(sounds)
 
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
