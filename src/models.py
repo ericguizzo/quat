@@ -403,7 +403,6 @@ class simple_autoencoder_2(nn.Module):
     def forward(self, x):
         x = self.encode(x)
         x_pred = torch.flatten(x, start_dim=1)
-        print ("CADFWERGFSBGR", x_pred.shape)
         pred = self.classifier(x_pred)
         x = self.decode(x)
 
