@@ -326,7 +326,7 @@ class simple_autoencoder_2(nn.Module):
         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
         if quat:
             self.t_conv1 = QuaternionTransposeConv(4, 4, kernel_size=3, stride=[2,1], padding=1, output_padding=[1,0])
-            self.t_conv2 = QuaternionTransposeConv(4, 4, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.t_conv2 = QuaternionTransposeConv(4, 4, kernel_size=3, stride=[2,1], padding=1, output_padding=[1,0])
             self.t_conv3 = QuaternionTransposeConv(4, 4, kernel_size=3, stride=2, padding=1, output_padding=1)
             self.tconv1_bn = QuaternionBatchNorm2d(4)
             self.tconv2_bn = QuaternionBatchNorm2d(4)
@@ -377,7 +377,7 @@ class simple_autoencoder_2(nn.Module):
         x = F.max_pool2d(x, kernel_size=[2,2])
         x = self.conv1_bn(x)
         x = F.relu(self.conv2(x))
-        x = F.max_pool2d(x, kernel_size=[2,2])
+        x = F.max_pool2d(x, kernel_size=[2,1])
         x = self.conv2_bn(x)
         x = F.relu(self.conv3(x))
         x = F.max_pool2d(x, kernel_size=[2,1])
@@ -397,17 +397,14 @@ class simple_autoencoder_2(nn.Module):
 
     def get_embeddings(self, x):
         x = self.encode(x)
+
         return x, 'dummy'
 
     def forward(self, x):
         x = self.encode(x)
-        print (x.shape)
-
         x_pred = torch.flatten(x, start_dim=1)
         pred = self.classifier(x_pred)
-        #x = self.decode(x)
         x = self.decode(x)
-        print (x.shape)
 
         return x, pred
 
