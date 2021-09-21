@@ -265,7 +265,7 @@ for epoch in range(args.num_epochs):
             optimizer.zero_grad()
             sounds = sounds.to(device)
             truth = truth.to(device)
-
+            print ("COGLIONEEEEEEEEEFWDUVJWEGBJFIOJ!!!",    sounds.shape)
             recon, pred = model(sounds)
 
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
