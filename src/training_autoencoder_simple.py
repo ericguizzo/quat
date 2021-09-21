@@ -123,7 +123,10 @@ if args.model_name == 'simple_autoencoder':
     print ('AAAAAFJFJFJFJFJFJFJFJFJFJFJFJ')
     model = locals()[args.model_name](quat=args.model_quat,
                                       classifier_quat=args.model_classifier_quat)
-
+elif args.model_name == 'simple_autoencoder_2':
+    print ('AAAAAFJFJFJFJFJFJFJFJFJFJFJFJ')
+    model = locals()[args.model_name](quat=args.model_quat,
+                                      classifier_quat=args.model_classifier_quat)
 model = model.to(device)
 
 #print (model)
