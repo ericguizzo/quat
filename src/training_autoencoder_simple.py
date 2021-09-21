@@ -62,6 +62,7 @@ parser.add_argument('--anti_transfer_model', type=str, default=None)
 parser.add_argument('--anti_transfer_layer', type=int, default=1)
 parser.add_argument('--anti_transfer_aggregation', type=str, default='gram')
 parser.add_argument('--anti_transfer_distance', type=str, default='cos_squared')
+parser.add_argument('--anti_transfer_beta', type=float, default=1.)
 
 
 #model parameters
