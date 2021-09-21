@@ -177,7 +177,7 @@ if args.anti_transfer_model is not None:
     at_model.load_state_dict(at_pretrained_dict, strict=False)
     at_model = at_model.to(device)
 
-    AT = AT = ATLoss(at_model.get_embeddings) #anti-transfer loss class
+    AT = ATLoss(at_model.get_embeddings) #anti-transfer loss class
 
 
 
@@ -210,11 +210,11 @@ def evaluate(model, device, loss_function, dataloader, emo_weight):
             if args.anti_transfer_model is not None:
                 AT_term = AT.loss(sounds,                      #input batch
                                   model.get_embeddings,       #current model
-                                  beta=1.,                #weight parameter
+                                  beta=args.anti_transfer_beta,                #weight parameter
                                   aggregation=args.anti_transfer_aggregation,     #channel aggregation
                                   distance=args.anti_transfer_distance) #distance function
             else:
-                AT_term = 0
+                AT_term = 0.
             loss = loss_function(recon, sounds, truth, pred, emo_weight, AT_term)
 
             #loss = loss['total'].cpu().numpy()
@@ -278,11 +278,11 @@ for epoch in range(args.num_epochs):
             if args.anti_transfer_model is not None:
                 AT_term = AT.loss(sounds,                      #input batch
                                   model.get_embeddings,       #current model
-                                  beta=1.,                #weight parameter
+                                  beta=args.anti_transfer_beta,                #weight parameter
                                   aggregation=args.anti_transfer_aggregation,     #channel aggregation
                                   distance=args.anti_transfer_distance) #distance function
             else:
-                AT_term = 0
+                AT_term = 0.
             loss = loss_function(recon, sounds, truth, pred, emo_weight, AT_term)
             loss['total'].backward()
             optimizer.step()
