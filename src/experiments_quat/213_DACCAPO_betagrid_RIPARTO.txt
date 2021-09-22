@@ -9,7 +9,7 @@
         "num_epochs": 200000,
         "learning_rate": 0.000001,
         "batch_size": 20,
-        "model_name": "simple_autoencoder",
+        "model_name": "simple_autoencoder_2",
         "fast_test": "False",
         "patience": 30,
         "save_model_metric": "total_loss",
