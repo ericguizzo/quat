@@ -63,12 +63,14 @@ def emo_loss_vad(recon, sounds, truth, pred, beta, beta_vad, at_term=0):
     arousal_loss = F.binary_cross_entropy(a_p.squeeze(), truth[:,2].squeeze())
     dominance_loss = F.binary_cross_entropy(d_p.squeeze(), truth[:,3].squeeze())
 
-    classification_loss = F.cross_entropy(c_p, truth[:,0].long())
     '''
     valence_loss = torch.tensor([0.]).cuda()
     arousal_loss = torch.tensor([0.]).cuda()
     dominance_loss = torch.tensor([0.]).cuda()
-    classification_loss = torch.tensor([0.]).cuda()
+    classification_loss = F.cross_entropy(c_p, truth[:,0].long())
+
+
+
     vad_loss = beta_vad * (valence_loss + arousal_loss + dominance_loss)
     emo_loss = beta * (classification_loss + vad_loss)
 
