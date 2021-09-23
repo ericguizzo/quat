@@ -51,16 +51,18 @@ def emo_loss_vad(recon, sounds, truth, pred, beta, beta_vad, at_term=0):
     recon = torch.sum(recon, axis=1) / 4.
     recon_loss = F.binary_cross_entropy(recon.squeeze(), sounds.squeeze())
 
-    valence_loss = F.mse_loss(pred['valence'], truth['valence'])
-    arousal_loss = F.mse_loss(pred['arousal'], truth['arousal'])
-    dominance_loss = F.mse_loss(pred['dominance'], truth['dominance'])
+    valence_loss = F.binary_cross_entropy(pred['valence'], truth['valence'])
+    arousal_loss = F.binary_cross_entropy(pred['arousal'], truth['arousal'])
+    dominance_loss = F.binary_cross_entropy(pred['dominance'], truth['dominance'])
     classification_loss = F.cross_entropy(pred, torch.argmax(truth, axis=1).long())
     vad_loss = beta_vad * (valence_loss + arousal_loss + dominance_loss)
     emo_loss = beta * (classification_loss + vad_loss)
 
     total_loss = recon_loss + emo_loss + at_term
-    acc = torch.sum(torch.argmax(pred, axis=1) == torch.argmax(truth, axis=1)) / pred.shape[0]
-
+    acc = torch.sum(torch.argmax(pred["class"], axis=1) == torch.argmax(truth, axis=1)) / pred["class"].shape[0]
+    acc_valence = torch.sum(pred["valence"] == truth["valence"] / pred["valence"].shape[0]
+    acc_arousal = torch.sum(pred["arousal"] == truth["arousal"] / pred["arousal"].shape[0]
+    acc_dominance = torch.sum(pred["dominance"] == truth["dominance"] / pred["dominance"].shape[0]
     if isinstance(at_term, int):
         at_term = 0.
     elif isinstance(at_term, float):
