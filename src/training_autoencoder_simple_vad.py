@@ -34,6 +34,7 @@ parser.add_argument('--fast_test', type=str, default='True')
 parser.add_argument('--fast_test_bound', type=int, default=5)
 parser.add_argument('--shuffle_data', type=str, default='False')
 parser.add_argument('--spreadsheet_profile', type=str, default=None)
+parser.add_argument('--num_classes', type=5, default=None)
 
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
@@ -205,7 +206,7 @@ def evaluate(model, device, loss_function, dataloader, emo_weight, vad_weight):
             truth = truth.to(device)
 
             recon, c, v, a, d = model(sounds)
-            pred = [c, v, a, d]
+            pred = [F.onehot(c, args.num_classes), , v, a, d]
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
             #print ('COGLIONE', recon.shape, sounds.shape)
             #loss = loss_function(recon, sounds)
@@ -285,7 +286,7 @@ for epoch in range(args.num_epochs):
             truth = truth.to(device)
 
             recon, c, v, a, d = model(sounds)
-            pred = [c, v, a, d]
+            pred = [F.onehot(c, args.num_classes), v, a, d]
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
             #recon = torch.unsqueeze(torch.sqrt(torch.sum(recon**2, axis=1)), dim=1)
             #loss = loss_function(recon, sounds)
