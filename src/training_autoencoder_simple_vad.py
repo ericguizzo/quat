@@ -206,7 +206,7 @@ def evaluate(model, device, loss_function, dataloader, emo_weight, vad_weight):
             truth = truth.to(device)
 
             recon, c, v, a, d = model(sounds)
-            pred = [F.onehot(c, args.num_classes), v, a, d]
+            pred = [F.one_hot(c, args.num_classes), v, a, d]
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
             #print ('COGLIONE', recon.shape, sounds.shape)
             #loss = loss_function(recon, sounds)
@@ -286,7 +286,7 @@ for epoch in range(args.num_epochs):
             truth = truth.to(device)
 
             recon, c, v, a, d = model(sounds)
-            pred = [F.onehot(c, args.num_classes), v, a, d]
+            pred = [F.one_hot(c, args.num_classes), v, a, d]
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
             #recon = torch.unsqueeze(torch.sqrt(torch.sum(recon**2, axis=1)), dim=1)
             #loss = loss_function(recon, sounds)
