@@ -51,11 +51,12 @@ def emo_loss_vad(recon, sounds, truth, pred, beta, beta_vad, at_term=0):
     print ('COGLIONECOGLIONECOGLIONECOGLIONECOGLIONECOGLIONE:', truth.shape, torch.tensor(pred).shape)
     recon = torch.sum(recon, axis=1) / 4.
     recon_loss = F.binary_cross_entropy(recon.squeeze(), sounds.squeeze())
+    c, v, a, d = pred
 
-    valence_loss = F.binary_cross_entropy(pred[1], truth[1])
-    arousal_loss = F.binary_cross_entropy(pred[2], truth[2])
-    dominance_loss = F.binary_cross_entropy(pred[3], truth[3])
-    classification_loss = F.cross_entropy(pred[0], torch.argmax(truth[0], axis=1).long())
+    valence_loss = F.binary_cross_entropy(v, v)
+    arousal_loss = F.binary_cross_entropy(a, a)
+    dominance_loss = F.binary_cross_entropy(d, d)
+    classification_loss = F.cross_entropy(torch.argmax(c, axis=1), torch.argmax(truth[0], axis=1).long())
     vad_loss = beta_vad * (valence_loss + arousal_loss + dominance_loss)
     emo_loss = beta * (classification_loss + vad_loss)
 

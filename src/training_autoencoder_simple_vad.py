@@ -286,7 +286,6 @@ for epoch in range(args.num_epochs):
 
             recon, c, v, a, d = model(sounds)
             pred = [c, v, a, d]
-            print ('aaadfsd', truth.shape, c.shape, v.shape)
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
             #recon = torch.unsqueeze(torch.sqrt(torch.sum(recon**2, axis=1)), dim=1)
             #loss = loss_function(recon, sounds)
