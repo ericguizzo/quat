@@ -40,7 +40,7 @@ def emo_loss(recon, sounds, truth, pred, beta, at_term=0):
         pass
     else:
         at_term = at_term.detach().item()
-
+    print ("cdnsvifjweorknjqfkiovdfwenio", at_term)
     return {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),
         'acc':acc.item(),'at':at_term}
 
