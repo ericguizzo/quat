@@ -59,6 +59,7 @@ def emo_loss_vad(recon, sounds, truth, pred, beta, beta_vad, at_term=0):
     emo_loss = beta * (classification_loss + vad_loss)
 
     total_loss = recon_loss + emo_loss + at_term
+    
     acc = torch.sum(torch.argmax(pred["class"], axis=1) == torch.argmax(truth, axis=1)) / pred["class"].shape[0]
     acc_valence = torch.sum(pred["valence"] == truth["valence"]) / pred["valence"].shape[0]
     acc_arousal = torch.sum(pred["arousal"] == truth["arousal"]) / pred["arousal"].shape[0]
