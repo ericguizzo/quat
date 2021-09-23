@@ -48,6 +48,7 @@ def emo_loss(recon, sounds, truth, pred, beta, at_term=0):
 
 def emo_loss_vad(recon, sounds, truth, pred, beta, beta_vad, at_term=0):
 
+    print ('COGLIONECOGLIONECOGLIONECOGLIONECOGLIONECOGLIONE:', truth.shape, torch.tensor(pred).shape)
     recon = torch.sum(recon, axis=1) / 4.
     recon_loss = F.binary_cross_entropy(recon.squeeze(), sounds.squeeze())
 
