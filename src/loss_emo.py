@@ -76,7 +76,6 @@ def emo_loss_vad(recon, sounds, truth, pred, beta, beta_vad, at_term=0):
     acc_arousal = torch.sum(torch.round(a_p) == truth[:,2]) / a_p.shape[0]
     acc_dominance = torch.sum(torch.round(d_p) == truth[:,3]) / d_p.shape[0]
 
-    print ("CVFEGRWEF", torch.sum(v_p == truth[:,1]), v_p, truth[:,1], v_p.shape[0])
     if isinstance(at_term, int):
         at_term = 0.
     elif isinstance(at_term, float):
