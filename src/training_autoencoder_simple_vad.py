@@ -206,9 +206,7 @@ def evaluate(model, device, loss_function, dataloader, emo_weight, vad_weight):
 
             recon, c, v, a, d = model(sounds)
             pred = [c, v, a, d]
-            #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
-            #print ('COGLIONE', recon.shape, sounds.shape)
-            #loss = loss_function(recon, sounds)
+
             if args.anti_transfer_model is not None:
                 AT_term = AT.loss(sounds,                      #input batch
                                   model.get_embeddings,       #current model
@@ -221,8 +219,6 @@ def evaluate(model, device, loss_function, dataloader, emo_weight, vad_weight):
 
             #loss = loss['total'].cpu().numpy()
 
-            #temp_loss.append({'total':loss, 'emo':0, 'recon':0,
-            #              'valence':0, 'arousal':0, 'dominance':0})
             temp_loss.append({'total':loss['total'].detach().cpu().numpy(),
                                        'emo': loss['emo'],
                                        'recon':loss['recon'],
