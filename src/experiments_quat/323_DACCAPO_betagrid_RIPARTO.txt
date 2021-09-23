@@ -21,7 +21,7 @@
   "0":{"comment_1": "no_pretraining", "comment_2": "TEST",
        "loss_beta": 0.01,
        "regularization_lambda":0.00001,
-       "learning_rate": 0.000001,
+       "learning_rate": 0.000001
         },
 
   "1":{"comment_1": "beta_0.01", "comment_2": "no_AT",
