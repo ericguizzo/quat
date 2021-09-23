@@ -115,7 +115,7 @@ def get_label_IEMOCAP(wavname):
     class_label = label_to_int[str_class_label]
 
     output = np.array([class_label, v, a, d])
-
+    print (output)
     return output
 
 def get_label_IEMOCAP_classification(wavname):
