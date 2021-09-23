@@ -36,6 +36,8 @@ def emo_loss(recon, sounds, truth, pred, beta, at_term=0):
     #    'valence':valence_loss.detach().item(),'arousal':arousal_loss.detach().item(), 'dominance':dominance_loss.detach().item()}
     if isinstance(at_term, int):
         at_term = 0.
+    elif isinstance(at_term, float):
+        at_term = at_term.item()
     else:
         at_term = at_term.detach().item()
 
