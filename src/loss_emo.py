@@ -30,7 +30,7 @@ def emo_loss(recon, sounds, truth, pred, beta, at_term=0):
 
     #emo_loss = beta * (valence_loss + arousal_loss + dominance_loss)
     #emo_loss = beta * F.mse_loss(truth, pred)
-    #print ('IMBECILLE', truth.shape, pred.shape)
+    print ('IMBECILLE', truth.shape, pred.shape)
     emo_loss = beta * F.cross_entropy(pred, torch.argmax(truth, axis=1).long())
     total_loss = (recon_loss) + emo_loss + at_term
 
