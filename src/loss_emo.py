@@ -65,10 +65,10 @@ def emo_loss_vad(recon, sounds, truth, pred, beta, beta_vad, at_term=0):
 
     classification_loss = F.cross_entropy(c_p, truth[:,0].long())
     '''
-    valence_loss = torch.tensor([0.])
-    arousal_loss = torch.tensor([0.])
-    dominance_loss = torch.tensor([0.])
-    classification_loss = torch.tensor([0.])
+    valence_loss = torch.tensor([0.]).cuda()
+    arousal_loss = torch.tensor([0.]).cuda()
+    dominance_loss = torch.tensor([0.]).cuda()
+    classification_loss = torch.tensor([0.]).cuda()
     vad_loss = beta_vad * (valence_loss + arousal_loss + dominance_loss)
     emo_loss = beta * (classification_loss + vad_loss)
 
@@ -79,10 +79,10 @@ def emo_loss_vad(recon, sounds, truth, pred, beta, beta_vad, at_term=0):
     acc_arousal = torch.sum(a_p == truth[:,2]) / a_p.shape[0]
     acc_dominance = torch.sum(d_p == truth[:,3]) / d_p.shape[0]
     '''
-    acc = torch.tensor([0.])
-    acc_valence = torch.tensor([0.])
-    acc_arousal = torch.tensor([0.])
-    acc_dominance = torch.tensor([0.])
+    acc = torch.tensor([0.]).cuda()
+    acc_valence = torch.tensor([0.]).cuda()
+    acc_arousal = torch.tensor([0.]).cuda()
+    acc_dominance = torch.tensor([0.]).cuda()
 
     if isinstance(at_term, int):
         at_term = 0.
