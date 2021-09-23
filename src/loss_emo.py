@@ -78,7 +78,7 @@ def emo_loss_vad(recon, sounds, truth, pred, beta, beta_vad, at_term=0):
         pass
     else:
         at_term = at_term.detach().item()
-    print ("COGLIONE!!!!!!!!", acc, acc_valence, acc_arousal, acc_dominance)
+    print ("COGLIONE!!!!!!!!", torch.argmax(a_p, axis=1), truth[:,2])
 
     output =  {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),
         'acc':acc.item(),'at':at_term, 'vad':vad_loss.detach().item(), 'valence':valence_loss.detach().item(),
