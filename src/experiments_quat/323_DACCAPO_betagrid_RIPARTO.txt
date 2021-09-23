@@ -2,7 +2,7 @@
   "global_parameters":{
         "gpu_id":1,
         "experiment_description": "no_beta_no_batchnorm_fasetest",
-        "script": "training_autoencoder_simple.py",
+        "script": "training_autoencoder_simple_vad.py",
         "dataset": "iemocap",
         "num_experiment": 14,
         "num_folds": 1,
