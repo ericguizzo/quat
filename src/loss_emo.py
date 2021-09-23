@@ -7,7 +7,7 @@ def _to_one_hot(y, num_classes):
     y_tensor = y.view(*y.size(), -1)
     zeros = torch.zeros(*y.size(), num_classes, dtype=y.dtype)
 
-    return zeros.scatter(scatter_dim, y_tensor, 1)
+    return zeros.scatter(scatter_dim, y_tensor.int64(), 1)
 
 def emo_loss(recon, sounds, truth, pred, beta, at_term=0):
     #split activation (sum quat channels)
