@@ -5,7 +5,7 @@ import numpy as np
 def _to_one_hot(y, num_classes):
     scatter_dim = len(y.size())
     y_tensor = y.view(*y.size(), -1)
-    zeros = torch.zeros(*y.size(), num_classes, dtype=int64)
+    zeros = torch.zeros(*y.size(), num_classes, dtype='int64')
 
     return zeros.scatter(scatter_dim, y_tensor, 1)
 
