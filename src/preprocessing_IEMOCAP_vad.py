@@ -110,7 +110,7 @@ def get_label_IEMOCAP(wavname):
     class_label = label_to_int[str_label]
 
     if int_label != None:
-        class_label = uf.onehot(int_label, num_classes_IEMOCAP)
+        class_label = uf.onehot(class_label, num_classes_IEMOCAP)
     else:
         class_label = None
 
