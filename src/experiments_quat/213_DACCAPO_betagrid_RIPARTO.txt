@@ -52,7 +52,7 @@
        "anti_transfer_model":"'../new_experiments/experiment_115_DACCAPO_pretraining_reconstruction.txt/models/model_xval_iemocap_exp115_DACCAPO_pretraining_reconstruction.txt_run2_fold0'"
         },
 
-  "5":{"comment_1": "beta_0.01", "comment_2": "TESTTESTTEST",
+  "0":{"comment_1": "beta_0.01", "comment_2": "TESTTESTTEST",
        "loss_beta": 0.01,
        "regularization_lambda":0.00001,
        "learning_rate": 0.000001
