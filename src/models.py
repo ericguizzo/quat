@@ -535,9 +535,9 @@ class simple_autoencoder_2_vad(nn.Module):
         x_dominance = torch.flatten(x[:,3,:,:], start_dim=1)
 
         pred_discrete = self.classifier_discrete(x_discrete)
-        pred_valence = torch.tanh(self.classifier_valence(x_valence))
-        pred_arousal = torch.tanh(self.classifier_arousal(x_arousal))
-        pred_dominance = torch.tanh(self.classifier_dominance(x_dominance))
+        pred_valence = torch.sigmoid(self.classifier_valence(x_valence))
+        pred_arousal = torch.sigmoid(self.classifier_arousal(x_arousal))
+        pred_dominance = torch.sigmoid(self.classifier_dominance(x_dominance))
 
         x = self.decode(x)
 
