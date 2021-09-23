@@ -99,13 +99,29 @@ def get_label_IEMOCAP(wavname):
     #trans_path = '/home/eric/Desktop/Ses01F_impro01.txt'
     with open(trans_path) as f:
         contents = f.readlines()
-    str_label = list(filter(lambda x: ID in x, contents))[0].split('\t')[-1]
-    str_label = eval(str_label)
-    str_label = np.subtract(str_label, 1)
-    str_label = np.divide(str_label, 4)
-    print ('cazzoCAZZIO', str_label)
 
-    return str_label
+    str_label_vad = list(filter(lambda x: ID in x, contents))[0].split('\t')[-1]
+    str_label_vad = eval(str_label)
+    #str_label_vad = np.subtract(str_label, 1)
+    vad = np.divide(str_label, 2)
+
+    str_label = list(filter(lambda x: ID in x, contents))[0].split('\t')[2]
+
+    class_label = label_to_int[str_label]
+
+    if int_label != None:
+        class_label = uf.onehot(int_label, num_classes_IEMOCAP)
+    else:
+        class_label = None
+
+    output = {"valence":vad[0],
+              "arousal":vad[1],
+              "dominance":vad[2],
+              "class":class_label}
+
+    print ('cazzoCAZZIO', output)
+
+    return output
 
 def get_label_IEMOCAP_classification(wavname):
     '''
