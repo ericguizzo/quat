@@ -105,14 +105,19 @@ def get_label_IEMOCAP(wavname):
     vad = np.divide(str_label_vad, 2)
     vad = np.subtract(vad, 1)
 
-    str_label = list(filter(lambda x: ID in x, contents))[0].split('\t')[2]
+    threshold = 0.5
+    v = [0 if vad[0] <= threshold else 1]
+    a = [0 if vad[0] <= threshold else 1]
+    d = [0 if vad[0] <= threshold else 1]
 
-    class_label = label_to_int[str_label]
+
+    str_class_label = list(filter(lambda x: ID in x, contents))[0].split('\t')[2]
+    class_label = label_to_int[str_class_label]
 
 
-    output = {"valence":vad[0],
-              "arousal":vad[1],
-              "dominance":vad[2],
+    output = {"valence":v,
+              "arousal":a,
+              "dominance":d,
               "class":class_label}
 
     print ('cazzoCAZZIO', output)
