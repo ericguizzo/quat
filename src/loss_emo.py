@@ -37,7 +37,7 @@ def emo_loss(recon, sounds, truth, pred, beta, at_term=0):
     if isinstance(at_term, int):
         at_term = 0.
     elif isinstance(at_term, float):
-        at_term = at_term.item()
+        pass
     else:
         at_term = at_term.detach().item()
 
