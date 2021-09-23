@@ -76,7 +76,7 @@ parser.add_argument('--model_latent_dim', type=int, default=1000)
 parser.add_argument('--model_verbose', type=str, default='False')
 parser.add_argument('--model_architecture', type=str, default='VGG16')
 parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
-parser.add_argument('--model_hidden_size', type=int, default=2048)
+parser.add_argument('--model_hidden_size', type=int, default=4096)
 
 #grid search parameters
 #SPECIFY ONLY IF PERFORMING A GRID SEARCH WITH exp_instance.py SCRIPT
