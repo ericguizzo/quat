@@ -226,6 +226,9 @@ def evaluate(model, device, loss_function, dataloader, emo_weight, vad_weight):
                                        'emo': loss['emo'],
                                        'recon':loss['recon'],
                                        'acc':loss['acc'],
+                                       'acc_valence':loss['acc_valence'],
+                                       'acc_arousal':loss['acc_arousal'],
+                                       'acc_dominance':loss['acc_dominance'],
                                        'at':loss['at'],
                                        'vad': loss['vad'],
                                        'valence': loss['valence'],
@@ -238,7 +241,8 @@ def mean_batch_loss(batch_loss):
     #compute mean of each loss item
     d = {'total':[], 'emo':[], 'recon':[],
                   'acc':[], 'at':[], 'vad':[],
-                  'valence':[], 'arousal':[], 'dominance':[]}
+                  'valence':[], 'arousal':[], 'dominance':[],
+                  'acc_valence':[], 'acc_arousal':[], 'acc_dominance':[]}
     for i in batch_loss:
         for j in i:
             name = j
@@ -302,6 +306,9 @@ for epoch in range(args.num_epochs):
                                        'emo': loss['emo'],
                                        'recon':loss['recon'],
                                        'acc':loss['acc'],
+                                       'acc_valence':loss['acc_valence'],
+                                       'acc_arousal':loss['acc_arousal'],
+                                       'acc_dominance':loss['acc_dominance'],
                                        'at':loss['at'],
                                        'vad': loss['vad'],
                                        'valence': loss['valence'],
@@ -406,6 +413,18 @@ temp_results['test_loss_emo'] = test_loss['emo']
 temp_results['train_loss_acc'] = train_loss['acc']
 temp_results['val_loss_acc'] = val_loss['acc']
 temp_results['test_loss_acc'] = test_loss['acc']
+
+temp_results['train_loss_acc_valence'] = train_loss['acc_valence']
+temp_results['val_loss_acc_valence'] = val_loss['acc_valence']
+temp_results['test_loss_acc_valence'] = test_loss['acc_valence']
+
+temp_results['train_loss_acc_arousal'] = train_loss['acc_arousal']
+temp_results['val_loss_acc_arousal'] = val_loss['acc_arousal']
+temp_results['test_loss_acc_arousal'] = test_loss['acc_arousal']
+
+temp_results['train_loss_acc_dominance'] = train_loss['acc_dominance']
+temp_results['val_loss_acc_dominance'] = val_loss['acc_dominance']
+temp_results['test_loss_acc_dominance'] = test_loss['acc_dominance']
 
 temp_results['train_loss_at'] = train_loss['at']
 temp_results['val_loss_at'] = val_loss['at']
