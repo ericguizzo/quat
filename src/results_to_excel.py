@@ -24,6 +24,17 @@ profile_autoencoder = ['train_loss_total', 'val_loss_total', 'test_loss_total', 
                        'train_loss_acc', 'val_loss_acc', 'test_loss_acc', '/',
                        'train_loss_at', 'val_loss_at', 'test_loss_at', '/',
                        ]
+profile_autoencoder_vad = ['train_loss_total', 'val_loss_total', 'test_loss_total', '/',
+                       'train_loss_recon', 'val_loss_recon', 'test_loss_recon', '/',
+                       'train_loss_emo', 'val_loss_emo', 'test_loss_emo', '/',
+                       'train_loss_acc', 'val_loss_acc', 'test_loss_acc', '/',
+                       'train_loss_at', 'val_loss_at', 'test_loss_at', '/',
+                       'train_loss_vad', 'val_loss_vad', 'test_loss_vad', '/',
+                       'train_loss_valence', 'val_loss_valence', 'test_loss_valence', '/',
+                       'train_loss_arousal', 'val_loss_arousal', 'test_loss_arousal', '/',
+                       'train_loss_dominance', 'val_loss_dominance', 'test_loss_dominance', '/',
+                       ]
+
 profile_emotion_recognition = ['train_loss', 'val_loss', 'test_loss', '/',
                        'train_acc', 'val_acc', 'test_acc', '/',
                        ]

@@ -444,7 +444,7 @@ class simple_autoencoder_2_vad(nn.Module):
             self.tconv1_bn = nn.BatchNorm2d(4)
             self.tconv2_bn = nn.BatchNorm2d(2)
 
-        classifier_layers_discrete = [nn.Linear(flatten_dim/4, self.hidden_size),
+        classifier_layers_discrete = [nn.Linear(flatten_dim//4, self.hidden_size),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(self.hidden_size, self.hidden_size),
@@ -452,7 +452,7 @@ class simple_autoencoder_2_vad(nn.Module):
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(self.hidden_size, num_classes)]
 
-        classifier_layers_valence = [nn.Linear(flatten_dim/4, self.hidden_size),
+        classifier_layers_valence = [nn.Linear(flatten_dim//4, self.hidden_size),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(self.hidden_size, self.hidden_size),
@@ -460,7 +460,7 @@ class simple_autoencoder_2_vad(nn.Module):
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(self.hidden_size, 1)]
 
-        classifier_layers_arousal = [nn.Linear(flatten_dim/4, self.hidden_size),
+        classifier_layers_arousal = [nn.Linear(flatten_dim//4, self.hidden_size),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(self.hidden_size, self.hidden_size),
@@ -468,7 +468,7 @@ class simple_autoencoder_2_vad(nn.Module):
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(self.hidden_size, 1)]
 
-        classifier_layers_dominance = [nn.Linear(flatten_dim/4, self.hidden_size),
+        classifier_layers_dominance = [nn.Linear(flatten_dim//4, self.hidden_size),
                              nn.ReLU(),
                              nn.Dropout(p=classifier_dropout),
                              nn.Linear(self.hidden_size, self.hidden_size),
@@ -523,7 +523,7 @@ class simple_autoencoder_2_vad(nn.Module):
         _ = "dummy"
 
         return x, _, _, _, _
-        
+
 
     def forward(self, x):
 
@@ -531,17 +531,17 @@ class simple_autoencoder_2_vad(nn.Module):
 
         x_discrete = torch.flatten(x[:,0,:,:], start_dim=1)
         x_valence = torch.flatten(x[:,1,:,:], start_dim=1)
-        x_arousal = torch.flatten(x[:,2,:,:], start_dim=1)]
+        x_arousal = torch.flatten(x[:,2,:,:], start_dim=1)
         x_dominance = torch.flatten(x[:,3,:,:], start_dim=1)
 
         pred_discrete = self.classifier_discrete(x_discrete)
-        pred_valence = self.classifier_discrete(x_valence)
-        pred_arousal = self.classifier_discrete(x_arousal)
-        pred_dominance = self.classifier_discrete(x_dominance)
+        pred_valence = torch.tanh(self.classifier_valence(x_valence))
+        pred_arousal = torch.tanh(self.classifier_arousal(x_arousal))
+        pred_dominance = torch.tanh(self.classifier_dominance(x_dominance))
 
         x = self.decode(x)
 
-        return x, prepred_discrete, pred_valence, pred_arousal, pred_dominance
+        return x, pred_discrete, pred_valence, pred_arousal, pred_dominance
 
 #__all__ = ['ResNet','resnet50']
 
