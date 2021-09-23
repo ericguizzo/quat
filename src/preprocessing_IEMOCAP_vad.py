@@ -106,9 +106,9 @@ def get_label_IEMOCAP(wavname):
     vad = np.subtract(vad, 1)
 
     threshold = 0.5
-    v = [0 if vad[0] <= threshold else 1]
-    a = [0 if vad[1] <= threshold else 1]
-    d = [0 if vad[2] <= threshold else 1]
+    v = 0 if vad[0] <= threshold else 1
+    a = 0 if vad[1] <= threshold else 1
+    d = 0 if vad[2] <= threshold else 1
 
 
     str_class_label = list(filter(lambda x: ID in x, contents))[0].split('\t')[2]
