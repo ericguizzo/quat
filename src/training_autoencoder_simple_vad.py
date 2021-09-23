@@ -34,7 +34,6 @@ parser.add_argument('--fast_test', type=str, default='True')
 parser.add_argument('--fast_test_bound', type=int, default=5)
 parser.add_argument('--shuffle_data', type=str, default='False')
 parser.add_argument('--spreadsheet_profile', type=str, default=None)
-parser.add_argument('--num_classes', type=int, default=5)
 
 #training parameters
 parser.add_argument('--gpu_id', type=int, default=1)
@@ -206,7 +205,7 @@ def evaluate(model, device, loss_function, dataloader, emo_weight, vad_weight):
             truth = truth.to(device)
 
             recon, c, v, a, d = model(sounds)
-            pred = [F.one_hot(c, args.num_classes), v, a, d]
+            pred = [c, v, a, d]
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
             #print ('COGLIONE', recon.shape, sounds.shape)
             #loss = loss_function(recon, sounds)
@@ -286,10 +285,8 @@ for epoch in range(args.num_epochs):
             truth = truth.to(device)
 
             recon, c, v, a, d = model(sounds)
-            pred = [F.one_hot(c, args.num_classes), v, a, d]
-            #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
-            #recon = torch.unsqueeze(torch.sqrt(torch.sum(recon**2, axis=1)), dim=1)
-            #loss = loss_function(recon, sounds)
+            pred = [c, v, a, d]
+
             if args.anti_transfer_model is not None:
                 AT_term = AT.loss(sounds,                      #input batch
                                   model.get_embeddings,       #current model
@@ -301,8 +298,6 @@ for epoch in range(args.num_epochs):
             loss = loss_function(recon, sounds, truth, pred, emo_weight, vad_weight, AT_term)
             loss['total'].backward()
             optimizer.step()
-
-            #loss = loss.detach().cpu().item()
 
             train_batch_losses.append({'total':loss['total'].cpu().numpy(),
                                        'emo': loss['emo'],
