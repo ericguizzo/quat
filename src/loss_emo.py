@@ -83,6 +83,7 @@ def emo_loss_vad(recon, sounds, truth, pred, beta, beta_vad, at_term=0):
     else:
         at_term = at_term.detach().item()
 
+    total_loss = vad_loss
     output =  {'total':total_loss, 'recon': recon_loss.detach().item(), 'emo':emo_loss.detach().item(),
         'acc':acc.item(),'at':at_term, 'vad':vad_loss.detach().item(), 'valence':valence_loss.detach().item(),
         'arousal':arousal_loss.detach().item(), 'dominance':dominance_loss.detach().item(),
