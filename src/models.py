@@ -538,10 +538,12 @@ class simple_autoencoder_2_vad(nn.Module):
         pred_valence = torch.tanh(self.classifier_valence(x_valence))
         pred_arousal = torch.tanh(self.classifier_arousal(x_arousal))
         pred_dominance = torch.tanh(self.classifier_dominance(x_dominance))
+        pred = [pred_discrete, pred_valence, pred_arousal, pred_dominance]
 
         x = self.decode(x)
 
-        return x, pred_discrete, pred_valence, pred_arousal, pred_dominance
+
+        return x, pred
 
 #__all__ = ['ResNet','resnet50']
 
