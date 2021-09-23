@@ -223,7 +223,7 @@ def evaluate(model, device, loss_function, dataloader, emo_weight, vad_weight):
 
             #temp_loss.append({'total':loss, 'emo':0, 'recon':0,
             #              'valence':0, 'arousal':0, 'dominance':0})
-            temp_loss.append({'total':loss['total'].cpu().numpy(),
+            temp_loss.append({'total':loss['total'].detach().cpu().numpy(),
                                        'emo': loss['emo'],
                                        'recon':loss['recon'],
                                        'acc':loss['acc'],
@@ -299,7 +299,7 @@ for epoch in range(args.num_epochs):
             loss['total'].backward()
             optimizer.step()
 
-            train_batch_losses.append({'total':loss['total'].cpu().numpy(),
+            train_batch_losses.append({'total':loss['total'].detach().cpu().numpy(),
                                        'emo': loss['emo'],
                                        'recon':loss['recon'],
                                        'acc':loss['acc'],
