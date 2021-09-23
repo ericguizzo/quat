@@ -114,7 +114,7 @@ def get_label_IEMOCAP(wavname):
     str_class_label = list(filter(lambda x: ID in x, contents))[0].split('\t')[2]
     class_label = label_to_int[str_class_label]
 
-    output = [class_label, v, a, d]
+    output = np.array([class_label, v, a, d])
 
     return output
 
