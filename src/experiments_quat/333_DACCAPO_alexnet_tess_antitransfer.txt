@@ -13,7 +13,6 @@
         "batch_size": 20,
         "model_name": "AlexNet",
         "fast_test": "False",
-        "r2he_model_path": "'../new_experiments/experiment_23_betagrid_RIPARTO.txt/models/model_xval_iemocap_exp23_betagrid_RIPARTO.txt_run1_fold0'",
         "shuffle_data": "False",
         "patience": 20,
         "save_model_metric": "loss",
