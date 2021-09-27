@@ -47,6 +47,22 @@
        "load_pretrained": "'../new_experiments/experiment_315_DACCAPO_pretraining_reconstruction.txt/models/model_xval_iemocap_exp315_DACCAPO_pretraining_reconstruction.txt_run1_fold0'",
        "loss_beta_vad":1
         },
+  "4":{"comment_1": "beta_0.01", "comment_2": "no_AT",
+       "loss_beta": 0.01,
+       "learning_rate": 0.001,
+       "regularization_lambda":0.00001,
+       "learning_rate": 0.000001,
+       "load_pretrained": "'../new_experiments/experiment_315_DACCAPO_pretraining_reconstruction.txt/models/model_xval_iemocap_exp315_DACCAPO_pretraining_reconstruction.txt_run1_fold0'",
+       "loss_beta_vad":0.1
+        },
+  "5":{"comment_1": "beta_0.01", "comment_2": "no_AT",
+       "loss_beta": 0.01,
+       "learning_rate": 0.000001,
+       "regularization_lambda":0.00001,
+       "learning_rate": 0.000001,
+       "load_pretrained": "'../new_experiments/experiment_315_DACCAPO_pretraining_reconstruction.txt/models/model_xval_iemocap_exp315_DACCAPO_pretraining_reconstruction.txt_run1_fold0'",
+       "loss_beta_vad":0.1
+        },
 
   "11":{"comment_1": "beta_0.01", "comment_2": "AT_pre",
        "loss_beta": 0.01,
