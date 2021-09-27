@@ -6,7 +6,7 @@
         "dataset": "iemocap",
         "num_experiment": 15,
         "num_folds": 1,
-        "num_epochs": 200000,
+        "num_epochs": 1,
         "learning_rate": 0.001,
         "batch_size": 50,
         "model_name": "simple_autoencoder_2_vad",
