@@ -68,7 +68,7 @@ parser.add_argument('--model_flatten_dim', type=int, default=32768)
 parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
 parser.add_argument('--model_num_classes', type=int, default=4)
 parser.add_argument('--model_embeddings_dim', type=str, default='[64,64]')
-parser.add_argument('--model_hidden_size', type=int, default=2048)
+parser.add_argument('--model_hidden_size', type=int, default=4096)
 
 parser.add_argument('--model_verbose', type=str, default='False')
 

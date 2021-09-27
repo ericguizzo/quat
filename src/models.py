@@ -410,7 +410,7 @@ class simple_autoencoder_2(nn.Module):
 
 
 class simple_autoencoder_2_vad(nn.Module):
-    def __init__(self, quat=True, classifier_quat=True, hidden_size=2048 ,flatten_dim=16384,
+    def __init__(self, quat=True, classifier_quat=True, hidden_size=4096 ,flatten_dim=16384,
                  classifier_dropout=0.5, embeddings_dim=[64,64], num_classes=5, ):
         super(simple_autoencoder_2_vad, self).__init__()
         ## encoder layers ##
