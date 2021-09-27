@@ -71,9 +71,9 @@ def emo_loss_vad(recon, sounds, truth, pred, beta, beta_vad, at_term=0):
     total_loss = recon_loss + emo_loss + at_term
     print ("COGLIONE!!!!!!!!!!: ", v_p, truth[:,1], v_p.shape, truth[:,1].shape)
     acc = torch.sum(torch.argmax(c_p, axis=1) == truth[:,0]) / c_p.shape[0]
-    acc_valence = torch.sum(torch.round(v_p) == truth[:,1]) / v_p.shape[0]
-    acc_arousal = torch.sum(torch.round(a_p) == truth[:,2]) / a_p.shape[0]
-    acc_dominance = torch.sum(torch.round(d_p) == truth[:,3]) / d_p.shape[0]
+    acc_valence = torch.sum(torch.round(v_p.squeeze()) == truth[:,1]) / v_p.shape[0]
+    acc_arousal = torch.sum(torch.round(a_p.squeeze()) == truth[:,2]) / a_p.shape[0]
+    acc_dominance = torch.sum(torch.round(d_p.squeeze()) == truth[:,3]) / d_p.shape[0]
 
     if isinstance(at_term, int):
         at_term = 0.
