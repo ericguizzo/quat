@@ -68,12 +68,14 @@ parser.add_argument('--model_flatten_dim', type=int, default=32768)
 parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
 parser.add_argument('--model_num_classes', type=int, default=4)
 parser.add_argument('--model_embeddings_dim', type=str, default='[64,64]')
+parser.add_argument('--model_hidden_size', type=int, default=2048)
+
 parser.add_argument('--model_verbose', type=str, default='False')
 
 parser.add_argument('--use_r2he', type=str, default='True')
 parser.add_argument('--r2he_model_path', type=str, default=None)
 parser.add_argument('--r2he_model_path_secondary', type=str, default=None)
-parser.add_argument('--r2he_model_name', type=str, default='simple_autoencoder')
+parser.add_argument('--r2he_model_name', type=str, default='simple_autoencoder_2_vad')
 parser.add_argument('--r2he_features_type', type=str, default='reconstruction',
                     help='reconstruction or embeddings')
 
@@ -171,17 +173,16 @@ if args.use_r2he:
         print ('loading r2he secondary: ', args.r2he_model_path_secondary)
         r2he.model_1.load_state_dict(pretrained_dict_r2he, strict=False)
         r2he.model_2.load_state_dict(pretrained_dict_r2he2, strict=False)
-
         r2he = r2he.to(device)
 
     if args.r2he_model_name == 'simple_autoencoder_2_vad':
-        r2he = simple_autoencoder_2_vad()
+        r2he = simple_autoencoder_2_vad(quat=args.model_quat,
+                                          classifier_quat=args.model_classifier_quat,
+                                          hidden_size=args.model_hidden_size)
         pretrained_dict_r2he = torch.load(args.r2he_model_path)
         print ('loading r2he: ', args.r2he_model_path)
         r2he.load_state_dict(pretrained_dict_r2he, strict=False)
         r2he = r2he.to(device)
-
-
 #define optimizer and loss
 optimizer = optim.Adam(model.parameters(), lr=args.learning_rate,
                               weight_decay=args.regularization_lambda)
