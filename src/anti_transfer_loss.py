@@ -71,8 +71,8 @@ class ATLoss():
         - distance = distance function between the aggregated feature maps
         '''
         #extract features until at_layer
-        pre_feat, _ = self.pretrained_model(input)
-        curr_feat, _ = current_model(input)
+        pre_feat, _, _, _, _ = self.pretrained_model(input)
+        curr_feat, _, _, _, _ = current_model(input)
 
         if aggregation == 'none':
             #no aggregation (channel permutation makes AT useless)
