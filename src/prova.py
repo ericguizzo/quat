@@ -1,16 +1,30 @@
 import torch
 from torch import nn
 import torch.nn.functional as F
-from quaternion_layers import (QuaternionConv, QuaternionLinear,
-                               QuaternionTransposeConv)
-from qbn import QuaternionBatchNorm2d
-from typing import Type, Any, Callable, Union, List, Optional
-from torch import Tensor
-from models import *
 
-a = simple_autoencoder_2_vad(quat=True)
+a = torch.tensor([[0.4243],
+        [0.3788],
+        [0.5170],
+        [0.5040],
+        [0.4850],
+        [0.4560],
+        [0.4811],
+        [0.6360],
+        [0.3033],
+        [0.3625],
+        [0.3628],
+        [0.4103],
+        [0.5194],
+        [0.4134],
+        [0.2764],
+        [0.5408],
+        [0.4633],
+        [0.4931],
+        [0.2561],
+        [0.4481]])
 
-x = torch.rand(1,1,512,128)
-x, p, v, a, d = a(x)
-print (x.shape)
-print(p, v, a, d)
+
+b = torch.tensor([1., 1., 1., 0., 0., 1., 1., 0., 1., 1., 1., 1., 0., 0., 0., 0., 1., 0.,
+        0., 0.])
+
+print ("COGLIONE: ", torch.sum(torch.round(a.squeeze()) == b) / a.shape[0])
