@@ -244,6 +244,7 @@ def mean_batch_loss(batch_loss):
                   'acc':[], 'at':[], 'vad':[],
                   'valence':[], 'arousal':[], 'dominance':[],
                   'acc_valence':[], 'acc_arousal':[], 'acc_dominance':[]}
+    print ("COGLIONE!!!!!!!!!!", d)
     for i in batch_loss:
         for j in i:
             name = j
