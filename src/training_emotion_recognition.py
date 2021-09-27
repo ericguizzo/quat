@@ -174,6 +174,13 @@ if args.use_r2he:
 
         r2he = r2he.to(device)
 
+    if args.r2he_model_name == 'simple_autoencoder_2_vad':
+        r2he = simple_autoencoder_2_vad()
+        pretrained_dict_r2he = torch.load(args.r2he_model_path)
+        print ('loading r2he: ', args.r2he_model_path)
+        r2he.load_state_dict(pretrained_dict_r2he, strict=False)
+        r2he = r2he.to(device)
+
 
 #define optimizer and loss
 optimizer = optim.Adam(model.parameters(), lr=args.learning_rate,
