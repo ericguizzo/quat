@@ -60,7 +60,6 @@ def emo_loss_vad(recon, sounds, truth, pred, beta, beta_vad, at_term=0):
     c_p, v_p, a_p, d_p = pred
 
     valence_loss = F.binary_cross_entropy(v_p.squeeze(), truth[:,1].squeeze())
-    valence_loss = F.binary_cross_entropy(v_p.squeeze(), truth[:,1].squeeze())
     arousal_loss = F.binary_cross_entropy(a_p.squeeze(), truth[:,2].squeeze())
     dominance_loss = F.binary_cross_entropy(d_p.squeeze(), truth[:,3].squeeze())
 

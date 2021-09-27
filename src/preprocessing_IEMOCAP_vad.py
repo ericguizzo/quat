@@ -35,7 +35,7 @@ print ('Features type: ' + str(FEATURES_TYPE))
 #and change num_classes_IEMOCAP
 num_classes_IEMOCAP = 5
 
-'''
+
 label_to_int = {'neu':0,
                 'ang':1,
                 'hap':2,
@@ -61,7 +61,7 @@ label_to_int = {'neu':0,
                 'xxx':4}
 
 
-'''
+
 label_to_int = {'neu':0,
                 'ang':1,
                 'hap':2,
@@ -102,10 +102,10 @@ def get_label_IEMOCAP(wavname):
 
     str_label_vad = list(filter(lambda x: ID in x, contents))[0].split('\t')[-1]
     str_label_vad = eval(str_label_vad)
-    vad = np.divide(str_label_vad, 2)
-    vad = np.subtract(vad, 1)
+    #vad = np.divide(str_label_vad, 2)
+    #vad = np.subtract(vad, 1)
 
-    threshold = 0.5
+    threshold = 2.5
     v = 0 if vad[0] <= threshold else 1
     a = 0 if vad[1] <= threshold else 1
     d = 0 if vad[2] <= threshold else 1
