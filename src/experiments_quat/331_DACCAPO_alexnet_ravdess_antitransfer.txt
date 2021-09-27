@@ -9,7 +9,7 @@
         "model_num_classes": 8,
         "num_experiment": 51,
         "num_folds": 1,
-        "num_epochs": 1,
+        "num_epochs": 500,
         "batch_size": 20,
         "model_name": "AlexNet",
         "fast_test": "False",

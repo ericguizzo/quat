@@ -9,7 +9,7 @@
         "model_num_classes": 7,
         "num_experiment": 24,
         "num_folds": 1,
-        "num_epochs": 200,
+        "num_epochs": 500,
         "batch_size": 20,
         "model_name": "VGGNet",
         "fast_test": "False",
