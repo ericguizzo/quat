@@ -16,10 +16,6 @@
         "spreadsheet_profile": "profile_autoencoder"
       },
 
-  "0":{"comment_1": "beta_0", "comment_2": "pretraining_reconstruction_QUAT",
-       "loss_beta": 0, "save_model_metric": "total_loss", "early_stopping": "True",
-       "time_dim":512, "model_classifier_quat": "True"
-        },
   "1":{"comment_1": "beta_0", "comment_2": "pretraining_reconstruction_REAL",
        "loss_beta": 0, "save_model_metric": "total_loss", "early_stopping": "True",
        "time_dim":512, "model_classifier_quat":"False", "model_quat":"False"
