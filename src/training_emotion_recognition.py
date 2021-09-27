@@ -209,7 +209,7 @@ def evaluate(model, device, loss_function, dataloader, emo_weight):
                 if args.r2he_features_type == 'reconstruction':
                     sounds, _ = r2he(sounds)
                 elif args.r2he_features_type == 'embeddings':
-                    sounds, _ = r2he.get_embeddings(sounds)
+                    sounds, _, _, _, _ = r2he.get_embeddings(sounds)
                 else:
                     raise ValueError('wrong r2he features type selected')
 
@@ -268,7 +268,7 @@ for epoch in range(args.num_epochs):
                     if args.r2he_features_type == 'reconstruction':
                         sounds, _ = r2he(sounds)
                     elif args.r2he_features_type == 'embeddings':
-                        sounds, _ = r2he.get_embeddings(sounds)
+                        sounds, _, _, _, _ = r2he.get_embeddings(sounds)
                     else:
                         raise ValueError('wrong r2he features type selected')
             #print (sounds.shape)
