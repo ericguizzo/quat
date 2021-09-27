@@ -175,6 +175,10 @@ if args.anti_transfer_model is not None:
     if args.model_name == 'simple_autoencoder_2':
         at_model = locals()[args.model_name](quat=False,
                                           classifier_quat=False)
+    if args.model_name == 'simple_autoencoder_2_vad':
+        at_model = locals()[args.model_name](quat=args.model_quat,
+                                          classifier_quat=args.model_classifier_quat,
+                                          hidden_size=args.model_hidden_size)
     #load weights, cut unused part (decoder and classifier), move to gpu
     at_pretrained_dict = torch.load(args.anti_transfer_model)
     at_model.load_state_dict(at_pretrained_dict, strict=False)
