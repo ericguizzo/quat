@@ -6,7 +6,7 @@
         "dataset": "iemocap",
         "num_experiment": 14,
         "num_folds": 1,
-        "num_epochs": 2,
+        "num_epochs": 1,
         "learning_rate": 0.000001,
         "batch_size": 20,
         "model_name": "simple_autoencoder_2_vad",
@@ -17,12 +17,6 @@
         "time_dim":512,
         "spreadsheet_profile": "profile_autoencoder_vad"
       },
-
-  "0":{"comment_1": "no_pretraining", "comment_2": "TEST",
-       "loss_beta": 1,
-       "regularization_lambda":0.00001,
-       "learning_rate": 0.000001
-        },
 
   "1":{"comment_1": "beta_0.01", "comment_2": "no_AT",
        "loss_beta": 0.01,
