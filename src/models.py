@@ -522,7 +522,7 @@ class simple_autoencoder_2_vad(nn.Module):
         x = self.encode(x)
         _ = "dummy"
 
-        return x, _, _, _, _
+        return x, _,
 
 
     def forward(self, x):
