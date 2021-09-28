@@ -91,7 +91,7 @@ def main():
         #curr_list = [os.path.join(INPUT_EMOVO_FOLDER, x) for x in curr_list]
         #preprocess all sounds of the current actor
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
-        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_EMOVO)
+        curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_SAVEE)
         uf.print_bar(index, num_files)
 
         #append preprocessed predictors and target to the dict
