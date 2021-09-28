@@ -56,8 +56,7 @@ def get_all_paths(input_folder):
         contents = [os.path.join(f, i) for i in contents]
         contents = list(filter(lambda x: x[-3:] == "wav", contents))
         paths += contents
-    print (paths)
-    sys.exit(0)
+
     return paths
 
 def main():
