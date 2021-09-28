@@ -18,6 +18,7 @@
         "save_model_metric": "loss",
         "early_stopping": "True",
         "time_dim":512,
+        "regularization_lambda":0.0001,
         "spreadsheet_profile": "profile_emotion_recognition"
       },
 
