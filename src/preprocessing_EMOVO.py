@@ -56,7 +56,8 @@ def get_all_paths(input_folder):
         contents = [os.path.join(f, i) for i in contents]
         contents = list(filter(lambda x: x[-3:] == "wav", contents))
         paths += contents
-
+    print (paths)
+    sys.exit(0)
     return paths
 
 def main():
@@ -88,7 +89,7 @@ def main():
         #print ('\nPreprocessing items')
         #make sure that each item list is a FULL path to a sound file
         #and not only the sound name as os.listdir outputs
-        curr_list = [os.path.join(INPUT_EMOVO_FOLDER, x) for x in curr_list]
+        #curr_list = [os.path.join(INPUT_EMOVO_FOLDER, x) for x in curr_list]
         #preprocess all sounds of the current actor
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
         curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_EMOVO)
