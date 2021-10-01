@@ -60,7 +60,7 @@ parser.add_argument('--model_architecture', type=str, default='simple')
 parser.add_argument('--model_classifier_dropout', type=float, default=0.5)
 parser.add_argument('--fast_test_bound', type=int, default=100)
 parser.add_argument('--shuffle_data', type=str, default='False')
-parser.add_argument('--moderl_hidden_size', type=int, default=4096)
+parser.add_argument('--model_hidden_size', type=int, default=4096)
 
 args = parser.parse_args()
 
