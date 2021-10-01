@@ -224,7 +224,7 @@ if __name__ == '__main__':
     parser.add_argument('--ids', type=str, default='[343, 346, 349]')
     parser.add_argument('--first', type=int, default=2)
     parser.add_argument('--last', type=int, default=2)
-    parser.add_argument('--gpu_id', type=int, default=1)
+    parser.add_argument('--gpu_id', type=int, default=0)
     args = parser.parse_args()
 
 
