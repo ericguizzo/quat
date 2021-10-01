@@ -190,7 +190,7 @@ if __name__ == '__main__':
         print ('AAAAAFJFJFJFJFJFJFJFJFJFJFJFJ')
         model = locals()[args.model_name]()
     if args.model_name == 'simple_autoencoder_2_vad':
-        at_model = locals()[args.model_name](quat=args.model_quat,
+        model = locals()[args.model_name](quat=args.model_quat,
                                           classifier_quat=False,
                                           hidden_size=args.model_hidden_size)
     else:
