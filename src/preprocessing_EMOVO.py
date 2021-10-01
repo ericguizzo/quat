@@ -15,7 +15,7 @@ FEATURES_TYPE = cfg.get('feature_extraction', 'features_type')
 SR = cfg.getint('sampling', 'sr_target')
 AUGMENTATION = eval(cfg.get('feature_extraction', 'augmentation'))
 NUM_AUG_SAMPLES = eval(cfg.get('feature_extraction', 'num_aug_samples'))
-SEGMENTATION = False
+SEGMENTATION = True
 INPUT_EMOVO_FOLDER = cfg.get('preprocessing', 'input_emovo_folder')
 OUTPUT_FOLDER = cfg.get('preprocessing', 'output_folder')
 
