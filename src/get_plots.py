@@ -188,6 +188,10 @@ if __name__ == '__main__':
     elif args.model_name == 'simple_autoencoder':
         print ('AAAAAFJFJFJFJFJFJFJFJFJFJFJFJ')
         model = locals()[args.model_name]()
+    if args.model_name == 'simple_autoencoder_2_vad':
+        at_model = locals()[args.model_name](quat=args.model_quat,
+                                          classifier_quat=False,
+                                          hidden_size=args.model_hidden_size)
     else:
         raise ValueError('Invalid model name')
 
