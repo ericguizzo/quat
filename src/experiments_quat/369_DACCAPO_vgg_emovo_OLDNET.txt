@@ -20,7 +20,7 @@
         "time_dim":512,
         "regularization_lambda":0.0001,
         "spreadsheet_profile": "profile_emotion_recognition",
-        "r2he_model_path": "'../new_experiments/experiment_23_betagrid_RIPARTO.txt/models/model_xval_iemocap_exp23_betagrid_RIPARTO.txt_run1_fold0'",
+        "r2he_model_path": "'../new_experiments/experiment_23_betagrid_RIPARTO.txt/models/model_xval_iemocap_exp23_betagrid_RIPARTO.txt_run1_fold0'"
 
       },
 
