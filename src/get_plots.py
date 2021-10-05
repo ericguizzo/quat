@@ -49,7 +49,7 @@ parser.add_argument('--sample_rate', type=int, default=16000)
 '../new_experiments/experiment_323_DACCAPO_betagrid_RIPARTO.txt/models/model_xval_iemocap_exp323_DACCAPO_betagrid_RIPARTO.txt_run2_fold0'
 '../new_experiments/experiment_315_DACCAPO_pretraining_reconstruction.txt/models/model_xval_iemocap_exp315_DACCAPO_pretraining_reconstruction.txt_run1_fold0'
 
-M_PATH='../new_experiments/experiment_315_DACCAPO_pretraining_reconstruction.txt/models/model_xval_iemocap_exp315_DACCAPO_pretraining_reconstruction.txt_run3_fold0'
+M_PATH='../new_experiments/experiment_315_DACCAPO_pretraining_reconstruction.txt/models/model_xval_iemocap_exp315_DACCAPO_pretraining_reconstruction.txt_run4_fold0'
 parser.add_argument('--model_path', type=str, default=M_PATH)
 parser.add_argument('--model_name', type=str, default='simple_autoencoder_2_vad')
 parser.add_argument('--model_quat', type=str, default='True')
