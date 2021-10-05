@@ -19,7 +19,7 @@ parser.add_argument('--fixed_seed', type=str, default='True')
 
 #dataset parameters
 parser.add_argument('--batch_size', type=int, default=20)
-parser.add_argument('--use_set', type=str, default='test')
+parser.add_argument('--use_set', type=str, default='train')
 parser.add_argument('--predictors_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy')
 parser.add_argument('--target_path', type=str, default='../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy')
 parser.add_argument('--train_perc', type=float, default=0.7)
@@ -49,7 +49,8 @@ parser.add_argument('--sample_rate', type=int, default=16000)
 '../new_experiments/experiment_323_DACCAPO_betagrid_RIPARTO.txt/models/model_xval_iemocap_exp323_DACCAPO_betagrid_RIPARTO.txt_run2_fold0'
 '../new_experiments/experiment_315_DACCAPO_pretraining_reconstruction.txt/models/model_xval_iemocap_exp315_DACCAPO_pretraining_reconstruction.txt_run1_fold0'
 
-M_PATH='../new_experiments/experiment_315_DACCAPO_pretraining_reconstruction.txt/models/model_xval_iemocap_exp315_DACCAPO_pretraining_reconstruction.txt_run4_fold0'
+M_PATH='../new_experiments/experiment_323_DACCAPO_betagrid_RIPARTO.txt/models/model_xval_iemocap_exp323_DACCAPO_betagrid_RIPARTO.txt_run2_fold0'
+
 parser.add_argument('--model_path', type=str, default=M_PATH)
 parser.add_argument('--model_name', type=str, default='simple_autoencoder_2_vad')
 parser.add_argument('--model_quat', type=str, default='True')
