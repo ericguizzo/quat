@@ -554,9 +554,9 @@ class simple_autoencoder_2_vad_mod(nn.Module):
         self.hidden_size = hidden_size
         self.num_classes = num_classes
         self.embeddings_dim = embeddings_dim
-        self.conv1 = nn.Conv2d(1, 2, 3, padding=1)
-        self.conv2 = nn.Conv2d(2, 4, 3, padding=1)
-        self.conv3 = nn.Conv2d(4, 4, 3, padding=1)
+        self.conv1 = nn.Conv2d(1, 16, 3, padding=1)
+        self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
+        self.conv3 = nn.Conv2d(32, 4, 3, padding=1)
 
         self.conv1_bn = nn.BatchNorm2d(2)
         self.conv2_bn = nn.BatchNorm2d(4)
@@ -568,15 +568,15 @@ class simple_autoencoder_2_vad_mod(nn.Module):
         ## decoder layers ##
         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
         if quat:
-            self.t_conv1 = QuaternionTransposeConv(4, 4, kernel_size=3, stride=[2,1], padding=1, output_padding=[1,0])
-            self.t_conv2 = QuaternionTransposeConv(4, 4, kernel_size=3, stride=[2,1], padding=1, output_padding=[1,0])
-            self.t_conv3 = QuaternionTransposeConv(4, 4, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.t_conv1 = QuaternionTransposeConv(4, 32, kernel_size=3, stride=[2,1], padding=1, output_padding=[1,0])
+            self.t_conv2 = QuaternionTransposeConv(32, 16, kernel_size=3, stride=[2,1], padding=1, output_padding=[1,0])
+            self.t_conv3 = QuaternionTransposeConv(16, 4, kernel_size=3, stride=2, padding=1, output_padding=1)
             self.tconv1_bn = QuaternionBatchNorm2d(4)
             self.tconv2_bn = QuaternionBatchNorm2d(4)
         else:
-            self.t_conv1 = nn.ConvTranspose2d(4, 4, 3, stride=[2,1], padding=1, output_padding=[1,0])
-            self.t_conv2 = nn.ConvTranspose2d(4, 2, 3, stride=[2,1], padding=1, output_padding=[1,0])
-            self.t_conv3 = nn.ConvTranspose2d(2, 1, 3, stride=2, padding=1, output_padding=1)
+            self.t_conv1 = nn.ConvTranspose2d(4, 32, 3, stride=[2,1], padding=1, output_padding=[1,0])
+            self.t_conv2 = nn.ConvTranspose2d(32, 16, 3, stride=[2,1], padding=1, output_padding=[1,0])
+            self.t_conv3 = nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1, output_padding=1)
             self.tconv1_bn = nn.BatchNorm2d(4)
             self.tconv2_bn = nn.BatchNorm2d(2)
 
