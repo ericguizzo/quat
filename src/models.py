@@ -547,7 +547,7 @@ class simple_autoencoder_2_vad(nn.Module):
 class simple_autoencoder_2_vad_mod(nn.Module):
     def __init__(self, quat=True, classifier_quat=True, hidden_size=4096 ,flatten_dim=16384,
                  classifier_dropout=0.5, embeddings_dim=[64,64], num_classes=5, batchnorm=False):
-        super(simple_autoencoder_2_vad, self).__init__()
+        super(simple_autoencoder_2_vad_mod, self).__init__()
         ## encoder layers ##
         # conv layer (depth from 3 --> 16), 3x3 kernels
         self.flatten_dim = flatten_dim
