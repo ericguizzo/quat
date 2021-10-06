@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 import numpy as np
-from models import simple_autoencoder, VGGNet, AlexNet, resnet50
+from models import *
 from torchsummary import summary
 from torchvision import models
 from torchsummary import summary
@@ -18,9 +18,9 @@ model = resnet50(num_classes=7, quat=True)
 summary(model, (4,64,64))
 '''
 
-model = simple_autoencoder(quat=False)
+model = simple_autoencoder_2_vad_mod(quat=True)
 
-y, _ = model.get_embeddings(x)
+y, _ , _, _, _= model(x)
 print (y.shape)
 '''
 print ('input_dim', x.shape)

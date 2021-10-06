@@ -572,7 +572,7 @@ class simple_autoencoder_2_vad_mod(nn.Module):
             self.t_conv1 = QuaternionTransposeConv(4, 64, kernel_size=3, stride=[2,1], padding=1, output_padding=[1,0])
             self.t_conv2 = QuaternionTransposeConv(64, 32, kernel_size=3, stride=[2,1], padding=1, output_padding=[1,0])
             self.t_conv3 = QuaternionTransposeConv(32, 16, kernel_size=3, stride=2, padding=1, output_padding=1)
-            self.t_conv4 = QuaternionTransposeConv(16, 4, kernel_size=3, stride=1, padding=1, output_padding=1)
+            self.t_conv4 = QuaternionTransposeConv(16, 4, kernel_size=3, stride=1, padding=1, output_padding=0)
 
             self.tconv1_bn = QuaternionBatchNorm2d(4)
             self.tconv2_bn = QuaternionBatchNorm2d(4)
@@ -580,7 +580,7 @@ class simple_autoencoder_2_vad_mod(nn.Module):
             self.t_conv1 = nn.ConvTranspose2d(4, 64, 3, stride=[2,1], padding=1, output_padding=[1,0])
             self.t_conv2 = nn.ConvTranspose2d(64, 32, 3, stride=[2,1], padding=1, output_padding=[1,0])
             self.t_conv3 = nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1, output_padding=1)
-            self.t_conv3 = nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1, output_padding=1)
+            self.t_conv3 = nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1, output_padding=0)
 
             self.tconv1_bn = nn.BatchNorm2d(4)
             self.tconv2_bn = nn.BatchNorm2d(2)
@@ -647,7 +647,7 @@ class simple_autoencoder_2_vad_mod(nn.Module):
             x = self.conv2_bn(x)
         x = F.relu(self.conv3(x))
         x = F.max_pool2d(x, kernel_size=[2,1])
-        x = F.sigmoid(self.conv4(x))
+        x = torch.sigmoid(self.conv4(x))
 
         return x
 
