@@ -20,6 +20,4 @@
        "loss_beta": 0, "save_model_metric": "total_loss", "early_stopping": "True",
        "time_dim":512, "model_classifier_quat": "True"
         }
-
-
 }
