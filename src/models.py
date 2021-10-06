@@ -569,10 +569,10 @@ class simple_autoencoder_2_vad_mod(nn.Module):
         ## decoder layers ##
         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
         if quat:
-            self.t_conv1 = QuaternionTransposeConv(4, 128, kernel_size=3, stride=[2,1], padding=1, output_padding=[1,0])
-            self.t_conv2 = QuaternionTransposeConv(128, 64, kernel_size=3, stride=[2,1], padding=1, output_padding=[1,0])
-            self.t_conv3 = QuaternionTransposeConv(64, 32, kernel_size=3, stride=2, padding=1, output_padding=1)
-            self.t_conv4 = QuaternionTransposeConv(32, 4, kernel_size=3, stride=1, padding=1, output_padding=0)
+            self.t_conv1 = QuaternionTransposeConv(128, 64, kernel_size=3, stride=[2,1], padding=1, output_padding=[1,0])
+            self.t_conv2 = QuaternionTransposeConv(64, 32, kernel_size=3, stride=[2,1], padding=1, output_padding=[1,0])
+            self.t_conv3 = QuaternionTransposeConv(32, 16, kernel_size=3, stride=2, padding=1, output_padding=1)
+            self.t_conv4 = QuaternionTransposeConv(16, 4, kernel_size=3, stride=1, padding=1, output_padding=0)
 
             self.tconv1_bn = QuaternionBatchNorm2d(4)
             self.tconv2_bn = QuaternionBatchNorm2d(4)
