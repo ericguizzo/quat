@@ -52,7 +52,7 @@ parser.add_argument('--sample_rate', type=int, default=16000)
 M_PATH='../new_experiments/experiment_323_DACCAPO_betagrid_RIPARTO.txt/models/model_xval_iemocap_exp323_DACCAPO_betagrid_RIPARTO.txt_run2_fold0'
 
 parser.add_argument('--model_path', type=str, default=M_PATH)
-parser.add_argument('--model_name', type=str, default='simple_autoencoder_2_vad')
+parser.add_argument('--model_name', type=str, default='simple_autoencoder_2_vad_mod')
 parser.add_argument('--model_quat', type=str, default='True')
 parser.add_argument('--model_in_channels', type=int, default=1)
 parser.add_argument('--model_flattened_dim', type=int, default=524288)
@@ -191,10 +191,16 @@ if __name__ == '__main__':
     elif args.model_name == 'simple_autoencoder':
         print ('AAAAAFJFJFJFJFJFJFJFJFJFJFJFJ')
         model = locals()[args.model_name]()
-    if args.model_name == 'simple_autoencoder_2_vad':
+    elif args.model_name == 'simple_autoencoder_2_vad':
         model = locals()[args.model_name](quat=args.model_quat,
                                           classifier_quat=False,
                                           hidden_size=args.model_hidden_size)
+    elif args.model_name == 'simple_autoencoder_2_vad_mod':
+        print ('AAAAAFJFJFJFJFJFJFJFJFJFJFJFJ')
+        model = locals()[args.model_name](quat=args.model_quat,
+                                          classifier_quat=args.model_classifier_quat,
+                                          hidden_size=args.model_hidden_size,
+                                          )
     else:
         raise ValueError('Invalid model name')
 
