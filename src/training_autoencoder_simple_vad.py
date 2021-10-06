@@ -131,6 +131,12 @@ elif args.model_name == 'simple_autoencoder_2_vad':
     model = locals()[args.model_name](quat=args.model_quat,
                                       classifier_quat=args.model_classifier_quat,
                                       hidden_size=args.model_hidden_size)
+elif args.model_name == 'simple_autoencoder_2_vad_mod':
+    print ('AAAAAFJFJFJFJFJFJFJFJFJFJFJFJ')
+    model = locals()[args.model_name](quat=args.model_quat,
+                                      classifier_quat=args.model_classifier_quat,
+                                      hidden_size=args.model_hidden_size,
+                                      )
 model = model.to(device)
 
 #print (model)
@@ -176,6 +182,10 @@ if args.anti_transfer_model is not None:
         at_model = locals()[args.model_name](quat=False,
                                           classifier_quat=False)
     if args.model_name == 'simple_autoencoder_2_vad':
+        at_model = locals()[args.model_name](quat=False,
+                                          classifier_quat=False,
+                                          hidden_size=args.model_hidden_size)
+    if args.model_name == 'simple_autoencoder_2_vad_mod':
         at_model = locals()[args.model_name](quat=False,
                                           classifier_quat=False,
                                           hidden_size=args.model_hidden_size)
