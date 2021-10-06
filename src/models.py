@@ -650,7 +650,7 @@ class simple_autoencoder_2_vad_mod(nn.Module):
         x = F.relu(self.conv3(x))
         x = F.max_pool2d(x, kernel_size=[2,1])
         x = F.relu(self.conv4(x))
-
+        x = F.relu(self.conv5(x))
         return x
 
 
@@ -662,7 +662,8 @@ class simple_autoencoder_2_vad_mod(nn.Module):
         if self.batchnorm:
             x = self.tconv2_bn(x)
         x = F.relu(self.t_conv3(x))
-        x = torch.sigmoid(self.t_conv4(x))
+        x = F.relu(self.t_conv4(x))
+        x = torch.sigmoid(self.t_conv5(x))
 
         return x
 
