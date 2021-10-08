@@ -326,7 +326,7 @@ for epoch in range(args.num_epochs):
             #del loss
 
     #validation data
-    val_batch_losses = evaluate(model, device, loss_function, val_data, emo_weight, vad_weight, alpha=args.loss_alpha, at_term=AT_term)
+    val_batch_losses = evaluate(model, device, loss_function, val_data, emo_weight, vad_weight)
 
     train_epoch_loss = mean_batch_loss(train_batch_losses)
     val_epoch_loss = mean_batch_loss(val_batch_losses)
