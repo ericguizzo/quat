@@ -34,6 +34,10 @@
        "time_dim":512, "model_classifier_quat":"True", "model_quat":"True",
        "anti_transfer_beta":0.01,
        "anti_transfer_model":"'../new_experiments/experiment_315_DACCAPO_pretraining_reconstruction.txt/models/model_xval_iemocap_exp315_DACCAPO_pretraining_reconstruction.txt_run2_fold0'"
-        }
+        },
+  "5":{"comment_1": "alpha_0", "comment_2": "pretraining_WITHOUTrecon_QUAT",
+       "loss_beta": 0, "save_model_metric": "total_loss", "early_stopping": "True",
+       "time_dim":512, "model_classifier_quat": "True", "loss_alpha":0
+        },
 
 }
