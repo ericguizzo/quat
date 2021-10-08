@@ -56,7 +56,8 @@ def emo_loss_vad(recon, sounds, truth, pred, beta, beta_vad, alpha=1, at_term=0)
 
     recon = torch.sum(recon, axis=1) / 4.
     recon_loss = F.binary_cross_entropy(recon.squeeze(), sounds.squeeze())
-
+    recon_loss = recon_loss * alpha
+    
     c_p, v_p, a_p, d_p = pred
 
     valence_loss = F.binary_cross_entropy(v_p.squeeze(), truth[:,1].squeeze())

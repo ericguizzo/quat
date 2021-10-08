@@ -230,7 +230,7 @@ def evaluate(model, device, loss_function, dataloader, emo_weight, vad_weight):
                                   distance=args.anti_transfer_distance) #distance function
             else:
                 AT_term = 0.
-            loss = loss_function(recon, sounds, truth, pred, emo_weight, vad_weight, alpha=loss_alpha, at_term=AT_term)
+            loss = loss_function(recon, sounds, truth, pred, emo_weight, vad_weight, alpha=args.loss_alpha, at_term=AT_term)
 
             #loss = loss['total'].cpu().numpy()
 
@@ -306,7 +306,7 @@ for epoch in range(args.num_epochs):
                                   distance=args.anti_transfer_distance) #distance function
             else:
                 AT_term = 0.
-            loss = loss_function(recon, sounds, truth, pred, emo_weight, vad_weight, alpha=loss_alpha, at_term=AT_term)
+            loss = loss_function(recon, sounds, truth, pred, emo_weight, vad_weight, alpha=args.loss_alpha, at_term=AT_term)
             loss['total'].backward()
             optimizer.step()
 
@@ -326,7 +326,7 @@ for epoch in range(args.num_epochs):
             #del loss
 
     #validation data
-    val_batch_losses = evaluate(model, device, loss_function, val_data, emo_weight, vad_weight, alpha=loss_alpha, at_term=AT_term)
+    val_batch_losses = evaluate(model, device, loss_function, val_data, emo_weight, vad_weight, alpha=args.loss_alpha, at_term=AT_term)
 
     train_epoch_loss = mean_batch_loss(train_batch_losses)
     val_epoch_loss = mean_batch_loss(val_batch_losses)
