@@ -74,6 +74,7 @@ parser.add_argument('--model_verbose', type=str, default='False')
 
 parser.add_argument('--use_r2he', type=str, default='True')
 parser.add_argument('--r2he_model_path', type=str, default=None)
+parser.add_argument('--r2he_quat', type=str, default=True)
 parser.add_argument('--r2he_model_path_secondary', type=str, default=None)
 parser.add_argument('--r2he_model_name', type=str, default='simple_autoencoder_2_vad')
 parser.add_argument('--r2he_features_type', type=str, default='reconstruction',
@@ -107,6 +108,7 @@ args.model_classifier_structure = eval(args.model_classifier_structure)
 args.model_embeddings_dim = eval(args.model_embeddings_dim)
 args.shuffle_data = eval(args.shuffle_data)
 args.use_r2he = eval(args.use_r2he)
+args.r2he_quat = eval(args.r2he_quat)
 
 
 if args.use_cuda:
@@ -178,7 +180,8 @@ if args.use_r2he:
     if args.r2he_model_name == 'simple_autoencoder_2_vad':
         r2he = simple_autoencoder_2_vad(quat=args.model_quat,
                                           classifier_quat=args.model_classifier_quat,
-                                          hidden_size=args.model_hidden_size)
+                                          hidden_size=args.model_hidden_size,
+                                          quat=args.r2he_quat)
         pretrained_dict_r2he = torch.load(args.r2he_model_path)
         print ('loading r2he: ', args.r2he_model_path)
         r2he.load_state_dict(pretrained_dict_r2he, strict=False)
