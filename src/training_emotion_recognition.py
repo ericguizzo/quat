@@ -178,8 +178,7 @@ if args.use_r2he:
         r2he = r2he.to(device)
 
     if args.r2he_model_name == 'simple_autoencoder_2_vad':
-        r2he = simple_autoencoder_2_vad(quat=args.model_quat,
-                                          classifier_quat=args.model_classifier_quat,
+        r2he = simple_autoencoder_2_vad( classifier_quat=args.model_classifier_quat,
                                           hidden_size=args.model_hidden_size,
                                           quat=args.r2he_quat)
         pretrained_dict_r2he = torch.load(args.r2he_model_path)
