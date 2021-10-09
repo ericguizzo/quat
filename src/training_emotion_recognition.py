@@ -74,7 +74,7 @@ parser.add_argument('--model_verbose', type=str, default='False')
 
 parser.add_argument('--use_r2he', type=str, default='True')
 parser.add_argument('--r2he_model_path', type=str, default=None)
-parser.add_argument('--r2he_quat', type=str, default=True)
+parser.add_argument('--r2he_quat', type=str, default='True')
 parser.add_argument('--r2he_model_path_secondary', type=str, default=None)
 parser.add_argument('--r2he_model_name', type=str, default='simple_autoencoder_2_vad')
 parser.add_argument('--r2he_features_type', type=str, default='reconstruction',
