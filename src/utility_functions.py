@@ -324,6 +324,13 @@ def load_datasets(args):
                                                                 target_merged, test_list)
 
 
+    if args.reduce_training_set is not None:
+        print ('Reduced training set: ', args.reduce_training_set)
+        num_tr_data = training_predictors.shape[0]
+        reduced_len = int(num_tr_data * reduce_training_set)
+        training_predictors = training_predictors[:reduced_len]
+        training_target = training_target[:reduced_len]
+
     if args.fast_test:
         print ('FAST TEST: using unly 100 datapoints ')
         #take only 100 datapoints, just for quick testing
