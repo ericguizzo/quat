@@ -327,7 +327,7 @@ def load_datasets(args):
     if args.reduce_training_set is not None:
         print ('Reduced training set: ', args.reduce_training_set)
         num_tr_data = training_predictors.shape[0]
-        reduced_len = int(num_tr_data * reduce_training_set)
+        reduced_len = int(num_tr_data * args.reduce_training_set)
         training_predictors = training_predictors[:reduced_len]
         training_target = training_target[:reduced_len]
 
