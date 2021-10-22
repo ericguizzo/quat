@@ -113,6 +113,7 @@ args.r2he_quat = eval(args.r2he_quat)
 
 
 if args.fixed_seed is not None:
+    print("SEED: ", args.fixed_seed)
     manualSeed = args.fixed_seed
     random.seed(manualSeed)
     torch.manual_seed(manualSeed)
@@ -123,6 +124,8 @@ if args.fixed_seed is not None:
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
+else:
+    print ("SEED: random")
 
 if args.use_cuda:
     device = 'cuda:' + str(args.gpu_id)
