@@ -20,7 +20,7 @@ cfg = configparser.ConfigParser()
 cfg.read('preprocessing_config.ini')
 
 FIXED_SEED = cfg.get('sampling', 'fixed_seed')
-SR = cfg.geti('sampling', 'sr_target')
+SR = cfg.getint('sampling', 'sr_target')
 
 
 FIXED_SEED = eval(FIXED_SEED)
