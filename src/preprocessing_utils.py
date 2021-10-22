@@ -175,6 +175,7 @@ def preprocess_datapoint(input_vector, max_file_length):
         else:
             pad[:len(input_vector)] = input_vector  #zero padding
         input_vector = pad
+    print ("COGLIONEEEEEEEEEEE, ", input_vector.shape)
     feats = extract_features(input_vector, FEATURES_TYPE)  #extract features
 
     return feats
