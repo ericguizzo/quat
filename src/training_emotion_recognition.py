@@ -98,6 +98,7 @@ args = parser.parse_args()
 #output filenames
 
 args.fast_test = eval(args.fast_test)
+args.fixed_seed = eval(args.fixed_seed)
 args.use_cuda = eval(args.use_cuda)
 args.early_stopping = eval(args.early_stopping)
 args.model_verbose = eval(args.model_verbose)
