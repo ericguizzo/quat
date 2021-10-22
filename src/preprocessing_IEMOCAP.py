@@ -26,7 +26,6 @@ if FIXED_SEED is not None:
     # Set seed
     manualSeed = FIXED_SEED
     random.seed(manualSeed)
-    torch.manual_seed(manualSeed)
     seed=manualSeed
     np.random.seed(seed)
 
