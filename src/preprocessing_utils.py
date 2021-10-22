@@ -58,7 +58,7 @@ if AUGMENTATION:
     import augmentation
 
 def spectrum_fast(x):
-    f, t, seg_stft = stft(x,window='hamming',nperseg=256,noverlap=512)
+    f, t, seg_stft = stft(x,window='hamming',nperseg=256,noverlap=128)
 
     return np.rot90(np.abs(seg_stft))
 

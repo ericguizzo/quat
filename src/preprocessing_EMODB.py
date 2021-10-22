@@ -113,6 +113,9 @@ def main():
         #and not only the sound name as os.listdir outputs
         #preprocess all sounds of the current actor
         #args:1. listof soundpaths of current actor, 2. max file length, 3. function to extract label from filepath
+        print (curr_list)
+
+        print ("colgione!!!!!!!!!!!!!!!!!!!!!!!!!")
         curr_predictors, curr_target = pre.preprocess_foldable_item(curr_list, max_file_length, get_label_EMODB)
         uf.print_bar(index, num_files)
         #append preprocessed predictors and target to the dict
