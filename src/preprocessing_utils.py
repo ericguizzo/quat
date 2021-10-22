@@ -46,13 +46,13 @@ N_MFCC = cfg.getint('feature_extraction', 'n_mfcc')
 #melspectrogram
 HOP_SIZE_MEL = cfg.getint('feature_extraction', 'hop_size_mel')
 FFT_SIZE_MEL = cfg.getint('feature_extraction', 'fft_size_mel')
-
+'''
 if FIXED_SEED is not None:
     # Set seed
     manualSeed = FIXED_SEED
     seed=manualSeed
     np.random.seed(seed)
-
+'''
 
 if AUGMENTATION:
     import augmentation
