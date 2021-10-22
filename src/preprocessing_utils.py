@@ -46,17 +46,17 @@ N_MFCC = cfg.getint('feature_extraction', 'n_mfcc')
 #melspectrogram
 HOP_SIZE_MEL = cfg.getint('feature_extraction', 'hop_size_mel')
 FFT_SIZE_MEL = cfg.getint('feature_extraction', 'fft_size_mel')
-'''
+
 if FIXED_SEED is not None:
     # Set seed
     manualSeed = FIXED_SEED
     seed=manualSeed
     np.random.seed(seed)
-'''
+
 
 if AUGMENTATION:
     import augmentation
-
+'''
 def spectrum_fast(x):
     f, t, seg_stft = stft(x,
                         window='hamming',
@@ -64,7 +64,7 @@ def spectrum_fast(x):
                         noverlap=128)
 
     return np.rot90(np.abs(seg_stft))
-
+'''
 
 def spectrum(x, M=WINDOW_SIZE, N=FFT_SIZE, H=HOP_SIZE_STFT, fs=SR, window_type=WINDOW_TYPE, compression=COMPRESSION):
     '''
