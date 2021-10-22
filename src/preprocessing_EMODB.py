@@ -10,7 +10,7 @@ cfg = configparser.ConfigParser()
 cfg.read('preprocessing_config.ini')
 
 #get values from config file
-FEATURES_TYPE = cfg.getint('feature_extraction', 'features_type')
+FEATURES_TYPE = cfg.get('feature_extraction', 'features_type')
 SR = cfg.getint('sampling', 'sr_target')
 AUGMENTATION = eval(cfg.get('feature_extraction', 'augmentation'))
 NUM_AUG_SAMPLES = eval(cfg.get('feature_extraction', 'num_aug_samples'))
