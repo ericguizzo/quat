@@ -175,7 +175,7 @@ def preprocess_datapoint(input_vector, max_file_length):
         else:
             pad[:len(input_vector)] = input_vector  #zero padding
         input_vector = pad
-    print ("COGLIONEEEEEEEEEEE, ", input_vector.shape)
+    #print ("COGLIONEEEEEEEEEEE, ", input_vector.shape)
     feats = extract_features(input_vector, FEATURES_TYPE)  #extract features
 
     return feats
@@ -289,9 +289,9 @@ def preprocess_foldable_item(sounds_list, max_file_length, get_label_function, p
                 print ('silent sample')
 
         except Exception as e:
-            #print ('\r corrupted file found: not added to dataset')
+            print ('\r corrupted file found: not added to dataset')
             #print (e)
-            raise ValueError(e)
+            #raise ValueError(e)
             #pass
 
 
