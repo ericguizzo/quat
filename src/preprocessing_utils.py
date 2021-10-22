@@ -18,7 +18,7 @@ cfg.read('preprocessing_config.ini')
 #get values from config file
 #global
 SR = cfg.getint('sampling', 'sr_target')
-FIXED_SEED = cfg.getint('sampling', 'fixed_seed')
+FIXED_SEED = cfg.get('sampling', 'fixed_seed')
 COMPRESSION = eval(cfg.get('feature_extraction', 'power_law_compression'))
 SEGMENTATION = eval(cfg.get('feature_extraction', 'segmentation'))
 AUGMENTATION = eval(cfg.get('feature_extraction', 'augmentation'))
@@ -46,6 +46,8 @@ N_MFCC = cfg.getint('feature_extraction', 'n_mfcc')
 #melspectrogram
 HOP_SIZE_MEL = cfg.getint('feature_extraction', 'hop_size_mel')
 FFT_SIZE_MEL = cfg.getint('feature_extraction', 'fft_size_mel')
+
+FIXED_SEED = eval(FIXED_SEED)
 
 if FIXED_SEED is not None:
     # Set seed
