@@ -15,10 +15,25 @@ import torch
 import torch.utils.data as utils
 
 
+
 cfg = configparser.ConfigParser()
 cfg.read('preprocessing_config.ini')
 
+FIXED_SEED = cfg.getint('sampling', 'fixed_seed')
 SR = cfg.getint('sampling', 'sr_target')
+
+if FIXED_SEED is not None:
+    # Set seed
+    manualSeed = FIXED_SEED
+    random.seed(manualSeed)
+    torch.manual_seed(manualSeed)
+    seed=manualSeed
+    np.random.seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
 
 tol = 1e-14    # threshold used to compute phase
 

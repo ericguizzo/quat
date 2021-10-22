@@ -17,7 +17,15 @@ NUM_AUG_SAMPLES = eval(cfg.get('feature_extraction', 'num_aug_samples'))
 SEGMENTATION = False
 INPUT_TESS_FOLDER = cfg.get('preprocessing', 'input_tess_folder')
 OUTPUT_FOLDER = cfg.get('preprocessing', 'output_folder')
+FIXED_SEED = cfg.getint('sampling', 'fixed_seed')
 
+if FIXED_SEED is not None:
+    # Set seed
+    manualSeed = FIXED_SEED
+    random.seed(manualSeed)
+    torch.manual_seed(manualSeed)
+    seed=manualSeed
+    np.random.seed(seed)
 
 assoc_labels = {'happy': 0,
                 'sad': 1,

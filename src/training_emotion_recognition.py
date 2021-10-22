@@ -3,6 +3,7 @@ import time
 import argparse
 import numpy as np
 import torch
+import random
 import torch.nn as nn
 from torch import optim
 from torchvision import models
@@ -44,7 +45,7 @@ parser.add_argument('--patience', type=int, default=100)
 parser.add_argument('--load_pretrained', type=str, default=None)
 parser.add_argument('--num_folds', type=int, default=1)
 parser.add_argument('--num_fold', type=int, default=0)
-parser.add_argument('--fixed_seed', type=str, default='True')
+parser.add_argument('--fixed_seed', type=str, default=1)
 parser.add_argument('--spreadsheet_profile', type=str, default=None)
 parser.add_argument('--reduce_training_set', type=float, default=None)
 
@@ -99,7 +100,6 @@ args = parser.parse_args()
 args.fast_test = eval(args.fast_test)
 args.use_cuda = eval(args.use_cuda)
 args.early_stopping = eval(args.early_stopping)
-args.fixed_seed = eval(args.fixed_seed)
 args.model_verbose = eval(args.model_verbose)
 args.model_quat = eval(args.model_quat)
 args.model_classifier_quat = eval(args.model_classifier_quat)
@@ -111,6 +111,18 @@ args.shuffle_data = eval(args.shuffle_data)
 args.use_r2he = eval(args.use_r2he)
 args.r2he_quat = eval(args.r2he_quat)
 
+
+if args.fixed_seed is not None
+    manualSeed = args.fixed_seed
+    random.seed(manualSeed)
+    torch.manual_seed(manualSeed)
+    seed=manualSeed
+    np.random.seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
 
 if args.use_cuda:
     device = 'cuda:' + str(args.gpu_id)

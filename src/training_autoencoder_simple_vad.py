@@ -48,7 +48,7 @@ parser.add_argument('--patience', type=int, default=100)
 parser.add_argument('--load_pretrained', type=str, default=None)
 parser.add_argument('--num_folds', type=int, default=1)
 parser.add_argument('--num_fold', type=int, default=0)
-parser.add_argument('--fixed_seed', type=str, default='True')
+parser.add_argument('--fixed_seed', type=str, default=1)
 
 
 #loss parameters
@@ -105,6 +105,17 @@ args.shuffle_data = eval(args.shuffle_data)
 
 print ('Quat: ', args.model_quat, 'Class_quat: ', args.model_classifier_quat)
 
+if args.fixed_seed is not None
+    manualSeed = args.fixed_seed
+    random.seed(manualSeed)
+    torch.manual_seed(manualSeed)
+    seed=manualSeed
+    np.random.seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
 
 if args.use_cuda:
     device = 'cuda:' + str(args.gpu_id)

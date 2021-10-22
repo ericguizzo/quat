@@ -18,6 +18,7 @@ cfg.read('preprocessing_config.ini')
 #get values from config file
 #global
 SR = cfg.getint('sampling', 'sr_target')
+FIXED_SEED = cfg.getint('sampling', 'fixed_seed')
 COMPRESSION = eval(cfg.get('feature_extraction', 'power_law_compression'))
 SEGMENTATION = eval(cfg.get('feature_extraction', 'segmentation'))
 AUGMENTATION = eval(cfg.get('feature_extraction', 'augmentation'))
@@ -45,6 +46,15 @@ N_MFCC = cfg.getint('feature_extraction', 'n_mfcc')
 #melspectrogram
 HOP_SIZE_MEL = cfg.getint('feature_extraction', 'hop_size_mel')
 FFT_SIZE_MEL = cfg.getint('feature_extraction', 'fft_size_mel')
+
+if FIXED_SEED is not None:
+    # Set seed
+    manualSeed = FIXED_SEED
+    random.seed(manualSeed)
+    torch.manual_seed(manualSeed)
+    seed=manualSeed
+    np.random.seed(seed)
+
 
 if AUGMENTATION:
     import augmentation
