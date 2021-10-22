@@ -56,15 +56,12 @@ if FIXED_SEED is not None:
 
 if AUGMENTATION:
     import augmentation
-'''
+
 def spectrum_fast(x):
-    f, t, seg_stft = stft(x,
-                        window='hamming',
-                        nperseg=256,
-                        noverlap=128)
+    f, t, seg_stft = stft(x,window='hamming',nperseg=256,noverlap=128)
 
     return np.rot90(np.abs(seg_stft))
-'''
+
 
 def spectrum(x, M=WINDOW_SIZE, N=FFT_SIZE, H=HOP_SIZE_STFT, fs=SR, window_type=WINDOW_TYPE, compression=COMPRESSION):
     '''
