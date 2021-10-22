@@ -222,9 +222,9 @@ if __name__ == '__main__':
     parser.add_argument('--experiments_folder', type=str, default='experiments_quat')
     parser.add_argument('--output_folder', type=str, default='../new_experiments')
     parser.add_argument('--ids', type=str, default='[413]')
-    parser.add_argument('--first', type=int, default=6)
-    parser.add_argument('--last', type=int, default=8)
-    parser.add_argument('--gpu_id', type=int, default=0)
+    parser.add_argument('--first', type=int, default=9)
+    parser.add_argument('--last', type=int, default=11)
+    parser.add_argument('--gpu_id', type=int, default=1)
     args = parser.parse_args()
 
 
