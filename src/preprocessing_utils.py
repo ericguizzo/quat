@@ -50,8 +50,6 @@ FFT_SIZE_MEL = cfg.getint('feature_extraction', 'fft_size_mel')
 if FIXED_SEED is not None:
     # Set seed
     manualSeed = FIXED_SEED
-    random.seed(manualSeed)
-    torch.manual_seed(manualSeed)
     seed=manualSeed
     np.random.seed(seed)
 
