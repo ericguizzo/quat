@@ -112,7 +112,7 @@ args.use_r2he = eval(args.use_r2he)
 args.r2he_quat = eval(args.r2he_quat)
 
 
-if args.fixed_seed is not None
+if args.fixed_seed is not None:
     manualSeed = args.fixed_seed
     random.seed(manualSeed)
     torch.manual_seed(manualSeed)
