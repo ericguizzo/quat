@@ -311,8 +311,8 @@ for epoch in range(args.num_epochs):
                                        'acc': loss['acc']})
             pbar.update(1)
             #del loss
-    m_b = torch.mean(m)
-    m_s = torch.mean(s)
+    m_b = torch.mean(torch.tensor(m))
+    m_s = torch.mean(torch.tensor(s))
     print ("M: ", m_b, "S: ", m_s)
     #validation data
     val_batch_losses = evaluate(model, device, loss_function, val_data, emo_weight)
