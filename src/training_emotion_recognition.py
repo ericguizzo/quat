@@ -81,6 +81,8 @@ parser.add_argument('--r2he_model_path_secondary', type=str, default=None)
 parser.add_argument('--r2he_model_name', type=str, default='simple_autoencoder_2_vad')
 parser.add_argument('--r2he_features_type', type=str, default='reconstruction',
                     help='reconstruction or embeddings')
+parser.add_argument('--embeddings_proc', type=str, default=None)
+
 
 
 #grid search parameters
@@ -135,8 +137,10 @@ else:
 #load data loaders
 tr_data, val_data, test_data = uf.load_datasets(args)
 
-#load model
 
+m = 1.6712)
+s = 2.9635
+#load model
 print ('\nMoving model to device')
 if args.model_name == 'VGGNet':
     model = VGGNet(architecture=args.model_architecture,
@@ -231,6 +235,9 @@ def evaluate(model, device, loss_function, dataloader, emo_weight):
                 else:
                     raise ValueError('wrong r2he features type selected')
 
+            if args.embeddings_proc == '0mean1std':
+                sounds = (sounds - m ) / s
+
             pred = model(sounds)
 
             loss = loss_function(pred, truth)
@@ -292,6 +299,8 @@ for epoch in range(args.num_epochs):
                     else:
                         raise ValueError('wrong r2he features type selected')
             #print (sounds.shape)
+            if args.embeddings_proc == '0mean1std':
+                sounds = (sounds - m ) / s
 
             M = torch.mean(sounds)
             S = torch.std(sounds)
