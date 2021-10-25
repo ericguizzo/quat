@@ -138,8 +138,8 @@ else:
 tr_data, val_data, test_data = uf.load_datasets(args)
 
 
-m = 1.6712
-s = 2.9635
+mean = 1.6712
+std = 2.9635
 #load model
 print ('\nMoving model to device')
 if args.model_name == 'VGGNet':
@@ -236,7 +236,7 @@ def evaluate(model, device, loss_function, dataloader, emo_weight):
                     raise ValueError('wrong r2he features type selected')
 
             if args.embeddings_proc == '0mean1std':
-                sounds = (sounds - m ) / s
+                sounds = (sounds - mean ) / std
 
             pred = model(sounds)
 
@@ -300,7 +300,7 @@ for epoch in range(args.num_epochs):
                         raise ValueError('wrong r2he features type selected')
             #print (sounds.shape)
             if args.embeddings_proc == '0mean1std':
-                sounds = (sounds - m ) / s
+                sounds = (sounds - mean ) / std
 
             M = torch.mean(sounds)
             S = torch.std(sounds)
