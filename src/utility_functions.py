@@ -344,10 +344,12 @@ def load_datasets(args):
 
     if args.reduce_training_set is not None:
         print ('Reduced training set: ', args.reduce_training_set)
-        num_tr_data = training_predictors.shape[0]
-        reduced_len = int(num_tr_data * args.reduce_training_set)
-        training_predictors = training_predictors[:reduced_len]
-        training_target = training_target[:reduced_len]
+        #num_tr_data = training_predictors.shape[0]
+        #reduced_len = int(num_tr_data * args.reduce_training_set)
+        training_predictors = training_predictors[:args.reduce_training_set]
+        training_target = training_target[:args.reduce_training_set]
+        validation_predictors = training_predictors[:args.reduce_training_set]
+        validation_target = training_target[:args.reduce_training_set]
 
     if args.fast_test:
         print ('FAST TEST: using unly 100 datapoints ')
