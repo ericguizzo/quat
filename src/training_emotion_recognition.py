@@ -252,6 +252,8 @@ def mean_batch_loss(batch_loss):
         d[i] = np.mean(d[i])
     return d
 
+m = []
+s = []
 #training loop
 for epoch in range(args.num_epochs):
     epoch_start = time.perf_counter()
@@ -290,6 +292,11 @@ for epoch in range(args.num_epochs):
                     else:
                         raise ValueError('wrong r2he features type selected')
             #print (sounds.shape)
+
+            M = torch.mean(sounds)
+            S = torch.std(sounds)
+            m.append(M)
+            s.append(S)
             pred = model(sounds)
 
             #recon = torch.unsqueeze(torch.sum(recon, axis=1), dim=1) / 4.
@@ -304,7 +311,9 @@ for epoch in range(args.num_epochs):
                                        'acc': loss['acc']})
             pbar.update(1)
             #del loss
-
+    m_b = torch.mean(m)
+    m_s = torch.mean(s)
+    print ("M: ", m_b, "S: ", m_s)
     #validation data
     val_batch_losses = evaluate(model, device, loss_function, val_data, emo_weight)
 
