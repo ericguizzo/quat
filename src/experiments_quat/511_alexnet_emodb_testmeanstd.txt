@@ -27,7 +27,6 @@
         "r2he_features_type":"embeddings",
         "model_flatten_dim":2048,
         "learning_rate": 0.000001,
-        "embeddings_proc":"0mean1std",
         "r2he_model_path": "'../new_experiments/experiment_323_DACCAPO_betagrid_RIPARTO.txt/models/model_xval_iemocap_exp323_DACCAPO_betagrid_RIPARTO.txt_run2_fold0'"
         },
       "2":{"comment_1": "OUR", "comment_2": "quat_r2he",
