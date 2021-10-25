@@ -138,7 +138,7 @@ else:
 tr_data, val_data, test_data = uf.load_datasets(args)
 
 
-m = 1.6712)
+m = 1.6712
 s = 2.9635
 #load model
 print ('\nMoving model to device')
