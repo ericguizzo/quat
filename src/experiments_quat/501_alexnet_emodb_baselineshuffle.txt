@@ -21,48 +21,41 @@
         "spreadsheet_profile": "profile_emotion_recognition"
       },
 
-
       "1":{"comment_1": "BASELINE", "comment_2": "NO_pre",
             "use_r2he":"False",
             "model_quat":"False",
             "learning_rate": 0.00001,
-            "predictors_normailzation":"0mean",
-            "shuffle_data":"True"
+            "predictors_normailzation":"0mean"
           },
       "2":{"comment_1": "BASELINE", "comment_2": "NO_pre",
             "use_r2he":"False",
             "model_quat":"False",
             "learning_rate": 0.00001,
-            "predictors_normailzation":"0mean",
-            "shuffle_data":"True"
+            "predictors_normailzation":"0mean"
           },
       "3":{"comment_1": "BASELINE", "comment_2": "NO_pre",
             "use_r2he":"False",
             "model_quat":"False",
             "learning_rate": 0.00001,
-            "predictors_normailzation":"0mean",
-            "shuffle_data":"True"
+            "predictors_normailzation":"0mean"
           },
       "4":{"comment_1": "BASELINE", "comment_2": "NO_pre",
             "use_r2he":"False",
             "model_quat":"False",
             "learning_rate": 0.00001,
-            "predictors_normailzation":"0mean",
-            "shuffle_data":"True"
+            "predictors_normailzation":"0mean"
           },
       "5":{"comment_1": "BASELINE", "comment_2": "NO_pre",
             "use_r2he":"False",
             "model_quat":"False",
             "learning_rate": 0.00001,
-            "predictors_normailzation":"0mean",
-            "shuffle_data":"True"
+            "predictors_normailzation":"0mean"
           },
       "6":{"comment_1": "BASELINE", "comment_2": "pre",
             "use_r2he":"False",
             "model_quat":"False",
             "learning_rate": 0.00001,
             "predictors_normailzation":"0mean",
-            "shuffle_data":"True",
             "load_pretrained":"../new_experiments/experiment_31_alexnet_iemocap.txt/models/model_xval_iemocap_exp31_alexnet_iemocap.txt_run4_fold0"
             },
       "7":{"comment_1": "BASELINE", "comment_2": "pre",
@@ -70,7 +63,6 @@
             "model_quat":"False",
             "learning_rate": 0.00001,
             "predictors_normailzation":"0mean",
-            "shuffle_data":"True",
             "load_pretrained":"../new_experiments/experiment_31_alexnet_iemocap.txt/models/model_xval_iemocap_exp31_alexnet_iemocap.txt_run4_fold0"
             },
       "8":{"comment_1": "BASELINE", "comment_2": "pre",
@@ -78,7 +70,6 @@
             "model_quat":"False",
             "learning_rate": 0.00001,
             "predictors_normailzation":"0mean",
-            "shuffle_data":"True",
             "load_pretrained":"../new_experiments/experiment_31_alexnet_iemocap.txt/models/model_xval_iemocap_exp31_alexnet_iemocap.txt_run4_fold0"
             },
       "9":{"comment_1": "BASELINE", "comment_2": "pre",
@@ -86,7 +77,6 @@
             "model_quat":"False",
             "learning_rate": 0.00001,
             "predictors_normailzation":"0mean",
-            "shuffle_data":"True",
             "load_pretrained":"../new_experiments/experiment_31_alexnet_iemocap.txt/models/model_xval_iemocap_exp31_alexnet_iemocap.txt_run4_fold0"
             },
       "10":{"comment_1": "BASELINE", "comment_2": "pre",
@@ -94,7 +84,6 @@
             "model_quat":"False",
             "learning_rate": 0.00001,
             "predictors_normailzation":"0mean",
-            "shuffle_data":"True",
             "load_pretrained":"../new_experiments/experiment_31_alexnet_iemocap.txt/models/model_xval_iemocap_exp31_alexnet_iemocap.txt_run4_fold0"
             }
 
