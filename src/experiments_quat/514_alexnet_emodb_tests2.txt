@@ -19,7 +19,8 @@
         "spreadsheet_profile": "profile_emotion_recognition",
         "fixed_seed": 180789,
         "val_perc":0.15,
-        "test_perc":0.15
+        "test_perc":0.15,
+        "patience":10
       },
 
 
