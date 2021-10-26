@@ -117,9 +117,8 @@ args.r2he_quat = eval(args.r2he_quat)
 if args.fixed_seed is not None:
     print("SEED: ", args.fixed_seed)
     manualSeed = args.fixed_seed
-    random.seed(manualSeed)
+    random.seed(manualSeed).astype(int64)
     torch.manual_seed(manualSeed)
-    seed=manualSeed
     np.random.seed(manualSeed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
