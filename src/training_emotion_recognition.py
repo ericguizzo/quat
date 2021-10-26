@@ -45,7 +45,7 @@ parser.add_argument('--patience', type=int, default=100)
 parser.add_argument('--load_pretrained', type=str, default=None)
 parser.add_argument('--num_folds', type=int, default=1)
 parser.add_argument('--num_fold', type=int, default=0)
-parser.add_argument('--fixed_seed', type=str, default=None)
+parser.add_argument('--fixed_seed', type=int, default=None)
 parser.add_argument('--spreadsheet_profile', type=str, default=None)
 parser.add_argument('--reduce_training_set', type=float, default=None)
 
@@ -117,7 +117,7 @@ args.r2he_quat = eval(args.r2he_quat)
 if args.fixed_seed is not None:
     print("SEED: ", args.fixed_seed)
     manualSeed = args.fixed_seed
-    random.seed(manualSeed).astype(int64)
+    random.seed(manualSeed)
     torch.manual_seed(manualSeed)
     np.random.seed(manualSeed)
     torch.backends.cudnn.deterministic = True
