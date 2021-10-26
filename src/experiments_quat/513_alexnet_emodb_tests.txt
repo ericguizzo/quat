@@ -107,7 +107,7 @@
         "model_quat":"True",
         "r2he_features_type":"embeddings",
         "model_flatten_dim":2048,
-        "learning_rate": 0.0001,
+        "learning_rate": 0.0005,
         "regularization_lambda":0.0001,
         "model_name": "AlexNet",
         "patience": 10,
