@@ -111,7 +111,8 @@
         "regularization_lambda":0.00001,
         "model_name": "AlexNet",
         "patience": 10,
-        "load_pretrained":"'../new_experiments/experiment_510_quat_iemocap.txt/models/model_xval_iemocap_exp510_quat_iemocap.txt_run1_fold0'",
+        "val_perc":0.15,
+        "test_perc":0.15,
         "r2he_model_path": "'../new_experiments/experiment_323_DACCAPO_betagrid_RIPARTO.txt/models/model_xval_iemocap_exp323_DACCAPO_betagrid_RIPARTO.txt_run2_fold0'"
         }
 
