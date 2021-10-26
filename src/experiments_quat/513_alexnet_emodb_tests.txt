@@ -124,6 +124,6 @@
             "val_perc":0.15,
             "test_perc":0.15,
             "predictors_normailzation":"0mean"
-          },
+          }
 
 }
