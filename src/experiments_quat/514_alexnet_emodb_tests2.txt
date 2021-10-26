@@ -19,7 +19,8 @@
         "spreadsheet_profile": "profile_emotion_recognition",
         "val_perc":0.15,
         "test_perc":0.15,
-        "patience":10
+        "patience":10,
+        "save_model_metric":"acc"
       },
 
 
