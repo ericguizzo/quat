@@ -17,7 +17,7 @@
         "early_stopping": "True",
         "time_dim":512,
         "spreadsheet_profile": "profile_emotion_recognition",
-        "fixed_seed": 180789,
+        "fixed_seed": "None",
         "val_perc":0.15,
         "test_perc":0.15,
         "patience":10
