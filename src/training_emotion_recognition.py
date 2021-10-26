@@ -120,12 +120,12 @@ if args.fixed_seed is not None:
     random.seed(manualSeed)
     torch.manual_seed(manualSeed)
     seed=manualSeed
-    np.random.seed(seed)
+    np.random.seed(manualSeed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
-    torch.manual_seed(seed)
+    torch.manual_seed(manualSeed)
     if torch.cuda.is_available():
-        torch.cuda.manual_seed_all(seed)
+        torch.cuda.manual_seed_all(manualSeed)
 else:
     print ("SEED: random")
 
