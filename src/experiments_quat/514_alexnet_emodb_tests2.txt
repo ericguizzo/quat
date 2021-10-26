@@ -60,7 +60,6 @@
             "regularization_lambda":0.00001,
             "predictors_normailzation":"0mean",
             "load_pretrained":"../new_experiments/experiment_31_alexnet_iemocap.txt/models/model_xval_iemocap_exp31_alexnet_iemocap.txt_run4_fold0"
-
-          },
+          }
 
 }
