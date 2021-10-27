@@ -8,7 +8,7 @@
         "target_path": "'../dataset/matrices/emodb_randsplit_spectrum_fast_target.npy'",
         "model_num_classes": 7,
         "num_experiment": 24,
-        "num_folds": 4,
+        "num_folds": 1,
         "num_epochs": 1000,
         "batch_size": 20,
         "fast_test": "False",
@@ -26,7 +26,6 @@
         "learning_rate": 0.000001
 
       },
-
 
       "1":{"comment_1": "OUR", "comment_2": "quat_r2he4",
         "use_r2he":"True",
