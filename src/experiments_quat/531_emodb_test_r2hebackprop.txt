@@ -19,8 +19,8 @@
         "spreadsheet_profile": "profile_emotion_recognition",
         "val_perc":0.15,
         "test_perc":0.15,
-        "patience":10,
-        "save_model_metric":"acc",
+        "patience":15,
+        "save_model_metric":"loss",
         "fixed_seed": 180789,
         "regularization_lambda":0.0000001,
         "learning_rate": 0.000001
