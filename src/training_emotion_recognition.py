@@ -219,8 +219,8 @@ if args.backprop_r2he == True:
         if c >= args.backprop_r2he_layers:
             break
         c += 1
-
     params_opt = list(model.parameters()) +  r2Hemo_params
+    
 else:
     params_opt = list(model.parameters())
 
