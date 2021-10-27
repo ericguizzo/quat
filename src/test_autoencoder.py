@@ -5,6 +5,7 @@ from models import *
 from torchsummary import summary
 from torchvision import models
 from torchsummary import summary
+from torch import optim
 
 x = torch.rand(1, 1, 512, 128)
 '''
@@ -18,10 +19,33 @@ model = resnet50(num_classes=7, quat=True)
 summary(model, (4,64,64))
 '''
 
-model = simple_autoencoder_2_vad_mod(quat=True)
+model_emo = AlexNet()
+model = simple_autoencoder_2_vad(quat=True)
 
-y, _ , _, _, _= model(x)
-print (y.shape)
+num_optim_layers = 10
+
+#A
+c = 1
+for p in model.parameters():
+    if c <= 10:
+        p.requires_grad = True
+    else:
+        p.requires_grad = False
+    c += 1
+
+optimizer = optim.Adam(list(model_emo.parameters()) +  list(model.parameters()))
+
+#B
+c = 1
+r2Hemo_params = []
+for p in model.parameters():
+    p.requires_grad = True
+    r2Hemo_params.append(p)
+    c += 1
+optimizer = optim.Adam(list(model_emo.parameters()) +  r2Hemo_params)
+
+
+
 '''
 print ('input_dim', x.shape)
 x, pred = model(x)

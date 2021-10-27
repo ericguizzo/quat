@@ -48,6 +48,9 @@ parser.add_argument('--num_fold', type=int, default=0)
 parser.add_argument('--fixed_seed', type=int, default=None)
 parser.add_argument('--spreadsheet_profile', type=str, default=None)
 parser.add_argument('--reduce_training_set', type=float, default=None)
+parser.add_argument('--backprop_r2he', type=str, default="False")
+parser.add_argument('--backprop_r2he_layers', type=int, default=10)
+
 
 #loss parameters
 parser.add_argument('--loss_function', type=str, default='emotion_recognition_loss')
@@ -112,7 +115,7 @@ args.model_embeddings_dim = eval(args.model_embeddings_dim)
 args.shuffle_data = eval(args.shuffle_data)
 args.use_r2he = eval(args.use_r2he)
 args.r2he_quat = eval(args.r2he_quat)
-
+args.backprop_r2he = eval(args.backprop_r2he)
 
 if args.fixed_seed is not None:
     print("SEED: ", args.fixed_seed)
@@ -205,7 +208,23 @@ if args.use_r2he:
         r2he.load_state_dict(pretrained_dict_r2he, strict=False)
         r2he = r2he.to(device)
 #define optimizer and loss
-optimizer = optim.Adam(model.parameters(), lr=args.learning_rate,
+
+if args.backprop_r2he == True:
+    print ('Backpropagating R2HEMO!')
+    c = 1
+    r2Hemo_params = []
+    for p in model.parameters():
+        p.requires_grad = True
+        r2Hemo_params.append(p)
+        if c >= args.backprop_r2he_layers:
+            break
+        c += 1
+
+    params_opt = list(model.parameters()) +  r2Hemo_params
+else:
+    params_opt = list(model.parameters())
+
+optimizer = optim.Adam(params_opt, lr=args.learning_rate,
                               weight_decay=args.regularization_lambda)
 
 #loss_function = nn.BCELoss()
