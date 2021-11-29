@@ -200,12 +200,13 @@ if args.use_r2he:
         r2he = r2he.to(device)
 
     if args.r2he_model_name == 'simple_autoencoder_2_vad':
-        r2he = simple_autoencoder_2_vad( classifier_quat=args.model_classifier_quat,
+        r2he = simple_autoencoder_2_vad(classifier_quat=args.model_classifier_quat,
                                           hidden_size=args.model_hidden_size,
                                           quat=args.r2he_quat)
-        pretrained_dict_r2he = torch.load(args.r2he_model_path)
-        print ('loading r2he: ', args.r2he_model_path)
-        r2he.load_state_dict(pretrained_dict_r2he, strict=False)
+        if r2he_model_path is not None:
+            pretrained_dict_r2he = torch.load(args.r2he_model_path)
+            print ('loading r2he: ', args.r2he_model_path)
+            r2he.load_state_dict(pretrained_dict_r2he, strict=False)
         r2he = r2he.to(device)
 #define optimizer and loss
 
@@ -220,7 +221,7 @@ if args.backprop_r2he == True:
             break
         c += 1
     params_opt = list(model.parameters()) +  r2Hemo_params
-    
+
 else:
     params_opt = list(model.parameters())
 
