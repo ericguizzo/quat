@@ -19,9 +19,11 @@ model = resnet50(num_classes=7, quat=True)
 summary(model, (4,64,64))
 '''
 
-model_emo = AlexNet()
 model = simple_autoencoder_2_vad(quat=True)
+model_params = sum([np.prod(p.size()) for p in model.parameters()])
+print ('Total paramters: ' + str(model_params))
 
+'''
 num_optim_layers = 10
 
 #A
@@ -46,18 +48,18 @@ optimizer = optim.Adam(list(model_emo.parameters()) +  r2Hemo_params)
 
 
 
-'''
+
 print ('input_dim', x.shape)
 x, pred = model(x)
 print ('output_dim', x.shape)
 y = model(x)
 print ('enc dim', y.shape)
-'''
+
 #compute number of parameters
 #model_params = sum([np.prod(p.size()) for p in model.parameters()])
 #print ('Total paramters: ' + str(model_params))
 
-'''
+
 model = r2he(verbose=True,
              latent_dim=100,
              quat=True,
@@ -68,4 +70,5 @@ print (model)
 print ('TESTING DIMENSIONS')
 print ('input_dim', x.shape)
 x,v,a,d=model(x)
+
 '''
