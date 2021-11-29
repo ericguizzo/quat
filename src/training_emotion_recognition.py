@@ -203,7 +203,7 @@ if args.use_r2he:
         r2he = simple_autoencoder_2_vad(classifier_quat=args.model_classifier_quat,
                                           hidden_size=args.model_hidden_size,
                                           quat=args.r2he_quat)
-        if r2he_model_path is not None:
+        if args.r2he_model_path is not None:
             pretrained_dict_r2he = torch.load(args.r2he_model_path)
             print ('loading r2he: ', args.r2he_model_path)
             r2he.load_state_dict(pretrained_dict_r2he, strict=False)
