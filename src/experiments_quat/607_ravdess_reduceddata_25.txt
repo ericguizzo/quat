@@ -24,7 +24,7 @@
         "fixed_seed": 180789,
         "regularization_lambda":0.0000001,
         "learning_rate": 0.000005,
-        "reduce_training_set":0.50
+        "reduce_training_set":0.25
       },
 
       "1":{"comment_1": "OUR", "comment_2": "back_pre",
