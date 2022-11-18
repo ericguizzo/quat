@@ -10,6 +10,7 @@
 #SBATCH --time=72:00:00                      # Time limit hrs:min:sec
 #SBATCH --output=myfluent_test_%j.out        # Standard output and error log [%j is replaced with the jobid]
 #SBATCH --error=myfluent_test_%j.error
+#SBATCH --gres=gpu:1
 
 module load cuda/9.2
 conda activate quat
