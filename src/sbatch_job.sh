@@ -13,5 +13,6 @@
 #SBATCH --gres=gpu:1
 
 module load cuda/9.2
+source ~/.bashrc
 conda activate quat
 python3 dummy_job.py
