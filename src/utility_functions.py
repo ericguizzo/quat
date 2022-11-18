@@ -15,7 +15,6 @@ import torch
 import torch.utils.data as utils
 
 
-
 cfg = configparser.ConfigParser()
 cfg.read('preprocessing_config.ini')
 
