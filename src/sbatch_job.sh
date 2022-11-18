@@ -12,5 +12,5 @@
 #SBATCH --error=myfluent_test_%j.error
 
 module load cuda/9.2
-
+conda activate quat
 python3 dummy_job.py
