@@ -7,7 +7,7 @@
 #SBATCH --nodes=2                            # Run on 2 nodes (each node has 48 cores)
 #SBATCH --ntasks-per-node=48                 # Use all the cores on each node
 #SBATCH --mem=0                              # Expected memory usage (0 means use all available memory)
-#SBATCH --time=100:00:00                      # Time limit hrs:min:sec
+#SBATCH --time=72:00:00                      # Time limit hrs:min:sec
 #SBATCH --output=myfluent_test_%j.out        # Standard output and error log [%j is replaced with the jobid]
 #SBATCH --error=myfluent_test_%j.error
 
