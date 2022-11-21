@@ -3,7 +3,6 @@
 #SBATCH --job-name=exp_quat                 # Job name
 #SBATCH --mail-type=END,FAIL                 # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=eric.guizzo@city.ac.uk         # Where to send mail	
-#SBATCH --exclusive                          # Exclusive use of nodes
 #SBATCH --nodes=1                            # Run on 2 nodes (each node has 48 cores)
 #SBATCH --ntasks-per-node=8                 # Use all the cores on each node
 #SBATCH --mem=0                              # Expected memory usage (0 means use all available memory)
