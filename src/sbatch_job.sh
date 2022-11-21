@@ -11,6 +11,7 @@
 #SBATCH --output=experiment_job_%j.out        # Standard output and error log [%j is replaced with the jobid]
 #SBATCH --error=experiment_job_%j.error
 #SBATCH --gres=gpu:1
+#SBATCH --partition=gengpu
 
 module load cuda/10.1
 source ~/.bashrc
