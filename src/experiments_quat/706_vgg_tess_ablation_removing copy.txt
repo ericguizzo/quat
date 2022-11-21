@@ -7,7 +7,7 @@
         "predictors_path": "'../dataset/matrices/tess_randsplit_spectrum_fast_predictors.npy'",
         "target_path": "'../dataset/matrices/tess_randsplit_spectrum_fast_target.npy'",
         "model_num_classes": 7,
-        "num_experiment": 703,
+        "num_experiment": 706,
         "num_folds": 1,
         "num_epochs": 500,
         "batch_size": 20,
