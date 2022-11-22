@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -D /users/aczk407/test/quat/src  # Working directory
+#SBATCH -D /users/aczk407/archive/aczk407/eric_phd/sapienza/quat/src  # Working directory
 #SBATCH --job-name=exp_quat                 # Job name
 #SBATCH --mail-type=END,FAIL                 # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=eric.guizzo@city.ac.uk         # Where to send mail	
