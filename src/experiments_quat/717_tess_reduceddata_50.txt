@@ -23,7 +23,7 @@
         "save_model_metric":"loss",
         "fixed_seed": 180789,
         "regularization_lambda":0.0000001,
-        "learning_rate": 0.000005,
+        "learning_rate": 0.000001,
         "reduce_training_set":0.5
       },
 
