@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
+#computed with the first results set
+
 b_vgg = 51.19
 b_alex = 61.19
 b_res = 53.58
@@ -99,7 +101,7 @@ for i, v in enumerate(y):
 ax.grid(color='gray', linestyle='dashed', alpha=0.3)
 
 
-#plt.show()
+plt.show()
 
 
 
