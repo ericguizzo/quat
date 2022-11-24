@@ -12,7 +12,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --partition=gengpu
 
-module load cuda/10.1
+module load cuda/11.1
 source ~/.bashrc
 conda activate quat
 python3 exp_instance_tess_red.py
