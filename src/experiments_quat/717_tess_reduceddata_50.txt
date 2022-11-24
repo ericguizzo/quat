@@ -1,6 +1,6 @@
 {
   "global_parameters":{
-        "gpu_id":1,
+        "gpu_id":0,
         "experiment_description": "testing_vgg",
         "script": "training_emotion_recognition.py",
         "dataset": "tess",

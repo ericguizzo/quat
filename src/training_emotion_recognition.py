@@ -172,7 +172,7 @@ print ('Total paramters: ' + str(model_params))
 #load pretrained model if desired
 if args.load_pretrained is not None:
     print ('Loading pretrained model: ' + args.load_pretrained)
-    pretrained_dict = torch.load(args.load_pretrained, strict=False)
+    pretrained_dict = torch.load(args.load_pretrained)
     l_w = list(pretrained_dict.keys())[-1]
     l_b = list(pretrained_dict.keys())[-2]
     #pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model.state_dict()}
@@ -184,15 +184,15 @@ if args.load_pretrained is not None:
 if args.use_r2he:
     if args.r2he_model_name == 'simple_autoencoder':
         r2he = simple_autoencoder()
-        pretrained_dict_r2he = torch.load(args.r2he_model_path, strict=False)
+        pretrained_dict_r2he = torch.load(args.r2he_model_path)
         print ('loading r2he: ', args.r2he_model_path)
         r2he.load_state_dict(pretrained_dict_r2he, strict=False)
         r2he = r2he.to(device)
     elif args.r2he_model_name == 'dual_simple_autoencoder':
         r2he = dual_simple_autoencoder()
-        pretrained_dict_r2he1 = torch.load(args.r2he_model_path, strict=False)
+        pretrained_dict_r2he1 = torch.load(args.r2he_model_path)
         assert args.r2he_model_path_secondary is not None
-        pretrained_dict_r2he2 = torch.load(args.r2he_model_path_secondary, strict=False)
+        pretrained_dict_r2he2 = torch.load(args.r2he_model_path_secondary)
         print ('loading r2he primary: ', args.r2he_model_path)
         print ('loading r2he secondary: ', args.r2he_model_path_secondary)
         r2he.model_1.load_state_dict(pretrained_dict_r2he, strict=False)
@@ -204,7 +204,7 @@ if args.use_r2he:
                                           hidden_size=args.model_hidden_size,
                                           quat=args.r2he_quat)
         if args.r2he_model_path is not None:
-            pretrained_dict_r2he = torch.load(args.r2he_model_path, strict=False)
+            pretrained_dict_r2he = torch.load(args.r2he_model_path)
             print ('loading r2he: ', args.r2he_model_path)
             r2he.load_state_dict(pretrained_dict_r2he, strict=False)
         r2he = r2he.to(device)
