@@ -3,10 +3,11 @@
         "gpu_id":0,
         "experiment_description": "testing_vgg",
         "script": "training_emotion_recognition.py",
-        "dataset": "iemocap",
-        "predictors_path": "'../dataset/matrices/iemocap_randsplit_spectrum_fast_predictors.npy'",
-        "target_path": "'../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy'",
-        "num_experiment": 716,
+        "dataset": "emodb",
+        "predictors_path": "'../dataset/matrices/emodb_randsplit_spectrum_fast_predictors.npy'",
+        "target_path": "'../dataset/matrices/emodb_randsplit_spectrum_fast_target.npy'",
+        "model_num_classes": 7,
+        "num_experiment": 712,
         "num_folds": 1,
         "num_epochs": 200,
         "batch_size": 20,
@@ -22,8 +23,8 @@
         "save_model_metric":"loss",
         "fixed_seed": 180789,
         "regularization_lambda":0.0000001,
-        "learning_rate": 0.000001,
-        "reduce_training_set":0.01
+        "learning_rate": 0.000002,
+        "reduce_training_set":0.25
       },
 
       "1":{"comment_1": "OUR", "comment_2": "back_pre",

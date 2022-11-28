@@ -8,7 +8,7 @@
         "target_path": "'../dataset/matrices/iemocap_randsplit_spectrum_fast_target.npy'",
         "num_experiment": 716,
         "num_folds": 1,
-        "num_epochs": 1000,
+        "num_epochs": 200,
         "batch_size": 20,
         "fast_test": "False",
         "shuffle_data": "False",
