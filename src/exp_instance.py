@@ -220,11 +220,11 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiments_folder', type=str, default='experiments_quat')
-    parser.add_argument('--output_folder', type=str, default='../new_experiments_revision')
-    parser.add_argument('--ids', type=str, default='[733,734, 735]')
+    parser.add_argument('--output_folder', type=str, default='../new_experiments_revision_HYPERION')
+    parser.add_argument('--ids', type=str, default='[800]')
     parser.add_argument('--first', type=int, default=1)
     parser.add_argument('--last', type=int, default=12)
-    parser.add_argument('--gpu_id', type=int, default=1)
+    parser.add_argument('--gpu_id', type=int, default=0)
     args = parser.parse_args()
 
 
