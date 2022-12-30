@@ -1,0 +1,57 @@
+{
+  "global_parameters":{
+        "gpu_id":0,
+        "experiment_description": "pretraining_iemocap_speaker",
+        "script": "training_emotion_recognition.py",
+        "dataset": "iemocap_speaker",
+        "predictors_path": "'../dataset/matrices/iemocap_speaker/iemocap_randsplit_spectrum_fast_predictors.npy'",
+        "target_path": "'../dataset/matrices/iemocap_speaker/iemocap_randsplit_spectrum_fast_target.npy'",
+        "load_custom_matrices":"False",
+        "model_num_classes": 5,
+        "num_experiment": 3,
+        "num_folds": 1,
+        "num_epochs": 1000,
+        "batch_size": 40,
+        "fast_test": "False",
+        "shuffle_data": "False",
+        "patience": 20,
+        "save_model_metric": "loss",
+        "early_stopping": "True",
+        "time_dim":512,
+        "spreadsheet_profile": "profile_emotion_recognition",
+        "r2he_model_path":"'../weights/pretrained_RHemo'",
+        "use_r2he":"False",
+        "model_quat":"False",
+        "model_classifier_quat":"False",
+        "r2he_features_type":"embeddings",
+        "learning_rate": 0.00005,
+        "time_dyn_pad":"False",
+        "source_time_dim":512,
+        "fixed_seed":1,
+        "onehot_truth":"False"
+      },
+
+  "1":{"comment_1": "pre_librispeech", "comment_2": "VGGNet",
+        "model_name": "VGGNet"
+        },
+  "2":{"comment_1": "pre_librispeech", "comment_2": "AlexNet",
+        "model_name": "AlexNet"
+        },
+  "3":{"comment_1": "pre_librispeech", "comment_2": "resnet50",
+        "model_name": "resnet50"
+        },
+      
+  "4":{"comment_1": "pre_librispeech", "comment_2": "VGGNet_reg",
+        "model_name": "VGGNet",
+        "regularization_lambda":0.00001
+        },
+  "5":{"comment_1": "pre_librispeech", "comment_2": "AlexNet_reg",
+        "model_name": "AlexNet",
+        "regularization_lambda":0.00001
+        },
+  "6":{"comment_1": "pre_librispeech", "comment_2": "resnet50_reg",
+        "model_name": "resnet50",
+        "regularization_lambda":0.00001
+        }
+
+}

@@ -1,0 +1,171 @@
+{
+  "global_parameters":{
+        "gpu_id":0,
+        "experiment_description": "tess_randsplit_quat",
+        "script": "training_emotion_recognition.py",
+        "dataset": "tess_randsplit",
+        "predictors_path": "'../dataset/matrices_orig/tess_randsplit_spectrum_fast_predictors.npy'",
+        "target_path": "'../dataset/matrices_orig/tess_randsplit_spectrum_fast_target.npy'",
+        "load_custom_matrices":"False",
+        "model_num_classes": 8,
+        "num_experiment": 40,
+        "num_folds": 1,
+        "num_epochs": 1000,
+        "batch_size": 40,
+        "fast_test": "False",
+        "fast_test_bound":40,
+        "shuffle_data": "False",
+        "patience": 20,
+        "save_model_metric": "loss",
+        "early_stopping": "True",
+        "time_dim":512,
+        "spreadsheet_profile": "profile_emotion_recognition",
+        "r2he_model_path":"'../weights/pretrained_RHemo'",
+        "use_r2he":"True",
+        "model_quat":"True",
+        "model_classifier_quat":"True",
+        "r2he_features_type":"embeddings",
+        "learning_rate": 0.00001,
+        "model_flatten_dim":2048,
+        "fixed_seed":1,
+        "model_name": "VGGNet"
+      },
+
+  "1":{"comment_1": "baseline", "comment_2": "no_AT",
+       "anti_transfer":"False"
+        },
+
+  "2":{"comment_1": "AT_speaker", "comment_2": "layer_0",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_speaker'",
+        "at_layer":0
+        },
+  "3":{"comment_1": "AT_speaker", "comment_2": "layer_2",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_speaker'",
+        "at_layer":2
+        },
+  "4":{"comment_1": "AT_speaker", "comment_2": "layer_5",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_speaker'",
+        "at_layer":5
+        },
+  "5":{"comment_1": "AT_speaker", "comment_2": "layer_7",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_speaker'",
+        "at_layer":7
+        },
+  "6":{"comment_1": "AT_speaker", "comment_2": "layer_10",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_speaker'",
+        "at_layer":10
+        },
+  "7":{"comment_1": "AT_speaker", "comment_2": "layer_12",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_speaker'",
+        "at_layer":12
+        },
+  "8":{"comment_1": "AT_speaker", "comment_2": "layer_14",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_speaker'",
+        "at_layer":14
+        },
+  "9":{"comment_1": "AT_speaker", "comment_2": "layer_17",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_speaker'",
+        "at_layer":17
+        },
+  "10":{"comment_1": "AT_speaker", "comment_2": "layer_19",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_speaker'",
+        "at_layer":19
+        },
+  "11":{"comment_1": "AT_speaker", "comment_2": "layer_21",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_speaker'",
+        "at_layer":21
+        },
+  "12":{"comment_1": "AT_speaker", "comment_2": "layer_24",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_speaker'",
+        "at_layer":24
+        },
+  "13":{"comment_1": "AT_speaker", "comment_2": "layer_26",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_speaker'",
+        "at_layer":26
+        },
+  "14":{"comment_1": "AT_speaker", "comment_2": "layer_28",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_speaker'",
+        "at_layer":28
+        },
+  "15":{"comment_1": "AT_word", "comment_2": "layer_0",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_word'",
+        "at_layer":0
+        },
+  "16":{"comment_1": "AT_word", "comment_2": "layer_2",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_word'",
+        "at_layer":2
+        },
+  "17":{"comment_1": "AT_word", "comment_2": "layer_5",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_word'",
+        "at_layer":5
+        },
+  "18":{"comment_1": "AT_word", "comment_2": "layer_7",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_word'",
+        "at_layer":7
+        },
+  "19":{"comment_1": "AT_word", "comment_2": "layer_10",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_word'",
+        "at_layer":10
+        },
+  "20":{"comment_1": "AT_word", "comment_2": "layer_12",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_word'",
+        "at_layer":12
+        },
+  "21":{"comment_1": "AT_word", "comment_2": "layer_14",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_word'",
+        "at_layer":14
+        },
+  "22":{"comment_1": "AT_word", "comment_2": "layer_17",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_word'",
+        "at_layer":17
+        },
+  "23":{"comment_1": "AT_word", "comment_2": "layer_19",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_word'",
+        "at_layer":19
+        },
+  "24":{"comment_1": "AT_word", "comment_2": "layer_21",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_word'",
+        "at_layer":21
+        },
+  "25":{"comment_1": "AT_word", "comment_2": "layer_24",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_word'",
+        "at_layer":24
+        },
+  "26":{"comment_1": "AT_word", "comment_2": "layer_26",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_word'",
+        "at_layer":26
+        },
+  "27":{"comment_1": "AT_word", "comment_2": "layer_28",
+        "anti_transfer":"True",
+        "at_model":"'../weights/pretrained_vgg_word'",
+        "at_layer":28
+        }
+
+
+
+}

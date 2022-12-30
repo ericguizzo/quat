@@ -15,6 +15,7 @@ import torch
 import torch.utils.data as utils
 
 
+
 cfg = configparser.ConfigParser()
 cfg.read('preprocessing_config.ini')
 
@@ -305,40 +306,49 @@ def load_datasets(args):
         if torch.cuda.is_available():
             torch.cuda.manual_seed_all(seed)
 
-    #PREDICTORS_LOAD = os.path.join(args.dataset_path, 'iemocap_randsplit_spectrum_fast_predictors.npy')
-    #TARGET_LOAD = os.path.join(args.dataset_path, 'iemocap_randsplit_spectrum_fast_target.npy')
-    PREDICTORS_LOAD = args.predictors_path
-    TARGET_LOAD = args.target_path
+    if not args.load_custom_matrices:
+        #PREDICTORS_LOAD = os.path.join(args.dataset_path, 'iemocap_randsplit_spectrum_fast_predictors.npy')
+        #TARGET_LOAD = os.path.join(args.dataset_path, 'iemocap_randsplit_spectrum_fast_target.npy')
+        PREDICTORS_LOAD = args.predictors_path
+        TARGET_LOAD = args.target_path
 
-    dummy = np.load(TARGET_LOAD,allow_pickle=True)
-    dummy = dummy.item()
-    #create list of datapoints for current fold
-    foldable_list = list(dummy.keys())
+        dummy = np.load(TARGET_LOAD,allow_pickle=True)
+        dummy = dummy.item()
+        #create list of datapoints for current fold
+        foldable_list = list(dummy.keys())
 
-    if args.shuffle_data:
-        random.shuffle(foldable_list)
+        if args.shuffle_data:
+            random.shuffle(foldable_list)
 
-    fold_actors_list = folds_generator(args.num_folds, foldable_list, [args.train_perc, args.val_perc, args.test_perc])
-    train_list = fold_actors_list[args.num_fold]['train']
-    val_list = fold_actors_list[args.num_fold]['val']
-    test_list = fold_actors_list[args.num_fold]['test']
-    del dummy
+        fold_actors_list = folds_generator(args.num_folds, foldable_list, [args.train_perc, args.val_perc, args.test_perc])
+        train_list = fold_actors_list[args.num_fold]['train']
+        val_list = fold_actors_list[args.num_fold]['val']
+        test_list = fold_actors_list[args.num_fold]['test']
+        del dummy
 
-    predictors_merged = np.load(PREDICTORS_LOAD,allow_pickle=True)
-    target_merged = np.load(TARGET_LOAD,allow_pickle=True)
-    predictors_merged = predictors_merged.item()
-    target_merged = target_merged.item()
+        predictors_merged = np.load(PREDICTORS_LOAD,allow_pickle=True)
+        target_merged = np.load(TARGET_LOAD,allow_pickle=True)
+        predictors_merged = predictors_merged.item()
+        target_merged = target_merged.item()
 
-    print ('\n building dataset for current fold')
-    print ('\n training:')
-    training_predictors, training_target = build_matrix_dataset(predictors_merged,
-                                                                target_merged, train_list)
-    print ('\n validation:')
-    validation_predictors, validation_target = build_matrix_dataset(predictors_merged,
-                                                                target_merged, val_list)
-    print ('\n test:')
-    test_predictors, test_target = build_matrix_dataset(predictors_merged,
-                                                                target_merged, test_list)
+        print ('\n building dataset for current fold')
+        print ('\n training:')
+        training_predictors, training_target = build_matrix_dataset(predictors_merged,
+                                                                    target_merged, train_list)
+        print ('\n validation:')
+        validation_predictors, validation_target = build_matrix_dataset(predictors_merged,
+                                                                    target_merged, val_list)
+        print ('\n test:')
+        test_predictors, test_target = build_matrix_dataset(predictors_merged,
+                                                                    target_merged, test_list)     
+
+    else:
+        training_predictors = np.load(args.training_predictors, allow_pickle=True)
+        training_target = np.load(args.training_target, allow_pickle=True)
+        validation_predictors = np.load(args.training_predictors, allow_pickle=True)
+        validation_target = np.load(args.training_target, allow_pickle=True)
+        test_predictors = np.load(args.training_predictors, allow_pickle=True)
+        test_target = np.load(args.training_target, allow_pickle=True)
 
 
     if args.reduce_training_set is not None:
@@ -351,9 +361,9 @@ def load_datasets(args):
         validation_target = training_target[:reduced_len]
 
     if args.fast_test:
-        print ('FAST TEST: using unly 100 datapoints ')
         #take only 100 datapoints, just for quick testing
         bound = args.fast_test_bound
+        print ("FAST TEST: using only " + str(bound) + " datapoints")
         training_predictors = training_predictors[:bound]
         training_target = training_target[:bound]
         validation_predictors = validation_predictors[:bound]
@@ -421,3 +431,15 @@ def load_datasets(args):
     print ('\nLoading time: ' + str(np.round(float(loading_time), decimals=1)) + ' seconds')
 
     return tr_data, val_data, test_data
+
+def dyn_pad(input, device, x_source, x_target):
+    #dynamic move in time desired portion of sound 
+    #this this is because zeropadding is always added to the end
+    input = input[:,:,:x_source,:]
+    b,c,x,y = input.shape
+    pad = torch.zeros(b,c,x_target,y).to(device)
+    diff = x_target - x - 1
+    random_init = np.random.randint(diff)
+    pad[:,:,random_init:random_init+x,:] = input
+
+    return pad

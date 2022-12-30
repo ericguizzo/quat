@@ -1,0 +1,52 @@
+{
+  "global_parameters":{
+        "gpu_id":1,
+        "experiment_description": "pretraining_librispeech",
+        "script": "training_emotion_recognition_ok_librispeech.py",
+        "dataset": "librispeech",
+        "predictors_path": "None",
+        "target_path": "None",
+        "load_custom_matrices":"True",
+        "training_predictors":"'../dataset/matrices/librispeech/reduceddata_training_predictors.npy'",
+        "training_target":"'../dataset/matrices/librispeech/reduceddata_training_target.npy'",
+        "validation_predictors":"'../dataset/matrices/librispeech/reduceddata_validation_predictors.npy'",
+        "validation_target":"'../dataset/matrices/librispeech/reduceddata_validation_target.npy'",    
+        "test_predictors":"'../dataset/matrices/librispeech/reduceddata_test_predictors.npy'",
+        "test_target":"'../dataset/matrices/librispeech/reduceddata_test_target.npy'", 
+        "model_num_classes": 1000,
+        "num_experiment": 2
+        ,
+        "num_folds": 1,
+        "num_epochs": 500,
+        "batch_size": 38,
+        "fast_test": "False",
+        "shuffle_data": "False",
+        "patience": 20,
+        "save_model_metric": "loss",
+        "early_stopping": "True",
+        "time_dim":170,
+        "spreadsheet_profile": "profile_emotion_recognition",
+        "r2he_model_path":"'../weights/pretrained_RHemo'",
+        "use_r2he":"False",
+        "model_quat":"False",
+        "model_classifier_quat":"False",
+        "r2he_features_type":"embeddings",
+        "learning_rate": 0.00005,
+        "time_dyn_pad":"True",
+        "source_time_dim":170,
+        "target_time_dim":512,
+        "fixed_seed":1,
+        "onehot_truth":"True"
+      },
+
+  "1":{"comment_1": "pre_librispeech", "comment_2": "VGGNet",
+        "model_name": "VGGNet"
+        },
+  "2":{"comment_1": "pre_librispeech", "comment_2": "AlexNet",
+        "model_name": "AlexNet"
+        },
+  "3":{"comment_1": "pre_librispeech", "comment_2": "resnet50",
+        "model_name": "resnet50"
+        }
+
+}

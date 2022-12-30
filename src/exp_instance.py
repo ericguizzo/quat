@@ -195,38 +195,63 @@ def grid_search(experiments_folder, output_folder, ids, begin, end, gpu_id):
         print (exp_keys)
 
         for run in exp_keys:
-            for g in parameters['global_parameters']:
-                name = g
-                value = parameters['global_parameters'][g]
-                parameters[run][name] = value
-            parameters[run]['gpu_id'] = gpu_id
-            #run experiment instance with correct parameters
+            if args.safe:
+                try: 
+                    for g in parameters['global_parameters']:
+                        name = g
+                        value = parameters['global_parameters'][g]
+                        parameters[run][name] = value
+                    parameters[run]['gpu_id'] = gpu_id
+                    #run experiment instance with correct parameters
+                    try:
+                        run_experiment(num_experiment=exp,
+                                    num_run=run,
+                                    num_folds=parameters[str(run)]['num_folds'],
+                                    dataset=parameters[str(run)]['dataset'],
+                                    experiment_folder=output_folder,
+                                    script=parameters[str(run)]['script'],
+                                    parameters=parameters[str(run)]
+                                    )
+                    except:
+                        pass
+                except:
+                    pass 
+            else: 
+                for g in parameters['global_parameters']:
+                    name = g
+                    value = parameters['global_parameters'][g]
+                    parameters[run][name] = value
+                parameters[run]['gpu_id'] = gpu_id
+                #run experiment instance with correct parameters
 
-            run_experiment(num_experiment=exp,
-                           num_run=run,
-                           num_folds=parameters[str(run)]['num_folds'],
-                           dataset=parameters[str(run)]['dataset'],
-                           experiment_folder=output_folder,
-                           script=parameters[str(run)]['script'],
-                           parameters=parameters[str(run)]
-                           )
+                run_experiment(num_experiment=exp,
+                            num_run=run,
+                            num_folds=parameters[str(run)]['num_folds'],
+                            dataset=parameters[str(run)]['dataset'],
+                            experiment_folder=output_folder,
+                            script=parameters[str(run)]['script'],
+                            parameters=parameters[str(run)]
+                            )
 
     print ('\nALL EXPERIMENTS REQUESTED COMPLETED')
 
 
-
+#[10,20,30,40,50,60,70,80]
+#[11,12,21,22,31,32,41,42,51,52,61,62,71,72,81,82]
 
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--experiments_folder', type=str, default='experiments_quat')
-    parser.add_argument('--output_folder', type=str, default='../new_experiments_revision_HYPERION')
-    parser.add_argument('--ids', type=str, default='[811, 812, 814]')
+    parser.add_argument('--experiments_folder', type=str, default='experiments_ATQUAT')
+    parser.add_argument('--output_folder', type=str, default='../results')
+    parser.add_argument('--safe', type=str, default="True")  ##use try except
+    parser.add_argument('--ids', type=str, default='[70,80]')
     parser.add_argument('--first', type=int, default=1)
-    parser.add_argument('--last', type=int, default=12)
+    parser.add_argument('--last', type=int, default=27)
     parser.add_argument('--gpu_id', type=int, default=1)
     args = parser.parse_args()
 
+    args.safe = eval(args.safe)
 
     grid_search(experiments_folder=args.experiments_folder,
                 output_folder=args.output_folder,

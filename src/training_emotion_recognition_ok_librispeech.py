@@ -13,7 +13,6 @@ from models import *
 from loss_emo import *
 import utility_functions as uf
 from tqdm import tqdm
-from anti_transfer_loss import ATLoss
 
 parser = argparse.ArgumentParser()
 #saving parameters
@@ -31,7 +30,7 @@ parser.add_argument('--val_perc', type=float, default=0.2)
 parser.add_argument('--test_perc', type=float, default=0.1)
 parser.add_argument('--predictors_normailzation', type=str, default='01')
 parser.add_argument('--fast_test', type=str, default='True')
-parser.add_argument('--fast_test_bound', type=int, default=500)
+parser.add_argument('--fast_test_bound', type=int, default=5)
 parser.add_argument('--shuffle_data', type=str, default='False')
 
 #load pre-computed npy matrices if desired
@@ -69,14 +68,6 @@ parser.add_argument('--reduce_training_set', type=float, default=None)
 parser.add_argument('--backprop_r2he', type=str, default="False")
 parser.add_argument('--backprop_r2he_layers', type=int, default=10)
 
-#anti-tansfer parameters 
-parser.add_argument('--anti_transfer', type=str, default="False")
-parser.add_argument('--at_model', type=str, default=None)
-parser.add_argument('--at_layer', type=int, default=1)
-parser.add_argument('--at_beta', type=float, default=1.)
-parser.add_argument('--at_aggregation_func', type=str, default="gram")
-parser.add_argument('--at_distance_func', type=str, default="cos_squared")
-
 
 #loss parameters
 parser.add_argument('--loss_function', type=str, default='emotion_recognition_loss')
@@ -112,6 +103,8 @@ parser.add_argument('--r2he_features_type', type=str, default='reconstruction',
                     help='reconstruction or embeddings')
 parser.add_argument('--embeddings_proc', type=str, default=None)
 
+
+
 #grid search parameters
 #SPECIFY ONLY IF PERFORMING A GRID SEARCH WITH exp_instance.py SCRIPT
 parser.add_argument('--script', type=str, default='training_autoencoder.py')
@@ -121,7 +114,6 @@ parser.add_argument('--experiment_description', type=str, default='none')
 parser.add_argument('--dataset', type=str, default='none')
 parser.add_argument('--num_experiment', type=int, default=0)
 #        "load_pretrained": "'../new_experiments/experiment_9_5samples.txt/models/model_xval_iemocap_exp9_5samples.txt_run1_fold0'"
-
 
 #eval string args
 args = parser.parse_args()
@@ -144,7 +136,6 @@ args.backprop_r2he = eval(args.backprop_r2he)
 args.load_custom_matrices = eval(args.load_custom_matrices)
 args.time_dyn_pad = eval(args.time_dyn_pad)
 args.onehot_truth = eval(args.onehot_truth)
-args.anti_transfer = eval(args.anti_transfer)
 
 if args.fixed_seed is not None:
     print("SEED: ", args.fixed_seed)
@@ -239,46 +230,6 @@ if args.use_r2he:
         r2he = r2he.to(device)
 #define optimizer and loss
 
-if args.anti_transfer:
-    #pretrained_dict_at = torch.load(args.at_model)
-    print ('loading at model: ', args.at_model)
-    if args.model_name == 'VGGNet':
-        at_model = VGGNet(architecture=args.model_architecture,
-                    classifier_dropout=args.model_classifier_dropout,
-                    flatten_dim=args.model_flatten_dim,
-                    verbose=args.model_verbose,
-                    quat=args.model_quat,
-                    num_classes=args.model_num_classes
-                    )
-        at_model = at_model.to(device)
-        at_model.features.load_state_dict(torch.load(args.at_model,
-                                    map_location=lambda storage, location: storage),
-                                    strict=False)
-        AT = ATLoss(at_model.features)
-    elif args.model_name == 'AlexNet':
-        at_model = AlexNet(quat=args.model_quat,
-                        num_classes=args.model_num_classes
-                        )
-        at_model = at_model.to(device)
-        at_model.features.load_state_dict(torch.load(args.at_model,
-                                    map_location=lambda storage, location: storage),
-                                    strict=False)        
-        AT = ATLoss(at_model.features)
-    elif args.model_name == 'resnet50':
-        at_model = resnet50(quat=args.model_quat,
-                        num_classes=args.model_num_classes
-                        )
-        at_model = nn.Sequential(*list(at_model.children())[:-2])
-        at_model = at_model.to(device)
-        at_model.load_state_dict(torch.load(args.at_model,
-                                map_location=lambda storage, location: storage),
-                                strict=False)           
-        AT = ATLoss(at_model)
-    else:
-        raise ValueError('Invalid model name')
-
-
-
 if args.backprop_r2he == True:
     print ('Backpropagating R2HEMO!')
     c = 1
@@ -334,35 +285,14 @@ def evaluate(model, device, loss_function, dataloader, emo_weight):
 
             loss = loss_function(pred, truth)
 
-            if args.anti_transfer:
-                if args.model_name == 'VGGNet':
-                    curr_model = model.features
-                elif args.model_name == 'AlexNet':
-                    curr_model = model.features
-                elif args.model_name == 'resnet50':
-                    curr_model = nn.Sequential(*list(model.children())[:-2])
-                at_loss = AT.loss(sounds,             
-                        curr_model,       #current model
-                        at_layer=args.at_layer,         #leyer to compute AT loss
-                        beta=args.at_beta,               #weight parameter
-                        aggregation=args.at_aggregation_func,     #channel aggregation
-                        distance=args.at_distance_func) #distance function
-                loss['loss'] = loss['loss'] + at_loss
-
-                temp_loss.append({'loss':loss['loss'].cpu().numpy(),
-                                'at_loss':at_loss.cpu().numpy(),
-                                'acc': loss['acc']})
-            else:
-                temp_loss.append({'loss':loss['loss'].cpu().numpy(),
-                                'acc': loss['acc']})
+            temp_loss.append({'loss':loss['loss'].cpu().numpy(),
+                              'acc': loss['acc']})
             pbar.update(1)
     return temp_loss
 
 def mean_batch_loss(batch_loss):
     #compute mean of each loss item
     d = {'loss':[], 'acc':[]}
-    if args.anti_transfer:
-        d = {'loss':[], 'acc':[], 'at_loss':[]}
     for i in batch_loss:
         for j in i:
             name = j
@@ -429,40 +359,14 @@ for epoch in range(args.num_epochs):
             #recon = torch.unsqueeze(torch.sqrt(torch.sum(recon**2, axis=1)), dim=1)
             #loss = loss_function(recon, sounds)
             loss = loss_function(pred, truth)
-            #print ("coglionedimerda:     ", sounds.shape)
-            if args.anti_transfer:
-                if args.model_name == 'VGGNet':
-                    curr_model = model.features
-                elif args.model_name == 'AlexNet':
-                    curr_model = model.features
-                elif args.model_name == 'resnet50':
-                    curr_model = nn.Sequential(*list(model.children())[:-2])
-                at_loss = AT.loss(sounds,             
-                        curr_model,       #current model
-                        at_layer=args.at_layer,         #leyer to compute AT loss
-                        beta=args.at_beta,               #weight parameter
-                        aggregation=args.at_aggregation_func,     #channel aggregation
-                        distance=args.at_distance_func) #distance function
-                loss['loss'] = loss['loss'] + at_loss
-                loss['loss'].backward()
-                optimizer.step()
-                train_batch_losses.append({'loss':loss['loss'].detach().cpu().numpy(),
-                                'at_loss':at_loss.detach().cpu().numpy(),
-                                'acc': loss['acc']})
-            else:
-                loss['loss'].backward()
-                optimizer.step()
-                train_batch_losses.append({'loss':loss['loss'].detach().cpu().numpy(),
-                                'acc': loss['acc']})
+            loss['loss'].backward()
+            optimizer.step()
 
-
-
-            
-
-
+            #loss = loss.detach().cpu().item()
+            train_batch_losses.append({'loss':loss['loss'].detach().cpu().numpy(),
+                                       'acc': loss['acc']})
             pbar.update(1)
             #del loss
-
     m_b = torch.mean(torch.tensor(m))
     m_s = torch.mean(torch.tensor(s))
     print ("M: ", m_b, "S: ", m_s)
